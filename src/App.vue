@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view />
+    <v-App><router-view /></v-App>
   </div>
 </template>
 
@@ -13,6 +13,6 @@ export default {
 <style>
 @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
 #app {
-  font-family: 'Spoqa Han Sans', 'sans-serif';
+  font-family: "Spoqa Han Sans", "sans-serif";
 }
 </style>
