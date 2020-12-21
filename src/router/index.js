@@ -12,17 +12,14 @@ export default new Router({
     {
       path: "/",
       name: "HelloWorld",
-      component: HelloWorld
+      component: HelloWorld,
+      meta: { admin: false }
     },
     {
-      path: "/memberManagement",
-      name: "MemberManagement",
-      component: MemberManagement
-    },
-    {
-      path: "/AdminOrder",
-      name: "AdminOrder",
-      component: AdminOrder
+      path: "/admin/seller",
+      name: "seller",
+      component: MemberManagement, //<=== admin home component 추가해야함
+      meta: { admin: true }
     }
   ]
 });
