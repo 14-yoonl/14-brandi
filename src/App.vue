@@ -1,12 +1,27 @@
 <template>
   <div id="app">
-    <v-App><router-view /></v-App>
+    <v-App>
+      <div v-if="!$route.meta.admin">
+        <!-- service header -->
+        <router-view />
+        <!-- service footer -->
+      </div>
+
+      <adminLayout v-if="$route.meta.admin">
+        <router-view />
+      </adminLayout>
+    </v-App>
   </div>
 </template>
 
 <script>
+import adminLayout from "./components/layout/AdminLayout";
+
 export default {
-  name: "App"
+  name: "App",
+  components: {
+    adminLayout
+  }
 };
 </script>
 
