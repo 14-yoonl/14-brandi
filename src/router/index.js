@@ -3,6 +3,7 @@ import Router from "vue-router";
 import HelloWorld from "@/components/HelloWorld";
 import MemberManagement from "@/components/MemberManagement/MemberManagement";
 import AdminOrder from "@/components/AdminOrder/AdminOrder";
+import signIn from "@/components/Service/SignIn";
 
 Vue.use(Router);
 
@@ -10,9 +11,9 @@ export default new Router({
   mode: "history",
   routes: [
     {
-      path: "/",
-      name: "HelloWorld",
-      component: HelloWorld,
+      path: "/signIn",
+      name: "signIn",
+      component: signIn,
       meta: { admin: false }
     },
     {
