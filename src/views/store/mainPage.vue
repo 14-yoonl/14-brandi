@@ -1,6 +1,6 @@
 <template>
   <div class="mainWrap">
-    <navbar></navbar>
+    <NavBar />
     <v-carousel>
       <v-carousel-item
         v-for="(item, i) in items"
@@ -10,15 +10,17 @@
         transition="fade-transition"
       ></v-carousel-item>
     </v-carousel>
-    <div>
-      <productCards></productCards>
+    <div class="mainProducts">
+      <h2 class="productHeader">당신을 위한 추천</h2>
+      <productCard />
     </div>
   </div>
 </template>
 
 <script>
-import navBar from "./navBar";
-import productCards from "./productCard";
+import productCard from "./productCard.vue";
+import NavBar from "./NavBar";
+
 export default {
   data() {
     return {
@@ -39,8 +41,8 @@ export default {
     };
   },
   components: {
-    navbar: navBar,
-    productCards: productCards,
+    NavBar: NavBar,
+    productCard: productCard,
   },
 };
 </script>
@@ -50,5 +52,10 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .mainProduct {
+    max-width: 1300px;
+    padding: 0px 30px;
+  }
 }
 </style>

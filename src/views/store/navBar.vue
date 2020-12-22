@@ -1,7 +1,7 @@
 <template>
   <div class="navBar">
     <div class="navTop">
-      <h1 class="logo">
+      <h1 class="logoImage">
         <a href="/"
           ><img
             src="https://www.brandi.co.kr/static/20.09.01/images/logo@3x.png"
@@ -48,7 +48,7 @@ export default {};
     display: flex;
     justify-content: space-between;
 
-    .logo {
+    .logoImage {
       width: 190px;
 
       img {
