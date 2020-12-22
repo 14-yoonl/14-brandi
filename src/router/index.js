@@ -3,6 +3,7 @@ import Router from "vue-router";
 import HelloWorld from "@/components/HelloWorld";
 import MemberManagement from "@/components/MemberManagement/MemberManagement";
 import home from "@/views/store/mainPage";
+import signIn from "@/views/store/signIn";
 
 Vue.use(Router);
 
@@ -13,6 +14,12 @@ export default new Router({
       path: "/",
       name: "home",
       component: home,
+      meta: { admin: false }
+    },
+    {
+      path: "/signIn",
+      name: "signIn",
+      component: signIn,
       meta: { admin: false }
     },
     {
