@@ -1,9 +1,9 @@
 <template>
   <div class="mainWrap">
     <NavBar />
-    <v-carousel>
+    <v-carousel class="mainImageSlide">
       <v-carousel-item
-        v-for="(item, i) in items"
+        v-for="(item, i) in slideitems"
         :key="i"
         :src="item.src"
         reverse-transition="fade-transition"
@@ -12,7 +12,20 @@
     </v-carousel>
     <div class="mainProducts">
       <h2 class="productHeader">당신을 위한 추천</h2>
-      <productCard />
+      <div class="cardList">
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+      </div>
     </div>
   </div>
 </template>
@@ -24,26 +37,26 @@ import NavBar from "./NavBar";
 export default {
   data() {
     return {
-      items: [
+      slideitems: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-        },
-      ],
+          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+        }
+      ]
     };
   },
   components: {
     NavBar: NavBar,
-    productCard: productCard,
-  },
+    productCard: productCard
+  }
 };
 </script>
 
@@ -53,9 +66,23 @@ export default {
   flex-direction: column;
   align-items: center;
 
-  .mainProduct {
-    max-width: 1300px;
+  .mainImageSlide {
+    margin-bottom: 30px;
+  }
+
+  .mainProducts {
+    width: 1300px;
     padding: 0px 30px;
+    .productHeader {
+      padding-top: 40px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .cardList {
+      display: flex;
+      flex-wrap: wrap;
+    }
   }
 }
 </style>
