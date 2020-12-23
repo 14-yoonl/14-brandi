@@ -4,7 +4,7 @@ import HelloWorld from "@/components/HelloWorld";
 import MemberManagement from "@/components/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
-import AdminOrder from "@/components/AdminOrder/AdminOrder";
+import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
 import signIn from "@/components/Service/SignIn";
 
 Vue.use(Router);

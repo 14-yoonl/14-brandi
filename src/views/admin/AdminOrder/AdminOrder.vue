@@ -18,30 +18,26 @@
       </div>
     </div>
     <div class="filter">
-      <!-- <v-select
-        v-model="select"
-        :hint="`${select.state}, ${select.abbr}`"
-        :items="items"
-        item-text="state"
-        item-value="abbr"
-        label="Select"
-        persistent-hint
-        return-object
-        single-line
-      ></v-select> -->
-      <input type="text" placeholder="검색어를 입력하세요" />
+      <v-col class="d-flex" cols="12" sm="6">
+        <v-select :items="searchCondition" outlined class="searchCondition" />
+        <input
+          type="text"
+          class="searchInputBox"
+          placeholder="검색어를 입력하세요"
+        />
+      </v-col>
       <div class="filterList">
         <label>결제완료일 : </label>
         <v-btn elevation="2" small>전체</v-btn>
         <v-btn elevation="2" small>오늘</v-btn>
-        <v-btn elevation="2" small>3일</v-btn>
+        <v-btn elevation="2" small color="primary">3일</v-btn>
         <v-btn elevation="2" small>1주일</v-btn>
         <v-btn elevation="2" small>1개월</v-btn>
         <v-btn elevation="2" small>3개월</v-btn>
       </div>
       <div class="filterList">
         <label>셀러속성 : </label>
-        <v-btn elevation="2" small>전체</v-btn>
+        <v-btn elevation="2" small color="primary">전체</v-btn>
         <v-btn elevation="2" small>쇼핑몰</v-btn>
         <v-btn elevation="2" small>마켓</v-btn>
         <v-btn elevation="2" small>로드샵</v-btn>
@@ -51,17 +47,21 @@
       </div>
       <div class="filterList">
         <label>셀러구분 : </label>
-        <v-btn elevation="2" small>전체</v-btn>
+        <v-btn elevation="2" small color="primary">전체</v-btn>
         <v-btn elevation="2" small>일반</v-btn>
         <v-btn elevation="2" small>헬피</v-btn>
       </div>
       <div class="filterList">
         <label>배송구분 : </label>
-        <v-btn elevation="2" small>전체</v-btn>
+        <v-btn elevation="2" small color="primary">전체</v-btn>
         <v-btn elevation="2" small>일반배송</v-btn>
         <v-btn elevation="2" small>오늘출발</v-btn>
         <v-btn elevation="2" small>새벽도착</v-btn>
         <v-btn elevation="2" small>저녁도착</v-btn>
+      </div>
+      <div class="searchBtnBox">
+        <v-btn elevation="2" md color="primary">검색</v-btn>
+        <v-btn elevation="2" md>초기화</v-btn>
       </div>
     </div>
     <div class="contentList">
@@ -70,89 +70,99 @@
           {{ header.text.toUpperCase() }}
         </template>
       </v-data-table> -->
-
-      <table>
-        <thead>
-          <tr>
-            <th>
-              <v-checkbox
-                color="success"
-                hide-details
-                v-model="selectAll"
-              ></v-checkbox>
-            </th>
-            <th v-for="column in headers">
-              {{ column.text }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="order in desserts">
-            <td>
-              <v-checkbox
-                color="success"
-                :value="order.orderNo"
-                v-model="selected"
-                hide-details
-              ></v-checkbox>
-            </td>
-            <td>
-              {{ order.orderNo }}
-            </td>
-            <td>
-              {{ order.paidDate }}
-            </td>
-            <td>
-              {{ order.orderDetailNo }}
-            </td>
-            <td>
-              {{ order.sellerName }}
-            </td>
-            <td>
-              {{ order.sellerType }}
-            </td>
-            <td>
-              {{ order.helpyType }}
-            </td>
-            <td>
-              {{ order.deliveryType }}
-            </td>
-            <td>
-              {{ order.productName }}
-            </td>
-            <td>
-              {{ order.options }}
-            </td>
-            <td>
-              {{ order.optionsPrice }}
-            </td>
-            <td>
-              {{ order.quantity }}
-            </td>
-            <td>
-              {{ order.senderName }}
-            </td>
-            <td>
-              {{ order.senderPhone }}
-            </td>
-            <td>
-              {{ order.paidPrice }}
-            </td>
-            <td>
-              {{ order.usedPoint }}
-            </td>
-            <td>
-              {{ order.discountCoupon }}
-            </td>
-            <td>
-              {{ order.paymentType }}
-            </td>
-            <td>
-              {{ order.orderStatus }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="handlePrepareBtns">
+        <span>전체 조회건 수 : 8 건</span>
+        <v-btn elevation="1" x-small color="primary">배송준비처리</v-btn>
+        <v-btn elevation="1" x-small color="primary">주문취소처리</v-btn>
+      </div>
+      <div class="tableContainer">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <v-checkbox
+                  color="success"
+                  hide-details
+                  v-model="selectAll"
+                ></v-checkbox>
+              </th>
+              <th v-for="column in headers">
+                {{ column.text }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="order in desserts">
+              <td>
+                <v-checkbox
+                  color="success"
+                  :value="order.orderNo"
+                  v-model="selected"
+                  hide-details
+                ></v-checkbox>
+              </td>
+              <td>
+                {{ order.orderNo }}
+              </td>
+              <td>
+                {{ order.paidDate }}
+              </td>
+              <td>
+                {{ order.orderDetailNo }}
+              </td>
+              <td>
+                {{ order.sellerName }}
+              </td>
+              <td>
+                {{ order.sellerType }}
+              </td>
+              <td>
+                {{ order.helpyType }}
+              </td>
+              <td>
+                {{ order.deliveryType }}
+              </td>
+              <td>
+                {{ order.productName }}
+              </td>
+              <td>
+                {{ order.options }}
+              </td>
+              <td>
+                {{ order.optionsPrice }}
+              </td>
+              <td>
+                {{ order.quantity }}
+              </td>
+              <td>
+                {{ order.senderName }}
+              </td>
+              <td>
+                {{ order.senderPhone }}
+              </td>
+              <td>
+                {{ order.paidPrice }}
+              </td>
+              <td>
+                {{ order.usedPoint }}
+              </td>
+              <td>
+                {{ order.discountCoupon }}
+              </td>
+              <td>
+                {{ order.paymentType }}
+              </td>
+              <td>
+                {{ order.orderStatus }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="handlePrepareBtns">
+        <v-btn elevation="1" x-small color="primary">배송준비처리</v-btn>
+        <v-btn elevation="1" x-small color="primary">주문취소처리</v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -180,6 +190,32 @@ export default {
         { text: "쿠폰할인", value: "discountCoupon" },
         { text: "결제수단", value: "paymentType" },
         { text: "주문상태", value: "orderStatus" }
+      ],
+      searchCondition: [
+        {
+          text: "주문번호",
+          value: "orderNo"
+        },
+        {
+          text: "주문상세번호",
+          value: "orderDetailNo"
+        },
+        {
+          text: "주문자명",
+          value: "senderName"
+        },
+        {
+          text: "핸드폰번호",
+          value: "senderPhone"
+        },
+        {
+          text: "셀러명",
+          value: "sellerName"
+        },
+        {
+          text: "상품명",
+          value: "productName"
+        }
       ],
       desserts: [
         {
@@ -314,6 +350,7 @@ export default {
   padding: 10px;
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #f3f4f7;
+  margin-left: 100px;
 
   .header {
     background-color: white;
@@ -352,8 +389,31 @@ export default {
     background-color: white;
     border-radius: 10px;
 
+    .searchCondition {
+      line-height: 30px;
+      margin-right: 20px;
+      font-size: 10px;
+    }
+
+    .searchInputBox {
+      width: 310px;
+      height: 30px;
+      padding: 6px 10px;
+      border: 1px solid #e5e5e5;
+      border-radius: 4px;
+      color: #333333;
+      font-size: 13px;
+    }
+
     .filterList {
       margin-bottom: 10px;
+    }
+    .searchBtnBox {
+      display: flex;
+      justify-content: center;
+      v-btn {
+        margin: 5px;
+      }
     }
   }
 
@@ -365,6 +425,12 @@ export default {
     background-color: white;
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
       0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+    .tableContainer {
+      width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
 
     table {
       width: 100%;
@@ -378,6 +444,11 @@ export default {
         left: 3px;
         margin: 0;
         padding: 0;
+      }
+
+      th,
+      td {
+        border: 1px solid #dddddd;
       }
 
       thead {
