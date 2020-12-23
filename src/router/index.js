@@ -1,20 +1,17 @@
 import Vue from "vue";
 import Router from "vue-router";
 
+//--admin
+import HelloWorld from "@/components/HelloWorld";
 import MemberManagement from "@/components/MemberManagement/MemberManagement";
-<<<<<<< HEAD
-import AdminOrder from "@/components/AdminOrder/AdminOrder";
-=======
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
 import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
-import signIn from "@/components/Service/SignIn";
->>>>>>> main
 
+//--service
+import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
-import signIn from "@/views/store/signIn";
-import adminSignIn from "@/views/admin/signIn";
-import adminSignUp from "@/views/admin/signUp";
+
 Vue.use(Router);
 
 export default new Router({
