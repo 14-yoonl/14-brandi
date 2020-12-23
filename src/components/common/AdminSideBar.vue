@@ -56,6 +56,7 @@ export default {
   font-weight: 300;
 
   ul {
+    width: 200px;
     padding: 0;
     list-style: none;
 
