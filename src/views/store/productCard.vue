@@ -3,16 +3,16 @@
     <ul>
       <li class="listImage">
         <img
-          src="https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
+          src="https://i.ibb.co/D7DZg3k/TH0-U6-FBTN-U019-SDQ4-LBC-9b19a40fac7d-512.png"
           alt="다람쥐사진"
         />
       </li>
-      <li class="listSeller"><span>셀러</span></li>
-      <li class="listTitle"><em>제목</em></li>
+      <li class="listSeller"><span>성보의 하루</span></li>
+      <li class="listTitle"><em>14기 대표 러블리 성보좌</em></li>
       <li class="listPrice">
-        <span class="dcPercent">10%</span>
-        <span class="bPrice">9,000</span>
-        <span class="aPrice">10,000</span>
+        <span class="dcPercent">20%</span>
+        <span class="bPrice">1,800,000</span>
+        <span class="aPrice">2,000,000</span>
       </li>
       <li class="productCount">300개 구매중</li>
     </ul>
@@ -36,7 +36,7 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     width: 240px;
-    padding: 0 4px 30px 4px;
+    padding: 0 5px 30px 5px;
     list-style: none;
     transition: all 0.2s ease-in-out;
     object-fit: cover;
@@ -44,7 +44,6 @@ export default {
     &:hover {
       cursor: pointer;
       transform: scale(1.03);
-      background-color: rgba(0, 0, 0, 0.03);
     }
 
     li {
@@ -91,7 +90,9 @@ export default {
       }
     }
     .productCount {
+      margin-top: 10px;
       font-size: 13px;
+      font-weight: 500;
       color: #757575;
     }
   }
