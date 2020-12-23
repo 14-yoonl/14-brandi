@@ -13,7 +13,6 @@ import adminFooter from "../common/AdminFooter";
 
 export default {
   name: "AdminLayout",
-
   components: { adminHeader, adminSideBar, adminFooter }
 };
 </script>
