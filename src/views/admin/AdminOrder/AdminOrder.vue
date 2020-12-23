@@ -350,7 +350,6 @@ export default {
   padding: 10px;
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #f3f4f7;
-  margin-left: 100px;
 
   .header {
     background-color: white;

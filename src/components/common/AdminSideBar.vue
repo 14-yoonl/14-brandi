@@ -54,7 +54,6 @@ export default {
   color: #f1f1f1;
   font-size: 14px;
   font-weight: 300;
-  border: 5px solid red;
 
   ul {
     width: 200px;
