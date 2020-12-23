@@ -2,7 +2,7 @@
   <header class="AdminHeader">
     <div class="headerLeft">
       <img class="brandiLogo" src="../../assets/logo.png" />
-      <span class="brandName">BRANDI</span>
+      <span class="brandName">B R A N D I</span>
       <span class="desc">internship(internship)</span>
     </div>
     <div class="headerRight">
@@ -36,7 +36,7 @@ export default {
       margin-right: 20px;
     }
     .brandName {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 700;
       margin-right: 20px;
     }
