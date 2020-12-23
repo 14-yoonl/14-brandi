@@ -1,17 +1,28 @@
 import Vue from "vue";
 import Router from "vue-router";
+
+//--admin
 import HelloWorld from "@/components/HelloWorld";
 import MemberManagement from "@/components/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
-import AdminOrder from "@/components/AdminOrder/AdminOrder";
-import signIn from "@/components/Service/SignIn";
+import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
+
+//--service
+import signIn from "@/views/store/SignIn";
+import home from "@/views/store/mainPage";
 
 Vue.use(Router);
 
 export default new Router({
   mode: "history",
   routes: [
+    {
+      path: "/",
+      name: "home",
+      component: home,
+      meta: { admin: false }
+    },
     {
       path: "/signIn",
       name: "signIn",

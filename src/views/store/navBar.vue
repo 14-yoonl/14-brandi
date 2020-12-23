@@ -1,7 +1,7 @@
 <template>
   <div class="navBar">
     <div class="navTop">
-      <h1 class="logo">
+      <h1 class="logoImage">
         <a href="/"
           ><img
             src="https://www.brandi.co.kr/static/20.09.01/images/logo@3x.png"
@@ -18,7 +18,7 @@
         <span>찜</span>
         <span>장바구니</span>
         <span>마이페이지</span>
-        <span>로그인</span>
+        <span> <a href="/signIn">로그인</a></span>
         <span>입점문의</span>
       </div>
     </div>
@@ -48,7 +48,7 @@ export default {};
     display: flex;
     justify-content: space-between;
 
-    .logo {
+    .logoImage {
       width: 190px;
 
       img {
@@ -72,6 +72,14 @@ export default {};
         margin: 0 4px;
         border-right: 1px solid rgba(0, 0, 0, 0.1);
         padding: 0 10px;
+
+        a {
+          text-decoration: none;
+          color: black;
+          &:hover {
+            color: gray;
+          }
+        }
       }
     }
   }
@@ -84,6 +92,11 @@ export default {};
 
     span {
       padding: 10px 47px;
+
+      &:hover {
+        color: gray;
+        border-bottom: 2px solid red;
+      }
     }
   }
 }
