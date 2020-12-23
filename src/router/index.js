@@ -2,8 +2,10 @@ import Vue from "vue";
 import Router from "vue-router";
 import HelloWorld from "@/components/HelloWorld";
 import MemberManagement from "@/components/MemberManagement/MemberManagement";
-import SignIn from "@/views/admin/signIn";
-import SignUp from "@/views/admin/signUp";
+import adminSignIn from "@/views/admin/signIn";
+import adminSignUp from "@/views/admin/signUp";
+import AdminOrder from "@/components/AdminOrder/AdminOrder";
+import signIn from "@/components/Service/SignIn";
 
 Vue.use(Router);
 
@@ -11,26 +13,32 @@ export default new Router({
   mode: "history",
   routes: [
     {
-      path: "/",
-      name: "HelloWorld",
-      component: HelloWorld,
+      path: "/signIn",
+      name: "signIn",
+      component: signIn,
       meta: { admin: false }
     },
     {
       path: "/admin/seller",
       name: "seller",
-      component: MemberManagement, //<=== admin home component 추가해야함
+      component: MemberManagement,
       meta: { admin: true }
     },
     {
       path: "/admin/signin",
       name: "signIn",
-      component: SignIn
+      component: adminSignIn
     },
     {
       path: "/admin/signup",
       name: "signUp",
-      component: SignUp
+      component: adminSignUp
+    },
+    {
+      path: "/admin/order",
+      name: "AdminOrder",
+      component: AdminOrder, //<=== admin home component 추가해야함
+      meta: { admin: true }
     }
   ]
 });
