@@ -1,6 +1,5 @@
 <template>
   <aside class="AdminSideBar">
-    <img src="../../assets/logo.png" />
     <ul v-for="(topValue, menuList, index) in menuList">
       <li>
         <input type="radio" name="navList" :id="`nav` + index" />
@@ -51,15 +50,10 @@ export default {
   display: flex;
   flex-direction: column;
   width: 250px;
+  margin-top: 80px;
   color: #f1f1f1;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 300;
-
-  img {
-    width: 50px;
-    height: 50px;
-    margin: 0 auto 30px auto;
-  }
 
   ul {
     padding: 0;
@@ -68,6 +62,7 @@ export default {
     li {
       overflow: hidden;
       border-bottom: 1px solid #414247;
+      margin-left: 20px;
 
       input[type="radio"] {
         display: none;
