@@ -4,12 +4,21 @@
       <div class="loginLogo">
         <img src="../../assets/logo.png" /><span>BRANDI ADMIN</span>
       </div>
-      <div class="inputbox">
-        <input type="text" placeholder="아이디를 입력해주세요" />
-      </div>
-      <div class="inputbox">
-        <input type="password" placeholder="비밀번호를 입력해주세요" />
-      </div>
+      <v-container>
+        <v-form>
+          <v-text-field
+            v-model="id"
+            label="아이디"
+            :rules="idRules"
+          ></v-text-field>
+          <v-text-field
+            type="password"
+            v-model="password"
+            label="비밀번호"
+            :rules="passwordRules"
+          ></v-text-field>
+        </v-form>
+      </v-container>
       <div class="rememberCheck">
         <v-checkbox
           label="아이디/비밀번호 기억하기"
@@ -41,8 +50,10 @@
 export default {
   data() {
     return {
-      id: "test",
-      password: "1234"
+      id: "",
+      password: "",
+      idRules: [v => !!v || "아이디를 입력해주세요"],
+      passwordRules: [v => !!v || "비밀번호를 입력해주세요."]
     };
   },
   methods: {
@@ -73,15 +84,17 @@ export default {
   position: relative;
   width: 100%;
   height: 100vh;
+  background-color: #fafafa;
 
   .loginForm {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 400px;
+    width: 450px;
     height: 600px;
     padding: 20px 40px;
     border-radius: 50px;
+    background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
 
     .loginLogo {
@@ -141,18 +154,19 @@ export default {
 
       span {
         margin: 5px 0;
-        font-size: 15px;
+        font-size: 13px;
         color: #929292;
         text-decoration: none;
 
         a {
           margin: 0 5px;
           text-decoration: none;
+          font-weight: bold;
         }
       }
 
       .findLogin {
-        font-size: 15px;
+        font-size: 13px;
         color: #929292;
         text-decoration: none;
       }
@@ -178,6 +192,18 @@ export default {
         font-size: 15px;
         font-weight: bold;
       }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .LoginPage {
+    align-items: flex-start;
+
+    .loginForm {
+      width: 100%;
+      margin: 30px;
+      height: auto;
     }
   }
 }
