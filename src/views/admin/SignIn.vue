@@ -44,16 +44,23 @@
         <span>@브랜디셀러</span>
       </div>
     </div>
+    <LodingSpinner v-if="loding"></LodingSpinner>
   </div>
 </template>
 <script>
+import LodingSpinner from "@/components/common/LodingSpinner";
+
 export default {
+  components: {
+    LodingSpinner
+  },
   data() {
     return {
       id: "",
       password: "",
       idRules: [v => !!v || "아이디를 입력해주세요"],
-      passwordRules: [v => !!v || "비밀번호를 입력해주세요."]
+      passwordRules: [v => !!v || "비밀번호를 입력해주세요."],
+      loding: false
     };
   },
   methods: {
