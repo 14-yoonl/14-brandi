@@ -3,7 +3,7 @@ import Router from "vue-router";
 
 //--admin
 import HelloWorld from "@/components/HelloWorld";
-import MemberManagement from "@/components/MemberManagement/MemberManagement";
+import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
 import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
@@ -37,7 +37,7 @@ export default new Router({
     },
     {
       path: "/admin/signin",
-      name: "signIn",
+      name: "adminSignIn",
       component: adminSignIn
     },
     {
