@@ -30,14 +30,21 @@
         <label>결제완료일 : </label>
         <v-btn elevation="2" small>전체</v-btn>
         <v-btn elevation="2" small>오늘</v-btn>
-        <v-btn elevation="2" small color="primary">3일</v-btn>
+        <v-btn elevation="2" small color="primary" active-class="v-item--active"
+          >3일</v-btn
+        >
         <v-btn elevation="2" small>1주일</v-btn>
         <v-btn elevation="2" small>1개월</v-btn>
         <v-btn elevation="2" small>3개월</v-btn>
       </div>
       <div class="filterList">
+        <<<<<<< HEAD
         <label>셀러속성 : </label>
         <v-btn elevation="2" small color="primary">전체</v-btn>
+        =======
+        <span class="filterTitle">셀러속성 : </span>
+        <v-btn elevation="2" small color="primary" class="{active}">전체</v-btn>
+        >>>>>>> 65b5e96... Update filter
         <v-btn elevation="2" small>쇼핑몰</v-btn>
         <v-btn elevation="2" small>마켓</v-btn>
         <v-btn elevation="2" small>로드샵</v-btn>
@@ -71,9 +78,13 @@
         </template>
       </v-data-table> -->
       <div class="handlePrepareBtns">
-        <span>전체 조회건 수 : 8 건</span>
-        <v-btn elevation="1" x-small color="primary">배송준비처리</v-btn>
-        <v-btn elevation="1" x-small color="primary">주문취소처리</v-btn>
+        <span>전체 조회건 수 : {{ desserts.length }} 건</span>
+        <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+          >배송준비처리</v-btn
+        >
+        <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+          >주문취소처리</v-btn
+        >
       </div>
       <div class="tableContainer">
         <table>
@@ -160,8 +171,12 @@
         </table>
       </div>
       <div class="handlePrepareBtns">
-        <v-btn elevation="1" x-small color="primary">배송준비처리</v-btn>
-        <v-btn elevation="1" x-small color="primary">주문취소처리</v-btn>
+        <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+          >배송준비처리</v-btn
+        >
+        <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+          >주문취소처리</v-btn
+        >
       </div>
     </div>
   </div>
@@ -189,37 +204,37 @@ export default {
         { text: "사용포인트", value: "usedPoint" },
         { text: "쿠폰할인", value: "discountCoupon" },
         { text: "결제수단", value: "paymentType" },
-        { text: "주문상태", value: "orderStatus" }
+        { text: "주문상태", value: "orderStatus" },
       ],
       searchCondition: [
         {
           text: "주문번호",
-          value: "orderNo"
+          value: "orderNo",
         },
         {
           text: "주문상세번호",
-          value: "orderDetailNo"
+          value: "orderDetailNo",
         },
         {
           text: "주문자명",
-          value: "senderName"
+          value: "senderName",
         },
         {
           text: "핸드폰번호",
-          value: "senderPhone"
+          value: "senderPhone",
         },
         {
           text: "셀러명",
-          value: "sellerName"
+          value: "sellerName",
         },
         {
           text: "상품명",
-          value: "productName"
-        }
+          value: "productName",
+        },
       ],
       desserts: [
         {
-          orderNo: 20201218000028000,
+          orderNo: 20201218000028012,
           paidDate: "2020-12-18 17:01:45",
           orderDetailNo: "B202012180001C001",
           sellerName: "모디무드",
@@ -236,7 +251,27 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
+          orderStatus: "상품준비",
+        },
+        {
+          orderNo: 20201218000021230,
+          paidDate: "2020-12-18 17:01:45",
+          orderDetailNo: "B202012180001C001",
+          sellerName: "모디무드",
+          sellerType: "헬피셀러",
+          helpyType: "헬피1",
+          deliveryType: "일반배송",
+          productName: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
+          options: "아이보리/free",
+          optionsPrice: 0,
+          quantity: 1,
+          senderName: "장호철",
+          senderPhone: "010-8516-1399",
+          paidPrice: 9800,
+          usedPoint: 0,
+          discountCoupon: 0,
+          paymentType: "네이버페이주문형(신용카드)",
+          orderStatus: "상품준비",
         },
         {
           orderNo: 20201218000028000,
@@ -256,7 +291,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
+          orderStatus: "상품준비",
         },
         {
           orderNo: 20201218000028000,
@@ -276,7 +311,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
+          orderStatus: "상품준비",
         },
         {
           orderNo: 20201218000028000,
@@ -296,50 +331,37 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
+          orderStatus: "상품준비",
         },
-        {
-          orderNo: 20201218000028000,
-          paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C001",
-          sellerName: "모디무드",
-          sellerType: "헬피셀러",
-          helpyType: "헬피1",
-          deliveryType: "일반배송",
-          productName: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
-          options: "아이보리/free",
-          optionsPrice: 0,
-          quantity: 1,
-          senderName: "장호철",
-          senderPhone: "010-8516-1399",
-          paidPrice: 9800,
-          usedPoint: 0,
-          discountCoupon: 0,
-          paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
-        }
-      ]
+      ],
     };
   },
-  methods: {},
+  methods: {
+    prepareOrder: function (event) {
+      alert(`selected.length개의 주문이 배송준비처리 되었습니다 !`);
+    },
+    cancelOrder: function (event) {
+      alert(`selected.length개의 주문이 취소되었습니다 !`);
+    },
+  },
   computed: {
     selectAll: {
-      get: function() {
+      get: function () {
         return this.desserts
           ? this.selected.length === this.desserts.length
           : false;
       },
-      set: function(value) {
+      set: function (value) {
         var selected = [];
         if (value) {
-          this.desserts.forEach(order => {
+          this.desserts.forEach((order) => {
             selected.push(order.orderNo);
           });
         }
         this.selected = selected;
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -388,10 +410,15 @@ export default {
     background-color: white;
     border-radius: 10px;
 
+    .select {
+      width: 100px;
+      height: 30px;
+    }
+
     .searchCondition {
       line-height: 30px;
       margin-right: 20px;
-      font-size: 10px;
+      font-size: 16px;
     }
 
     .searchInputBox {
@@ -406,12 +433,21 @@ export default {
 
     .filterList {
       margin-bottom: 10px;
+      .filterTitle {
+        margin: 0 20px;
+        font-size: 14px;
+      }
+      .v-btn {
+        margin: 0 5px;
+      }
     }
     .searchBtnBox {
       display: flex;
       justify-content: center;
-      v-btn {
-        margin: 5px;
+
+      .v-btn {
+        width: 100px;
+        margin: 0 5px;
       }
     }
   }
