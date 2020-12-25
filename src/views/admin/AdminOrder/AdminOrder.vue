@@ -34,8 +34,8 @@
       </div>
       <div class="filterList">
         <span class="filterTitle">결제완료일 : </span>
-        <input type="radio" v-for="completedDateValue in completedDateList" />
-        <span>{{ completedDateValue.text }}</span>
+        <!-- <input type="radio" v-for="completedDateValue in completedDateList" />
+        <span>{{ completedDateValue.text }}</span> -->
       </div>
       <div class="filterList">
         <span class="filterTitle">셀러속성 : </span>
