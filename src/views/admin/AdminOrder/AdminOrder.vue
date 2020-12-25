@@ -18,33 +18,38 @@
       </div>
     </div>
     <div class="filter">
-      <v-col class="d-flex" cols="12" sm="6">
-        <v-select :items="searchCondition" outlined class="searchCondition" />
+      <div class="filterList">
+        <span class="filterTitle">검색조건 : </span>
+        <select v-model="filterSelectedCondition" class="searchCondition">
+          <option value="">조건을 선택해주세요</option>
+          <option v-for="condition in searchCondition">
+            {{ condition.text }}
+          </option>
+        </select>
         <input
-          type="text"
+          v-model="searchInputData"
           class="searchInputBox"
           placeholder="검색어를 입력하세요"
         />
-      </v-col>
-      <div class="filterList">
-        <label>결제완료일 : </label>
-        <v-btn elevation="2" small>전체</v-btn>
-        <v-btn elevation="2" small>오늘</v-btn>
-        <v-btn elevation="2" small color="primary" active-class="v-item--active"
-          >3일</v-btn
-        >
-        <v-btn elevation="2" small>1주일</v-btn>
-        <v-btn elevation="2" small>1개월</v-btn>
-        <v-btn elevation="2" small>3개월</v-btn>
       </div>
       <div class="filterList">
-        <<<<<<< HEAD
-        <label>셀러속성 : </label>
-        <v-btn elevation="2" small color="primary">전체</v-btn>
-        =======
+        <span class="filterTitle">결제완료일 : </span>
+        <input type="radio" id="0" />
+        <label for="0">전체</label>
+        <input type="radio" id="1" />
+        <label for="1">오늘</label>
+        <input type="radio" id="2" />
+        <label for="2">3일</label>
+        <input type="radio" id="3" />
+        <label for="3">1주일</label>
+        <input type="radio" id="4" />
+        <label for="4">1개월</label>
+        <input type="radio" id="5" />
+        <label for="5">3개월</label>
+      </div>
+      <div class="filterList">
         <span class="filterTitle">셀러속성 : </span>
         <v-btn elevation="2" small color="primary" class="{active}">전체</v-btn>
-        >>>>>>> 65b5e96... Update filter
         <v-btn elevation="2" small>쇼핑몰</v-btn>
         <v-btn elevation="2" small>마켓</v-btn>
         <v-btn elevation="2" small>로드샵</v-btn>
@@ -53,13 +58,13 @@
         <v-btn elevation="2" small>뷰티</v-btn>
       </div>
       <div class="filterList">
-        <label>셀러구분 : </label>
+        <span class="filterTitle">셀러구분 : </span>
         <v-btn elevation="2" small color="primary">전체</v-btn>
         <v-btn elevation="2" small>일반</v-btn>
         <v-btn elevation="2" small>헬피</v-btn>
       </div>
       <div class="filterList">
-        <label>배송구분 : </label>
+        <span class="filterTitle">배송구분 : </span>
         <v-btn elevation="2" small color="primary">전체</v-btn>
         <v-btn elevation="2" small>일반배송</v-btn>
         <v-btn elevation="2" small>오늘출발</v-btn>
@@ -72,11 +77,6 @@
       </div>
     </div>
     <div class="contentList">
-      <!-- <v-data-table :headers="headers" :items="desserts" class="elevation-1">
-        <template v-slot:header.name="{ header }">
-          {{ header.text.toUpperCase() }}
-        </template>
-      </v-data-table> -->
       <div class="handlePrepareBtns">
         <span>전체 조회건 수 : {{ desserts.length }} 건</span>
         <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
@@ -185,7 +185,44 @@
 export default {
   data() {
     return {
+      searchInputData: "",
+      filterSelectedCondition: "",
       selected: [],
+      completedDate: "",
+      completedDateList: [
+        { text: "전체", value: "allDays" },
+        { text: "오늘", value: "today" },
+        { text: "3일", value: "3days" },
+        { text: "1주일", value: "1week" },
+        { text: "1개월", value: "1month" },
+        { text: "3개월", value: "3month" }
+      ],
+      searchCondition: [
+        {
+          text: "주문번호",
+          value: "orderNo"
+        },
+        {
+          text: "주문상세번호",
+          value: "orderDetailNo"
+        },
+        {
+          text: "주문자명",
+          value: "senderName"
+        },
+        {
+          text: "핸드폰번호",
+          value: "senderPhone"
+        },
+        {
+          text: "셀러명",
+          value: "sellerName"
+        },
+        {
+          text: "상품명",
+          value: "productName"
+        }
+      ],
       headers: [
         { text: "주문번호", value: "orderNo" },
         { text: "결제일자", value: "paidDate" },
@@ -204,33 +241,7 @@ export default {
         { text: "사용포인트", value: "usedPoint" },
         { text: "쿠폰할인", value: "discountCoupon" },
         { text: "결제수단", value: "paymentType" },
-        { text: "주문상태", value: "orderStatus" },
-      ],
-      searchCondition: [
-        {
-          text: "주문번호",
-          value: "orderNo",
-        },
-        {
-          text: "주문상세번호",
-          value: "orderDetailNo",
-        },
-        {
-          text: "주문자명",
-          value: "senderName",
-        },
-        {
-          text: "핸드폰번호",
-          value: "senderPhone",
-        },
-        {
-          text: "셀러명",
-          value: "sellerName",
-        },
-        {
-          text: "상품명",
-          value: "productName",
-        },
+        { text: "주문상태", value: "orderStatus" }
       ],
       desserts: [
         {
@@ -251,7 +262,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
+          orderStatus: "상품준비"
         },
         {
           orderNo: 20201218000021230,
@@ -271,7 +282,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
+          orderStatus: "상품준비"
         },
         {
           orderNo: 20201218000028000,
@@ -291,7 +302,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
+          orderStatus: "상품준비"
         },
         {
           orderNo: 20201218000028000,
@@ -311,7 +322,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
+          orderStatus: "상품준비"
         },
         {
           orderNo: 20201218000028000,
@@ -331,37 +342,37 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
-        },
-      ],
+          orderStatus: "상품준비"
+        }
+      ]
     };
   },
   methods: {
-    prepareOrder: function (event) {
+    prepareOrder: function(event) {
       alert(`selected.length개의 주문이 배송준비처리 되었습니다 !`);
     },
-    cancelOrder: function (event) {
+    cancelOrder: function(event) {
       alert(`selected.length개의 주문이 취소되었습니다 !`);
-    },
+    }
   },
   computed: {
     selectAll: {
-      get: function () {
+      get: function() {
         return this.desserts
           ? this.selected.length === this.desserts.length
           : false;
       },
-      set: function (value) {
+      set: function(value) {
         var selected = [];
         if (value) {
-          this.desserts.forEach((order) => {
+          this.desserts.forEach(order => {
             selected.push(order.orderNo);
           });
         }
         this.selected = selected;
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
