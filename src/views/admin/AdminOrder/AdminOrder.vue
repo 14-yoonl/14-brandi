@@ -18,26 +18,38 @@
       </div>
     </div>
     <div class="filter">
-      <v-col class="d-flex" cols="12" sm="6">
-        <v-select :items="searchCondition" outlined class="searchCondition" />
+      <div class="filterList">
+        <span class="filterTitle">검색조건 : </span>
+        <select v-model="filterSelectedCondition" class="searchCondition">
+          <option value="">조건을 선택해주세요</option>
+          <option v-for="condition in searchCondition">
+            {{ condition.text }}
+          </option>
+        </select>
         <input
-          type="text"
+          v-model="searchInputData"
           class="searchInputBox"
           placeholder="검색어를 입력하세요"
         />
-      </v-col>
-      <div class="filterList">
-        <label>결제완료일 : </label>
-        <v-btn elevation="2" small>전체</v-btn>
-        <v-btn elevation="2" small>오늘</v-btn>
-        <v-btn elevation="2" small color="primary">3일</v-btn>
-        <v-btn elevation="2" small>1주일</v-btn>
-        <v-btn elevation="2" small>1개월</v-btn>
-        <v-btn elevation="2" small>3개월</v-btn>
       </div>
       <div class="filterList">
-        <label>셀러속성 : </label>
-        <v-btn elevation="2" small color="primary">전체</v-btn>
+        <span class="filterTitle">결제완료일 : </span>
+        <input type="radio" id="0" />
+        <label for="0">전체</label>
+        <input type="radio" id="1" />
+        <label for="1">오늘</label>
+        <input type="radio" id="2" />
+        <label for="2">3일</label>
+        <input type="radio" id="3" />
+        <label for="3">1주일</label>
+        <input type="radio" id="4" />
+        <label for="4">1개월</label>
+        <input type="radio" id="5" />
+        <label for="5">3개월</label>
+      </div>
+      <div class="filterList">
+        <span class="filterTitle">셀러속성 : </span>
+        <v-btn elevation="2" small color="primary" class="{active}">전체</v-btn>
         <v-btn elevation="2" small>쇼핑몰</v-btn>
         <v-btn elevation="2" small>마켓</v-btn>
         <v-btn elevation="2" small>로드샵</v-btn>
@@ -46,13 +58,13 @@
         <v-btn elevation="2" small>뷰티</v-btn>
       </div>
       <div class="filterList">
-        <label>셀러구분 : </label>
+        <span class="filterTitle">셀러구분 : </span>
         <v-btn elevation="2" small color="primary">전체</v-btn>
         <v-btn elevation="2" small>일반</v-btn>
         <v-btn elevation="2" small>헬피</v-btn>
       </div>
       <div class="filterList">
-        <label>배송구분 : </label>
+        <span class="filterTitle">배송구분 : </span>
         <v-btn elevation="2" small color="primary">전체</v-btn>
         <v-btn elevation="2" small>일반배송</v-btn>
         <v-btn elevation="2" small>오늘출발</v-btn>
@@ -65,15 +77,14 @@
       </div>
     </div>
     <div class="contentList">
-      <!-- <v-data-table :headers="headers" :items="desserts" class="elevation-1">
-        <template v-slot:header.name="{ header }">
-          {{ header.text.toUpperCase() }}
-        </template>
-      </v-data-table> -->
       <div class="handlePrepareBtns">
-        <span>전체 조회건 수 : 8 건</span>
-        <v-btn elevation="1" x-small color="primary">배송준비처리</v-btn>
-        <v-btn elevation="1" x-small color="primary">주문취소처리</v-btn>
+        <span>전체 조회건 수 : {{ desserts.length }} 건</span>
+        <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+          >배송준비처리</v-btn
+        >
+        <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+          >주문취소처리</v-btn
+        >
       </div>
       <div class="tableContainer">
         <table>
@@ -160,8 +171,12 @@
         </table>
       </div>
       <div class="handlePrepareBtns">
-        <v-btn elevation="1" x-small color="primary">배송준비처리</v-btn>
-        <v-btn elevation="1" x-small color="primary">주문취소처리</v-btn>
+        <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+          >배송준비처리</v-btn
+        >
+        <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+          >주문취소처리</v-btn
+        >
       </div>
     </div>
   </div>
@@ -170,26 +185,17 @@
 export default {
   data() {
     return {
+      searchInputData: "",
+      filterSelectedCondition: "",
       selected: [],
-      headers: [
-        { text: "주문번호", value: "orderNo" },
-        { text: "결제일자", value: "paidDate" },
-        { text: "주문상세번호", value: "orderDetailNo" },
-        { text: "셀러명", value: "sellerName" },
-        { text: "셀러구분", value: "sellerType" },
-        { text: "헬피구분", value: "helpyType" },
-        { text: "배송구분", value: "deliveryType" },
-        { text: "상품명", value: "productName" },
-        { text: "옵션정보", value: "options" },
-        { text: "옵션추가금액", value: "optionsPrice" },
-        { text: "수량", value: "quantity" },
-        { text: "주문자명", value: "senderName" },
-        { text: "핸드폰번호", value: "senderPhone" },
-        { text: "결제금액", value: "paidPrice" },
-        { text: "사용포인트", value: "usedPoint" },
-        { text: "쿠폰할인", value: "discountCoupon" },
-        { text: "결제수단", value: "paymentType" },
-        { text: "주문상태", value: "orderStatus" }
+      completedDate: "",
+      completedDateList: [
+        { text: "전체", value: "allDays" },
+        { text: "오늘", value: "today" },
+        { text: "3일", value: "3days" },
+        { text: "1주일", value: "1week" },
+        { text: "1개월", value: "1month" },
+        { text: "3개월", value: "3month" }
       ],
       searchCondition: [
         {
@@ -217,9 +223,29 @@ export default {
           value: "productName"
         }
       ],
+      headers: [
+        { text: "주문번호", value: "orderNo" },
+        { text: "결제일자", value: "paidDate" },
+        { text: "주문상세번호", value: "orderDetailNo" },
+        { text: "셀러명", value: "sellerName" },
+        { text: "셀러구분", value: "sellerType" },
+        { text: "헬피구분", value: "helpyType" },
+        { text: "배송구분", value: "deliveryType" },
+        { text: "상품명", value: "productName" },
+        { text: "옵션정보", value: "options" },
+        { text: "옵션추가금액", value: "optionsPrice" },
+        { text: "수량", value: "quantity" },
+        { text: "주문자명", value: "senderName" },
+        { text: "핸드폰번호", value: "senderPhone" },
+        { text: "결제금액", value: "paidPrice" },
+        { text: "사용포인트", value: "usedPoint" },
+        { text: "쿠폰할인", value: "discountCoupon" },
+        { text: "결제수단", value: "paymentType" },
+        { text: "주문상태", value: "orderStatus" }
+      ],
       desserts: [
         {
-          orderNo: 20201218000028000,
+          orderNo: 20201218000028012,
           paidDate: "2020-12-18 17:01:45",
           orderDetailNo: "B202012180001C001",
           sellerName: "모디무드",
@@ -239,7 +265,7 @@ export default {
           orderStatus: "상품준비"
         },
         {
-          orderNo: 20201218000028000,
+          orderNo: 20201218000021230,
           paidDate: "2020-12-18 17:01:45",
           orderDetailNo: "B202012180001C001",
           sellerName: "모디무드",
@@ -321,7 +347,14 @@ export default {
       ]
     };
   },
-  methods: {},
+  methods: {
+    prepareOrder: function(event) {
+      alert(`selected.length개의 주문이 배송준비처리 되었습니다 !`);
+    },
+    cancelOrder: function(event) {
+      alert(`selected.length개의 주문이 취소되었습니다 !`);
+    }
+  },
   computed: {
     selectAll: {
       get: function() {
@@ -388,10 +421,15 @@ export default {
     background-color: white;
     border-radius: 10px;
 
+    .select {
+      width: 100px;
+      height: 30px;
+    }
+
     .searchCondition {
       line-height: 30px;
       margin-right: 20px;
-      font-size: 10px;
+      font-size: 16px;
     }
 
     .searchInputBox {
@@ -406,12 +444,21 @@ export default {
 
     .filterList {
       margin-bottom: 10px;
+      .filterTitle {
+        margin: 0 20px;
+        font-size: 14px;
+      }
+      .v-btn {
+        margin: 0 5px;
+      }
     }
     .searchBtnBox {
       display: flex;
       justify-content: center;
-      v-btn {
-        margin: 5px;
+
+      .v-btn {
+        width: 100px;
+        margin: 0 5px;
       }
     }
   }
