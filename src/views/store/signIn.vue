@@ -11,6 +11,7 @@
           <input type="text" class="idInput" placeholder="아이디 입력" />
           <input type="text" class="pwInput" placeholder="비밀번호 입력" />
           <button class="logInButton"><a href="/">로그인</a></button>
+
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
           <button class="socialLogin">
             <img

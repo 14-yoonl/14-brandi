@@ -1,5 +1,6 @@
 <template>
   <div class="signUpContainer">
+    <NavBar class="nav"></NavBar>
     <h2 class="signUpHeader">회원가입</h2>
     <div class="joinSteps">
       <div>본인인증</div>
@@ -20,14 +21,14 @@
         </div>
       </div>
     </div>
-
-    <div class="confirmBtn">
-      <v-btn><a href="/getInfo">다음</a></v-btn>
+    <div class="secConfirmBtn">
+      <v-btn><a href="/thirdStep">다음</a></v-btn>
     </div>
   </div>
 </template>
 
 <script>
+import NavBar from "../NavBar";
 export default {
   data() {
     return {
@@ -70,12 +71,21 @@ export default {
       },
     },
   },
+  components: {
+    NavBar: NavBar,
+  },
 };
 </script>
+
+
 
 <style lang="scss" scoped>
 .signUpContainer {
   text-align: center;
+  .nav {
+    margin: 0 auto;
+  }
+
   .signUpHeader {
     padding-top: 40px;
     margin: 15px 0;
@@ -128,9 +138,12 @@ export default {
       }
     }
   }
-  .confirmBtn {
+  .secConfirmBtn {
     margin-top: 30px;
     button {
+      background-color: black;
+      color: white;
+
       a {
         text-decoration: none;
         color: black;

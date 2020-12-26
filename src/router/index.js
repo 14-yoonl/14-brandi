@@ -13,6 +13,8 @@ import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
+// import privacyInput from "@/views/store/signupprocess/privacyInput";
+import thirdStep from "@/views/store/signupprocess/thirdStep";
 
 Vue.use(Router);
 
@@ -23,6 +25,12 @@ export default new Router({
       path: "/",
       name: "home",
       component: home,
+      meta: { admin: false }
+    },
+    {
+      path: "/signIn",
+      name: "signIn",
+      component: signIn,
       meta: { admin: false }
     },
     {
@@ -38,9 +46,9 @@ export default new Router({
       meta: { admin: false }
     },
     {
-      path: "/signIn",
-      name: "signIn",
-      component: signIn,
+      path: "/thirdStep",
+      name: "thirdStep",
+      component: thirdStep,
       meta: { admin: false }
     },
     {

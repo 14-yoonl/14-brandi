@@ -1,5 +1,6 @@
 <template>
   <div class="signUpContainer">
+    <NavBar class="nav"></NavBar>
     <h2 class="signUpHeader">회원가입</h2>
     <div class="joinSteps">
       <div class="firstStep">본인인증</div>
@@ -29,11 +30,19 @@
 </template>
 
 <script>
-export default {};
+import NavBar from "../NavBar";
+export default {
+  components: {
+    NavBar: NavBar,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .signUpContainer {
+  .nav {
+    margin: 0 auto;
+  }
   text-align: center;
   .signUpHeader {
     padding-top: 40px;
