@@ -24,11 +24,14 @@
     <div class="secConfirmBtn">
       <v-btn><a href="/thirdStep">다음</a></v-btn>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import NavBar from "../NavBar";
+import Footer from "../footer";
+
 export default {
   data() {
     return {
@@ -73,6 +76,7 @@ export default {
   },
   components: {
     NavBar: NavBar,
+    Footer: Footer,
   },
 };
 </script>

@@ -13,7 +13,6 @@ import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
-// import privacyInput from "@/views/store/signupprocess/privacyInput";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
 
 Vue.use(Router);

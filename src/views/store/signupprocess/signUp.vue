@@ -26,14 +26,17 @@
         </div>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import NavBar from "../NavBar";
+import Footer from "../footer";
 export default {
   components: {
     NavBar: NavBar,
+    Footer: Footer,
   },
 };
 </script>
