@@ -11,10 +11,13 @@ import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
 //--service
 import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
+
+//--service_signup
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
-// import privacyInput from "@/views/store/signupprocess/privacyInput";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
+//--service_product_detail
+import productsDetail from "@/views/store/products/productsDetail";
 
 Vue.use(Router);
 
@@ -49,6 +52,12 @@ export default new Router({
       path: "/thirdStep",
       name: "thirdStep",
       component: thirdStep,
+      meta: { admin: false }
+    },
+    {
+      path: "/detail",
+      name: "productsDetail",
+      component: productsDetail,
       meta: { admin: false }
     },
     {
