@@ -11,6 +11,10 @@ import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
 //--service
 import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
+import signUp from "@/views/store/signupprocess/signUp";
+import getInfo from "@/views/store/signupprocess/getInfo";
+// import privacyInput from "@/views/store/signupprocess/privacyInput";
+import thirdStep from "@/views/store/signupprocess/thirdStep";
 
 Vue.use(Router);
 
@@ -27,6 +31,24 @@ export default new Router({
       path: "/signIn",
       name: "signIn",
       component: signIn,
+      meta: { admin: false }
+    },
+    {
+      path: "/signUp",
+      name: "signUp",
+      component: signUp,
+      meta: { admin: false }
+    },
+    {
+      path: "/getInfo",
+      name: "getInfo",
+      component: getInfo,
+      meta: { admin: false }
+    },
+    {
+      path: "/thirdStep",
+      name: "thirdStep",
+      component: thirdStep,
       meta: { admin: false }
     },
     {
