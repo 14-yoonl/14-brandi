@@ -25,6 +25,14 @@
         <productCard />
         <productCard />
         <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
       </div>
     </div>
     <Footer></Footer>
