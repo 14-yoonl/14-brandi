@@ -1,5 +1,6 @@
 <template>
   <div class="signUpContainer">
+    <NavBar></NavBar>
     <h2 class="signUpHeader">회원가입</h2>
     <div class="joinSteps">
       <div>본인인증</div>
@@ -21,11 +22,19 @@
         <v-btn><a href="/signUpDone">다음</a></v-btn>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
-export default {};
+import NavBar from "../NavBar";
+import Footer from "../footer";
+export default {
+  components: {
+    NavBar: NavBar,
+    Footer: Footer,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
