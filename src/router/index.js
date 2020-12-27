@@ -3,7 +3,7 @@ import Router from "vue-router";
 
 //--admin
 import HelloWorld from "@/components/HelloWorld";
-import MemberManagement from "@/components/MemberManagement/MemberManagement";
+import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
 import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
@@ -13,7 +13,6 @@ import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
-// import privacyInput from "@/views/store/signupprocess/privacyInput";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
 
 Vue.use(Router);
@@ -59,7 +58,7 @@ export default new Router({
     },
     {
       path: "/admin/signin",
-      name: "signIn",
+      name: "adminSignIn",
       component: adminSignIn
     },
     {
