@@ -25,38 +25,49 @@
         <productCard />
         <productCard />
         <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
+        <productCard />
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import productCard from "./productCard.vue";
 import NavBar from "./NavBar";
+import Footer from "./footer";
 
 export default {
   data() {
     return {
       slideitems: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
+          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
+          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
+          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
-        }
-      ]
+          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
+        },
+      ],
     };
   },
   components: {
     NavBar: NavBar,
-    productCard: productCard
-  }
+    productCard: productCard,
+    Footer: Footer,
+  },
 };
 </script>
 
