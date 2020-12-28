@@ -1,6 +1,6 @@
 <template>
   <div class="signUpContainer">
-    <NavBar></NavBar>
+    <NavBar class="nav"></NavBar>
     <h2 class="signUpHeader">회원가입</h2>
     <div class="joinSteps">
       <div>본인인증</div>
@@ -15,11 +15,11 @@
       </div>
       <div class="inputMessage">이메일 정보는 비밀번호 찾기시 사용됩니다.</div>
       <div class="inputBottom">
-        <input type="text" placeholder="비밀번호 입력" />
-        <input type="text" placeholder="비밀번호 확인" />
+        <input type="password" placeholder="비밀번호 입력" />
+        <input type="password" placeholder="비밀번호 확인" />
       </div>
       <div class="thrConfirmBtn">
-        <v-btn><a href="/signUpDone">다음</a></v-btn>
+        <v-btn><a href="/ ">가입 완료</a></v-btn>
       </div>
     </div>
     <Footer></Footer>
@@ -30,6 +30,9 @@
 import NavBar from "../NavBar";
 import Footer from "../footer";
 export default {
+  data() {
+    return {};
+  },
   components: {
     NavBar: NavBar,
     Footer: Footer,

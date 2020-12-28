@@ -13,26 +13,17 @@
     <div class="mainProducts">
       <h2 class="productHeader">당신을 위한 추천</h2>
       <div class="cardList">
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
+        <productCard
+          v-for="item in items"
+          :key="item"
+          :seller="item.sellerName"
+          :imageUrl="item.imageUrl"
+          :name="item.name"
+          :originPrice="item.originPrice"
+          :discountRate="item.discountRate"
+          :discountedPrice="item.discountedPrice"
+          :count="item.count"
+        />
       </div>
     </div>
     <Footer></Footer>
@@ -49,25 +40,49 @@ export default {
     return {
       slideitems: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
+          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
+          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
+          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
-        }
-      ]
+          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
+        },
+      ],
+      items: [
+        {
+          id: 1,
+          sellerName: "미우블랑",
+          imageUrl:
+            "https://image.brandi.me/cproduct/2019/12/16/12635118_1576508021_image1_M.jpg",
+          name: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
+          originPrice: 9800,
+          discountRate: 0,
+          discountedPrice: 9800,
+          count: 432,
+        },
+        {
+          id: 2,
+          sellerName: "로젠하이",
+          imageUrl:
+            "https://image.brandi.me/cproduct/2019/06/25/9350924_1561425223_image1_M.jpg",
+          name: "일론 스티치 반팔 미니-원피스(린넨55%)",
+          originPrice: 26000,
+          discountRate: 18,
+          discountedPrice: 18720,
+          count: 1136,
+        },
+      ],
     };
   },
   components: {
     NavBar: NavBar,
     productCard: productCard,
-    Footer: Footer
-  }
+    Footer: Footer,
+  },
 };
 </script>
 
