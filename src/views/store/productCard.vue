@@ -1,36 +1,50 @@
 <template>
   <div class="productList">
-    <ul>
-      <li class="listImage">
-        <img
-          src="https://i.ibb.co/D7DZg3k/TH0-U6-FBTN-U019-SDQ4-LBC-9b19a40fac7d-512.png"
-          alt="다람쥐사진"
-        />
-      </li>
-      <li class="listSeller"><span>성보의 하루</span></li>
-      <li class="listTitle"><em>14기 대표 러블리 성보좌</em></li>
-      <li class="listPrice">
-        <span class="dcPercent">20%</span>
-        <span class="bPrice">1,800,000</span>
-        <span class="aPrice">2,000,000</span>
-      </li>
-      <li class="productCount">300개 구매중</li>
-    </ul>
+    <a href="">
+      <ul>
+        <li class="listImage">
+          <img :src="imageUrl" alt="다람쥐사진" />
+        </li>
+        <li class="listSeller">
+          <span>{{ seller }}</span>
+        </li>
+        <li class="listTitle">
+          <em>{{ name }}</em>
+        </li>
+        <li class="listPrice">
+          <span class="dcPercent">{{ discountRate }}%</span>
+          <span class="bPrice">{{ discountedPrice }}</span>
+          <span class="aPrice">{{ originPrice }}</span>
+        </li>
+        <li class="productCount">{{ count }}개 판매중</li>
+      </ul>
+    </a>
   </div>
 </template>
 
 <script>
 export default {
+  props: [
+    "seller",
+    "imageUrl",
+    "name",
+    "originPrice",
+    "discountRate",
+    "discountedPrice",
+    "count",
+  ],
   data() {
-    return {
-      items: []
-    };
-  }
+    return {};
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .productList {
+  a {
+    text-decoration: none;
+    color: black;
+  }
   ul {
     display: flex;
     flex-direction: column;
