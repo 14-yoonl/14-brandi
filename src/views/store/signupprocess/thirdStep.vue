@@ -10,16 +10,16 @@
     </div>
     <div class="inputSection">
       <div class="inputTop">
-        <input type="text" placeholder="아이디 입력" />
-        <input type="text" placeholder="이메일 입력" />
+        <input type="text" placeholder="아이디 입력" v-model="id" />
+        <input type="text" placeholder="이메일 입력" v-model="email" />
       </div>
       <div class="inputMessage">이메일 정보는 비밀번호 찾기시 사용됩니다.</div>
       <div class="inputBottom">
-        <input type="password" placeholder="비밀번호 입력" />
+        <input type="password" placeholder="비밀번호 입력" v-model="password" />
         <input type="password" placeholder="비밀번호 확인" />
       </div>
       <div class="thrConfirmBtn">
-        <v-btn><a href="/ ">가입 완료</a></v-btn>
+        <v-btn @click="postTest"><a href="/ ">가입 완료</a></v-btn>
       </div>
     </div>
     <Footer></Footer>
@@ -31,11 +31,20 @@ import NavBar from "../NavBar";
 import Footer from "../footer";
 export default {
   data() {
-    return {};
+    return {
+      id: "",
+      password: "",
+      email: "",
+    };
   },
   components: {
     NavBar: NavBar,
     Footer: Footer,
+  },
+  methods: {
+    postTest() {
+      this.$store.dispatch("test", this.state);
+    },
   },
 };
 </script>

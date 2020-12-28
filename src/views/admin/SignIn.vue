@@ -52,15 +52,15 @@ import LodingSpinner from "@/components/common/LodingSpinner";
 
 export default {
   components: {
-    LodingSpinner
+    LodingSpinner,
   },
   data() {
     return {
       id: "",
       password: "",
-      idRules: [v => !!v || "아이디를 입력해주세요"],
-      passwordRules: [v => !!v || "비밀번호를 입력해주세요."],
-      loding: false
+      idRules: [(v) => !!v || "아이디를 입력해주세요"],
+      passwordRules: [(v) => !!v || "비밀번호를 입력해주세요."],
+      loding: false,
     };
   },
   methods: {
@@ -79,8 +79,8 @@ export default {
       //   } catch (err) {
       //     console.log("error", err);
       //   }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

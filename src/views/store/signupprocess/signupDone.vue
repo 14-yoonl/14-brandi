@@ -1,7 +1,9 @@
 <template>
   <div>
     <NavBar></NavBar>
-
+    <div>
+      <img src="" alt="" />
+    </div>
     <Footer></Footer>
   </div>
 </template>
