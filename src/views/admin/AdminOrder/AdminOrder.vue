@@ -1,11 +1,11 @@
 <template>
   <div class="AdminOrder">
-    <div class="headerContainer">
-      <div class="title">
+    <AdminHeader>
+      <template v-slot:title>
         <h1 class="mainTitle">주문 관리</h1>
         <span class="subTitle">상품준비 관리</span>
-      </div>
-      <div>
+      </template>
+      <template v-slot:notice>
         <p class="notice">
           ( 상품준비 단계에서는 구매회원의 주문취소가 가능하며, 배송준비단계로
           처리할 경우 3영업일 동안은 구매회원의 주문취소가 불가능합니다. )
@@ -15,8 +15,8 @@
           구매회원의 주문취소가 가능하며 이에 따른 책임은 판매자 회원에게
           있습니다. (전자상거래법 제 15조 1항에 근거) )
         </p>
-      </div>
-    </div>
+      </template>
+    </AdminHeader>
     <div class="filterContainer">
       <div class="filterList">
         <div class="filterTitle">
@@ -25,17 +25,21 @@
         <div class="filterBtnsGroup">
           <select v-model="filterSelectedCondition" class="searchCondition">
             <option value="" disabled>조건을 선택해주세요 ▼ </option>
-            <option value="orderNo">주문번호</option>
+            <!-- <option value="orderNo">주문번호</option>
             <option value="orderDetailNo">주문상세번호</option>
             <option value="" disabled>--------------------</option>
             <option value="senderName">주문자명</option>
             <option value="senderPhone">핸드폰번호</option>
             <option value="" disabled>--------------------</option>
             <option value="sellerName">셀러명</option>
-            <option value="productName">상품명</option>
-            <!-- <option v-for="condition in searchCondition">
-            {{ condition.text }}
-          </option> -->
+            <option value="productName">상품명</option> -->
+            <option
+              v-for="(condition, disabled) in searchCondition"
+              :disabled="condition.disabled"
+              v-bind:key="condition.id"
+            >
+              {{ condition.text }}
+            </option>
           </select>
         </div>
         <input
@@ -50,7 +54,17 @@
           <span>결제완료일 : </span>
         </div>
         <div class="filterBtnsGroup">
-          <input
+          <!-- <input
+            v-for="(date, name, value, id, model) in payedCompletedDateList"
+            v-bind:key="date.id"
+            type="radio"
+            :name="name"
+            :value="value"
+            id="id"
+            model="payedCompletedDate"
+          />
+          <label for="id">{{ date.value }}</label> -->
+          <!-- <input
             type="radio"
             name="payedDate"
             value="전체"
@@ -58,7 +72,6 @@
             v-model="payedCompletedDate"
           />
           <label for="payedDateAll">전체</label>
-
           <input
             type="radio"
             name="payedDate"
@@ -99,7 +112,7 @@
             id="3month"
             v-model="payedCompletedDate"
           />
-          <label for="3month">3개월</label>
+          <label for="3month">3개월</label> -->
         </div>
         <span>{{ payedCompletedDate }}</span>
         <input type="date" v-model="getStartedDate" />
@@ -107,7 +120,6 @@
         <span>{{ startedDate }}</span>
         <!-- <v-date-picker v-model="dates" range></v-date-picker> -->
       </div>
-
       <div class="filterList">
         <div class="filterTitle">
           <span>셀러속성 : </span>
@@ -120,6 +132,7 @@
             id="sellerAttributeAll"
             v-model="sellerAttribute"
           />
+          <!-- v-model="selectAllSellerAttribute" -->
           <label for="sellerAttributeAll">전체</label>
           <input
             type="checkbox"
@@ -254,7 +267,7 @@
       </div>
     </div>
     <div class="tableContainer">
-      <div class="contentListHeaderBtns">
+      <div class="tableContainerHeaderBtns">
         <div class="headerLeft">
           <span class="totalQuantity"
             >전체 조회건 수 : {{ desserts.length }} 건</span
@@ -268,7 +281,11 @@
         </div>
         <div class="headerRight">
           <span>{{ itemsPerPage }}</span>
-          <select v-model="itemsPerPage" class="selectItemsPerPage">
+          <select
+            v-model="itemsPerPage"
+            class="selectItemsPerPage"
+            @change="handleItemsPerPage"
+          >
             <option value="10">10개씩 보기</option>
             <option value="20">20개씩 보기</option>
             <option value="30">30개씩 보기</option>
@@ -298,7 +315,7 @@
               <td>
                 <v-checkbox
                   color="success"
-                  :value="order.orderNo"
+                  :value="order.orderDetailNo"
                   v-model="selectedItems"
                   hide-details
                 ></v-checkbox>
@@ -361,13 +378,14 @@
           </tbody>
         </table>
       </div>
-      <div class="handlePrepareBtns">
+      <div class="tableContainerFooterBtns">
         <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
           >배송준비처리</v-btn
         >
         <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
           >주문취소처리</v-btn
         >
+        <span>{{ selectedItems }}</span>
         <v-pagination v-model="currentPage" :length="5"></v-pagination>
         <span>{{ currentPage }}</span>
       </div>
@@ -375,19 +393,18 @@
   </div>
 </template>
 <script>
-// import adminHeader from "../common/AdminHeader";
-// import adminSideBar from "../common/AdminSideBar";
-// import adminFooter from "../common/AdminFooter";
+import AdminHeader from "../../../components/common/adminDataTable/AdminHeader";
+import AdminFilter from "../../../components/common/adminDataTable/AdminFilter";
 
 export default {
-  // name: "adminOrder",
-  // components: { adminHeader },
+  name: "adminOrder",
+  components: { AdminHeader, AdminFilter },
   data() {
     return {
       filterSelectedCondition: "",
       searchInputData: "",
       payedCompletedDate: "3",
-      sellerAttribute: ["전체"],
+      sellerAttribute: [],
       selectedsellerAttribute: [],
       sellerType: "전체",
       deliveryType: "전체",
@@ -396,6 +413,25 @@ export default {
       currentDate: "",
       currentPage: 1,
       itemsPerPage: 30,
+      searchCondition: [
+        { text: "주문번호", value: "orderNo", disabled: false },
+        { text: "주문상세번호", value: "orderDetailNo", disabled: false },
+        { text: "--------------------", value: "", disabled: true }
+      ],
+      payedCompletedDateList: [
+        {
+          name: "payedDate",
+          value: "전체",
+          id: "payedDateAll",
+          model: "payedCompletedDate"
+        },
+        {
+          name: "payedDate",
+          value: "오늘",
+          id: "today",
+          model: "payedCompletedDate"
+        }
+      ],
       headers: [
         { text: "주문번호", value: "orderNo" },
         { text: "결제일자", value: "paidDate" },
@@ -420,7 +456,7 @@ export default {
         {
           orderNo: 20201218000028012,
           paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C001",
+          orderDetailNo: "B202012180001C100",
           sellerName: "모디무드",
           sellerType: "헬피셀러",
           helpyType: "헬피1",
@@ -440,7 +476,7 @@ export default {
         {
           orderNo: 20201218000021230,
           paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C001",
+          orderDetailNo: "B202012180001C121",
           sellerName: "모디무드",
           sellerType: "헬피셀러",
           helpyType: "헬피1",
@@ -460,7 +496,7 @@ export default {
         {
           orderNo: 20201218000028000,
           paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C001",
+          orderDetailNo: "B202012180001C521",
           sellerName: "모디무드",
           sellerType: "헬피셀러",
           helpyType: "헬피1",
@@ -480,7 +516,7 @@ export default {
         {
           orderNo: 20201218000028000,
           paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C001",
+          orderDetailNo: "B202012180001C541",
           sellerName: "모디무드",
           sellerType: "헬피셀러",
           helpyType: "헬피1",
@@ -500,7 +536,7 @@ export default {
         {
           orderNo: 20201218000028000,
           paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C001",
+          orderDetailNo: "B202012180001C873",
           sellerName: "모디무드",
           sellerType: "헬피셀러",
           helpyType: "헬피1",
@@ -548,6 +584,9 @@ export default {
         alert(`${this.selectedItems.length}개의 주문이 취소되었습니다 !`);
       }
     },
+    handleItemsPerPage: function() {
+      console.log(`아이템 갯수가 ${this.itemsPerPage}로 바뀜 `);
+    },
     getToday: function() {
       let currentDate = new Date().toJSON().slice(0, 10);
       let today = new Date();
@@ -573,22 +612,20 @@ export default {
       }
     },
 
-    selectAllSellerAttribute: {
-      get: function() {
-        return this.sellerAttribute
-          ? this.selectedsellerAttribute.length === 5
-          : false;
-      },
-      set: function(value) {
-        let selectedsellerAttribute = [];
-        if (value) {
-          this.sellerAttribute.forEach(attribute => {
-            selectedsellerAttribute.push(attribute.value);
-          });
-        }
-        this.selectedsellerAttribute = selectedsellerAttribute;
-      }
-    },
+    // selectAllSellerAttribute: {
+    //   get: function() {
+    //     return this.sellerAttribute ? this.sellerAttribute.length === 6 : false;
+    //   },
+    //   set: function(value) {
+    //     let sellerAttribute = [];
+    //     if (value) {
+    //       this.sellerAttribute.forEach(attribute => {
+    //         sellerAttribute.push(attribute.value);
+    //       });
+    //     }
+    //     this.sellerAttribute = sellerAttribute;
+    //   }
+    // },
 
     selectAllItems: {
       get: function() {
@@ -600,7 +637,7 @@ export default {
         let selectedItems = [];
         if (value) {
           this.desserts.forEach(order => {
-            selectedItems.push(order.orderNo);
+            selectedItems.push(order.orderDetailNo);
           });
         }
         this.selectedItems = selectedItems;
@@ -622,39 +659,9 @@ export default {
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #f3f4f7;
 
-  .headerContainer {
-    background-color: white;
-    padding: 10px 10px 0 10px;
-    border-radius: 10px;
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-
-    .title {
-      display: flex;
-      align-items: center;
-      margin: 5px;
-
-      .mainTitle {
-        font-size: 28px;
-      }
-
-      .subTitle {
-        margin-left: 5px;
-        margin-bottom: -10px;
-        font-size: 16px;
-      }
-    }
-
-    .notice {
-      margin: 5px;
-      color: #888888;
-      font-size: 13px;
-    }
-  }
-
   .filterContainer {
     width: 100%;
-    height: 320px;
+    /* height: 320px; */
     margin: 10px auto;
     background-color: white;
     border-radius: 10px;
@@ -771,15 +778,15 @@ export default {
   }
 
   .tableContainer {
-    padding: 10px;
+    padding: 5px;
     border-radius: 10px;
     background-color: white;
 
-    .contentListHeaderBtns {
+    .tableContainerHeaderBtns {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 5px;
+      margin-left: 7px;
 
       .totalQuantity {
         margin-right: 10px;
