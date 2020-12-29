@@ -21,7 +21,7 @@
       <div class="filterList">
         <span class="filterTitle">검색조건 : </span>
         <select v-model="filterSelectedCondition" class="searchCondition">
-          <option value="">조건을 선택해주세요 ▼ </option>
+          <option value="" disabled>조건을 선택해주세요 ▼ </option>
           <option v-for="condition in searchCondition">
             {{ condition.text }}
           </option>
@@ -43,6 +43,7 @@
           v-model="payedCompletedDate"
         />
         <label for="payedDateAll">전체</label>
+
         <input
           type="radio"
           name="payedDate"
@@ -336,6 +337,7 @@ export default {
       sellerType: "전체",
       deliveryType: "전체",
       selectedItem: [],
+      currentDate: "",
       searchCondition: [
         {
           text: "주문번호",
@@ -344,6 +346,10 @@ export default {
         {
           text: "주문상세번호",
           value: "orderDetailNo"
+        },
+        {
+          text: "---------------",
+          value: ""
         },
         {
           text: "주문자명",
@@ -499,10 +505,17 @@ export default {
         (this.deliveryType = "전체");
     },
     prepareOrder: function(event) {
-      alert(`selectedItem.length개의 주문이 배송준비처리 되었습니다 !`);
+      alert(`${this.selectedItem.length}개의 주문이 배송준비처리 되었습니다 !`);
     },
     cancelOrder: function(event) {
-      alert(`selectedItem.length개의 주문이 취소되었습니다 !`);
+      alert(`${this.selectedItem.length}개의 주문이 취소되었습니다 !`);
+    },
+    getToday: function() {
+      let currentDate = new Date()
+        .toJSON()
+        .slice(0, 10)
+        .replace(/-/g, "/");
+      this.currentDate = currentDate;
     }
   },
   computed: {
@@ -522,6 +535,9 @@ export default {
         this.selectedItem = selectedItem;
       }
     }
+  },
+  mounted() {
+    this.getToday();
   }
 };
 </script>

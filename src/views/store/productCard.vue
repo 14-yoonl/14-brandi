@@ -13,10 +13,10 @@
         </li>
         <li class="listPrice">
           <span class="dcPercent">{{ discountRate }}%</span>
-          <span class="bPrice">{{ discountedPrice }}</span>
-          <span class="aPrice">{{ originPrice }}</span>
+          <span class="bPrice">{{ newDiscountedPrice }}</span>
+          <span class="aPrice">{{ newOriginPrice }}</span>
         </li>
-        <li class="productCount">{{ count }}개 판매중</li>
+        <li class="productCount">{{ newCount }}개 판매중</li>
       </ul>
     </a>
   </div>
@@ -34,7 +34,23 @@ export default {
     "count",
   ],
   data() {
-    return {};
+    return {
+      newOriginPrice: Number(this.originPrice).toLocaleString(),
+      newDiscountedPrice: Number(this.discountedPrice).toLocaleString(),
+      newCount: Number(this.count).toLocaleString(),
+    };
+  },
+  computed: {
+    params: function () {
+      return this.$route.params;
+    },
+    created() {
+      const id = this.$route.params.id;
+
+      if (id === undefined) {
+        this.$router.push("/");
+      }
+    },
   },
 };
 </script>
