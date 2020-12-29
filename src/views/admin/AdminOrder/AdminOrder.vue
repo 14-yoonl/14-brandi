@@ -21,7 +21,7 @@
       <div class="filterList">
         <span class="filterTitle">검색조건 : </span>
         <select v-model="filterSelectedCondition" class="searchCondition">
-          <option value="">조건을 선택해주세요</option>
+          <option value="" disabled>조건을 선택해주세요 ▼ </option>
           <option v-for="condition in searchCondition">
             {{ condition.text }}
           </option>
@@ -31,41 +31,194 @@
           class="searchInputBox"
           placeholder="검색어를 입력하세요"
         />
+        <span>{{ searchInputData }}</span>
       </div>
       <div class="filterList">
         <span class="filterTitle">결제완료일 : </span>
-        <input type="radio" v-for="completedDateValue in completedDateList">
-        {{ completedDateValue}}
-      
-        
+        <input
+          type="radio"
+          name="payedDate"
+          value="전체"
+          id="payedDateAll"
+          v-model="payedCompletedDate"
+        />
+        <label for="payedDateAll">전체</label>
+
+        <input
+          type="radio"
+          name="payedDate"
+          value="오늘"
+          id="today"
+          v-model="payedCompletedDate"
+        />
+        <label for="today">오늘</label>
+        <input
+          type="radio"
+          name="payedDate"
+          value="3일"
+          id="3days"
+          v-model="payedCompletedDate"
+          checked
+        />
+        <label for="3days">3일</label>
+        <input
+          type="radio"
+          name="payedDate"
+          value="1주일"
+          id="1week"
+          v-model="payedCompletedDate"
+        />
+        <label for="1week">1주일</label>
+        <input
+          type="radio"
+          name="payedDate"
+          value="1개월"
+          id="1month"
+          v-model="payedCompletedDate"
+        />
+        <label for="1month">1개월</label>
+        <input
+          type="radio"
+          name="payedDate"
+          value="3개월"
+          id="3month"
+          v-model="payedCompletedDate"
+        />
+        <label for="3month">3개월</label>
+        <span>{{ payedCompletedDate }}</span>
       </div>
       <div class="filterList">
         <span class="filterTitle">셀러속성 : </span>
-        <v-btn elevation="2" small color="primary" class="{active}">전체</v-btn>
-        <v-btn elevation="2" small>쇼핑몰</v-btn>
-        <v-btn elevation="2" small>마켓</v-btn>
-        <v-btn elevation="2" small>로드샵</v-btn>
-        <v-btn elevation="2" small>디자이너브랜드</v-btn>
-        <v-btn elevation="2" small>재너럴브랜드</v-btn>
-        <v-btn elevation="2" small>뷰티</v-btn>
+        <input
+          type="radio"
+          name="sellerAttribute"
+          value="전체"
+          id="sellerAttributeAll"
+          v-model="sellerAttribute"
+          checked
+        />
+        <label for="sellerAttributeAll">전체</label>
+        <input
+          type="radio"
+          name="sellerAttribute"
+          value="쇼핑몰"
+          id="shoppingmall"
+          v-model="sellerAttribute"
+        />
+        <label for="shoppingmall">쇼핑몰</label>
+        <input
+          type="radio"
+          name="sellerAttribute"
+          value="마켓"
+          id="market"
+          v-model="sellerAttribute"
+        />
+        <label for="market">마켓</label>
+        <input
+          type="radio"
+          name="sellerAttribute"
+          value="로드샵"
+          id="roadShop"
+          v-model="sellerAttribute"
+        />
+        <label for="roadShop">로드샵</label>
+        <input
+          type="radio"
+          name="sellerAttribute"
+          value="디자이너브랜드"
+          id="designerBrand"
+          v-model="sellerAttribute"
+        />
+        <label for="designerBrand">디자이너브랜드</label>
+        <input
+          type="radio"
+          name="sellerAttribute"
+          value="뷰티"
+          id="beauty"
+          v-model="sellerAttribute"
+        />
+        <label for="beauty">뷰티</label>
+        <span>{{ sellerAttribute }}</span>
       </div>
       <div class="filterList">
         <span class="filterTitle">셀러구분 : </span>
-        <v-btn elevation="2" small color="primary">전체</v-btn>
-        <v-btn elevation="2" small>일반</v-btn>
-        <v-btn elevation="2" small>헬피</v-btn>
+        <input
+          type="radio"
+          name="sellerType"
+          value="전체"
+          id="sellerTypeAll"
+          v-model="sellerType"
+          checked
+        />
+        <label for="sellerTypeAll">전체</label>
+        <input
+          type="radio"
+          name="sellerType"
+          value="일반"
+          id="normalSeller"
+          v-model="sellerType"
+        />
+        <label for="normalSeller">일반</label>
+        <input
+          type="radio"
+          name="sellerType"
+          value="헬피"
+          id="helpySeller"
+          v-model="sellerType"
+        />
+        <label for="helpySeller">헬피</label>
+        <span>{{ sellerType }}</span>
       </div>
       <div class="filterList">
         <span class="filterTitle">배송구분 : </span>
-        <v-btn elevation="2" small color="primary">전체</v-btn>
-        <v-btn elevation="2" small>일반배송</v-btn>
-        <v-btn elevation="2" small>오늘출발</v-btn>
-        <v-btn elevation="2" small>새벽도착</v-btn>
-        <v-btn elevation="2" small>저녁도착</v-btn>
+        <input
+          type="radio"
+          name="deliveryType"
+          value="전체"
+          id="deliveryTypeAll"
+          v-model="deliveryType"
+          checked
+        />
+        <label for="deliveryTypeAll">전체</label>
+        <input
+          type="radio"
+          name="deliveryType"
+          value="일반배송"
+          id="normalDelivery"
+          v-model="deliveryType"
+        />
+        <label for="normalDelivery">일반배송</label>
+        <input
+          type="radio"
+          name="deliveryType"
+          value="오늘출발"
+          id="sendToday"
+          v-model="deliveryType"
+        />
+        <label for="sendToday">오늘출발</label>
+        <input
+          type="radio"
+          name="deliveryType"
+          value="새벽도착"
+          id="arriveDawn"
+          v-model="deliveryType"
+        />
+        <label for="arriveDawn">새벽도착</label>
+        <input
+          type="radio"
+          name="deliveryType"
+          value="저녁도착"
+          id="arriveEvening"
+          v-model="deliveryType"
+        />
+        <label for="arriveEvening">저녁도착</label>
+        <span>{{ deliveryType }}</span>
       </div>
       <div class="searchBtnBox">
-        <v-btn elevation="2" md color="primary">검색</v-btn>
-        <v-btn elevation="2" md>초기화</v-btn>
+        <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
+          >검색</v-btn
+        >
+        <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
       </div>
     </div>
     <div class="contentList">
@@ -100,7 +253,7 @@
                 <v-checkbox
                   color="success"
                   :value="order.orderNo"
-                  v-model="selected"
+                  v-model="selectedItem"
                   hide-details
                 ></v-checkbox>
               </td>
@@ -177,43 +330,63 @@
 export default {
   data() {
     return {
-      searchInputData: "",
       filterSelectedCondition: "",
-      selected: [],
-      completedDate: "",
-      completedDateList: [
-        { text: "전체", value: "allDays" },
-        { text: "오늘", value: "today" },
-        { text: "3일", value: "3days" },
-        { text: "1주일", value: "1week" },
-        { text: "1개월", value: "1month" },
-        { text: "3개월", value: "3month" },
-      ],
+      searchInputData: "",
+      payedCompletedDate: "3일",
+      sellerAttribute: "전체",
+      sellerType: "전체",
+      deliveryType: "전체",
+      selectedItem: [],
+      currentDate: "",
       searchCondition: [
         {
           text: "주문번호",
-          value: "orderNo",
+          value: "orderNo"
         },
         {
           text: "주문상세번호",
-          value: "orderDetailNo",
+          value: "orderDetailNo"
+        },
+        {
+          text: "---------------",
+          value: ""
         },
         {
           text: "주문자명",
-          value: "senderName",
+          value: "senderName"
         },
         {
           text: "핸드폰번호",
-          value: "senderPhone",
+          value: "senderPhone"
         },
         {
           text: "셀러명",
-          value: "sellerName",
+          value: "sellerName"
         },
         {
           text: "상품명",
-          value: "productName",
-        },
+          value: "productName"
+        }
+      ],
+      headers: [
+        { text: "주문번호", value: "orderNo" },
+        { text: "결제일자", value: "paidDate" },
+        { text: "주문상세번호", value: "orderDetailNo" },
+        { text: "셀러명", value: "sellerName" },
+        { text: "셀러구분", value: "sellerType" },
+        { text: "헬피구분", value: "helpyType" },
+        { text: "배송구분", value: "deliveryType" },
+        { text: "상품명", value: "productName" },
+        { text: "옵션정보", value: "options" },
+        { text: "옵션추가금액", value: "optionsPrice" },
+        { text: "수량", value: "quantity" },
+        { text: "주문자명", value: "senderName" },
+        { text: "핸드폰번호", value: "senderPhone" },
+        { text: "결제금액", value: "paidPrice" },
+        { text: "사용포인트", value: "usedPoint" },
+        { text: "쿠폰할인", value: "discountCoupon" },
+        { text: "결제수단", value: "paymentType" },
+        { text: "주문상태", value: "orderStatus" }
       ],
       headers: [
         { text: "주문번호", value: "orderNo" },
@@ -254,7 +427,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
+          orderStatus: "상품준비"
         },
         {
           orderNo: 20201218000021230,
@@ -274,7 +447,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
+          orderStatus: "상품준비"
         },
         {
           orderNo: 20201218000028000,
@@ -294,7 +467,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
+          orderStatus: "상품준비"
         },
         {
           orderNo: 20201218000028000,
@@ -314,7 +487,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
+          orderStatus: "상품준비"
         },
         {
           orderNo: 20201218000028000,
@@ -334,37 +507,58 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비",
-        },
-      ],
+          orderStatus: "상품준비"
+        }
+      ]
     };
   },
   methods: {
-    prepareOrder: function (event) {
-      alert(`selected.length개의 주문이 배송준비처리 되었습니다 !`);
+    filterSearch: function(event) {
+      alert("검색 완료!");
     },
-    cancelOrder: function (event) {
-      alert(`selected.length개의 주문이 취소되었습니다 !`);
+    filterReset: function(event) {
+      (this.filterSelectedCondition = ""),
+        (this.searchInputData = ""),
+        (this.payedCompletedDate = "3일"),
+        (this.sellerAttribute = "전체"),
+        (this.sellerType = "전체"),
+        (this.deliveryType = "전체");
     },
+    prepareOrder: function(event) {
+      alert(`${this.selectedItem.length}개의 주문이 배송준비처리 되었습니다 !`);
+    },
+    cancelOrder: function(event) {
+      alert(`${this.selectedItem.length}개의 주문이 취소되었습니다 !`);
+    },
+    getToday: function() {
+      let currentDate = new Date()
+        .toJSON()
+        .slice(0, 10)
+        .replace(/-/g, "/");
+      this.currentDate = currentDate;
+    }
   },
   computed: {
     selectAll: {
-      get: function () {
+      get: function() {
         return this.desserts
-          ? this.selected.length === this.desserts.length
+          ? this.selectedItem.length === this.desserts.length
           : false;
       },
-      set: function (value) {
-        var selected = [];
+      set: function(value) {
+        let selectedItem = [];
         if (value) {
-          this.desserts.forEach((order) => {
-            selected.push(order.orderNo);
+          this.desserts.forEach(order => {
+            selectedItem.push(order.orderNo);
           });
         }
-        this.selected = selected;
-      },
-    },
+        this.selectedItem = selectedItem;
+      }
+    }
   },
+  mounted() {
+    this.getToday();
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -408,7 +602,7 @@ export default {
 
   .filter {
     width: 100%;
-    height: 300px;
+    height: 320px;
     margin: 10px auto;
     background-color: white;
     border-radius: 10px;
@@ -419,38 +613,74 @@ export default {
     }
 
     .searchCondition {
-      line-height: 30px;
+      width: 130px;
+      height: 30px;
       margin-right: 20px;
-      font-size: 16px;
+      font-size: 12px;
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      padding: 0 5px;
+
+      option {
+        text-align: center;
+      }
     }
 
     .searchInputBox {
-      width: 310px;
+      width: 300px;
       height: 30px;
-      padding: 6px 10px;
       border: 1px solid #e5e5e5;
+      padding-left: 10px;
       border-radius: 4px;
       color: #333333;
       font-size: 13px;
     }
 
     .filterList {
-      margin-bottom: 10px;
+      margin: 15px;
+      :hover {
+        cursor: pointer;
+      }
+
+      input[type="radio"] {
+        display: none;
+      }
+
+      input[type="radio"] + label {
+        display: inline-block;
+        padding: 5px 0px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        font-size: 11px !important;
+        width: 80px;
+        text-align: center;
+      }
+
+      input[type="radio"]:radio + label {
+        background-image: none;
+        background-color: #3598dc;
+        color: #fff;
+      }
+
+      input[type="radio"]:checked + label {
+        background-color: #2b80d4;
+        border-color: #2b80d4;
+        color: #ffffff;
+        font-weight: 700;
+      }
+
       .filterTitle {
         margin: 0 20px;
         font-size: 14px;
-      }
-      .v-btn {
-        margin: 0 5px;
       }
     }
     .searchBtnBox {
       display: flex;
       justify-content: center;
+      margin-bottom: 20px;
 
       .v-btn {
         width: 100px;
-        margin: 0 5px;
       }
     }
   }
