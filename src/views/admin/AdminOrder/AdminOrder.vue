@@ -654,14 +654,13 @@ export default {
 .AdminOrder {
   display: flex;
   flex-direction: column;
-  width: 85%;
+  width: 90%;
   padding: 10px;
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #f3f4f7;
 
   .filterContainer {
     width: 100%;
-    /* height: 320px; */
     margin: 10px auto;
     background-color: white;
     border-radius: 10px;
