@@ -1,6 +1,6 @@
 <template>
   <div class="AdminOrder">
-    <div class="header">
+    <div class="headerContainer">
       <div class="title">
         <h1 class="mainTitle">주문 관리</h1>
         <span class="subTitle">상품준비 관리</span>
@@ -17,15 +17,27 @@
         </p>
       </div>
     </div>
-    <div class="filter">
+    <div class="filterContainer">
       <div class="filterList">
-        <span class="filterTitle">검색조건 : </span>
-        <select v-model="filterSelectedCondition" class="searchCondition">
-          <option value="" disabled>조건을 선택해주세요 ▼ </option>
-          <option v-for="condition in searchCondition">
+        <div class="filterTitle">
+          <span>검색조건 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <select v-model="filterSelectedCondition" class="searchCondition">
+            <option value="" disabled>조건을 선택해주세요 ▼ </option>
+            <option value="orderNo">주문번호</option>
+            <option value="orderDetailNo">주문상세번호</option>
+            <option value="" disabled>--------------------</option>
+            <option value="senderName">주문자명</option>
+            <option value="senderPhone">핸드폰번호</option>
+            <option value="" disabled>--------------------</option>
+            <option value="sellerName">셀러명</option>
+            <option value="productName">상품명</option>
+            <!-- <option v-for="condition in searchCondition">
             {{ condition.text }}
-          </option>
-        </select>
+          </option> -->
+          </select>
+        </div>
         <input
           v-model="searchInputData"
           class="searchInputBox"
@@ -34,184 +46,204 @@
         <span>{{ searchInputData }}</span>
       </div>
       <div class="filterList">
-        <span class="filterTitle">결제완료일 : </span>
-        <input
-          type="radio"
-          name="payedDate"
-          value="전체"
-          id="payedDateAll"
-          v-model="payedCompletedDate"
-        />
-        <label for="payedDateAll">전체</label>
+        <div class="filterTitle">
+          <span>결제완료일 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <input
+            type="radio"
+            name="payedDate"
+            value="전체"
+            id="payedDateAll"
+            v-model="payedCompletedDate"
+          />
+          <label for="payedDateAll">전체</label>
 
-        <input
-          type="radio"
-          name="payedDate"
-          value="오늘"
-          id="today"
-          v-model="payedCompletedDate"
-        />
-        <label for="today">오늘</label>
-        <input
-          type="radio"
-          name="payedDate"
-          value="3일"
-          id="3days"
-          v-model="payedCompletedDate"
-          checked
-        />
-        <label for="3days">3일</label>
-        <input
-          type="radio"
-          name="payedDate"
-          value="1주일"
-          id="1week"
-          v-model="payedCompletedDate"
-        />
-        <label for="1week">1주일</label>
-        <input
-          type="radio"
-          name="payedDate"
-          value="1개월"
-          id="1month"
-          v-model="payedCompletedDate"
-        />
-        <label for="1month">1개월</label>
-        <input
-          type="radio"
-          name="payedDate"
-          value="3개월"
-          id="3month"
-          v-model="payedCompletedDate"
-        />
-        <label for="3month">3개월</label>
+          <input
+            type="radio"
+            name="payedDate"
+            value="0"
+            id="today"
+            v-model="payedCompletedDate"
+          />
+          <label for="today">오늘</label>
+          <input
+            type="radio"
+            name="payedDate"
+            value="3"
+            id="3days"
+            v-model="payedCompletedDate"
+            checked
+          />
+          <label for="3days">3일</label>
+          <input
+            type="radio"
+            name="payedDate"
+            value="7"
+            id="1week"
+            v-model="payedCompletedDate"
+          />
+          <label for="1week">1주일</label>
+          <input
+            type="radio"
+            name="payedDate"
+            value="30"
+            id="1month"
+            v-model="payedCompletedDate"
+          />
+          <label for="1month">1개월</label>
+          <input
+            type="radio"
+            name="payedDate"
+            value="90"
+            id="3month"
+            v-model="payedCompletedDate"
+          />
+          <label for="3month">3개월</label>
+        </div>
         <span>{{ payedCompletedDate }}</span>
+        <input type="date" v-model="getStartedDate" />
+        <input type="date" v-model="currentDate" />
+        <span>{{ startedDate }}</span>
+        <!-- <v-date-picker v-model="dates" range></v-date-picker> -->
+      </div>
+
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>셀러속성 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <input
+            type="checkbox"
+            name="sellerAttribute"
+            value="전체"
+            id="sellerAttributeAll"
+            v-model="sellerAttribute"
+          />
+          <label for="sellerAttributeAll">전체</label>
+          <input
+            type="checkbox"
+            name="sellerAttribute"
+            value="쇼핑몰"
+            id="shoppingmall"
+            v-model="sellerAttribute"
+          />
+          <label for="shoppingmall">쇼핑몰</label>
+          <input
+            type="checkbox"
+            name="sellerAttribute"
+            value="마켓"
+            id="market"
+            v-model="sellerAttribute"
+          />
+          <label for="market">마켓</label>
+          <input
+            type="checkbox"
+            name="sellerAttribute"
+            value="로드샵"
+            id="roadShop"
+            v-model="sellerAttribute"
+          />
+          <label for="roadShop">로드샵</label>
+          <input
+            type="checkbox"
+            name="sellerAttribute"
+            value="디자이너브랜드"
+            id="designerBrand"
+            v-model="sellerAttribute"
+          />
+          <label for="designerBrand">디자이너브랜드</label>
+          <input
+            type="checkbox"
+            name="sellerAttribute"
+            value="뷰티"
+            id="beauty"
+            v-model="sellerAttribute"
+          />
+          <label for="beauty">뷰티</label>
+          <span>{{ sellerAttribute }}</span>
+        </div>
       </div>
       <div class="filterList">
-        <span class="filterTitle">셀러속성 : </span>
-        <input
-          type="radio"
-          name="sellerAttribute"
-          value="전체"
-          id="sellerAttributeAll"
-          v-model="sellerAttribute"
-          checked
-        />
-        <label for="sellerAttributeAll">전체</label>
-        <input
-          type="radio"
-          name="sellerAttribute"
-          value="쇼핑몰"
-          id="shoppingmall"
-          v-model="sellerAttribute"
-        />
-        <label for="shoppingmall">쇼핑몰</label>
-        <input
-          type="radio"
-          name="sellerAttribute"
-          value="마켓"
-          id="market"
-          v-model="sellerAttribute"
-        />
-        <label for="market">마켓</label>
-        <input
-          type="radio"
-          name="sellerAttribute"
-          value="로드샵"
-          id="roadShop"
-          v-model="sellerAttribute"
-        />
-        <label for="roadShop">로드샵</label>
-        <input
-          type="radio"
-          name="sellerAttribute"
-          value="디자이너브랜드"
-          id="designerBrand"
-          v-model="sellerAttribute"
-        />
-        <label for="designerBrand">디자이너브랜드</label>
-        <input
-          type="radio"
-          name="sellerAttribute"
-          value="뷰티"
-          id="beauty"
-          v-model="sellerAttribute"
-        />
-        <label for="beauty">뷰티</label>
-        <span>{{ sellerAttribute }}</span>
-      </div>
-      <div class="filterList">
-        <span class="filterTitle">셀러구분 : </span>
-        <input
-          type="radio"
-          name="sellerType"
-          value="전체"
-          id="sellerTypeAll"
-          v-model="sellerType"
-          checked
-        />
-        <label for="sellerTypeAll">전체</label>
-        <input
-          type="radio"
-          name="sellerType"
-          value="일반"
-          id="normalSeller"
-          v-model="sellerType"
-        />
-        <label for="normalSeller">일반</label>
-        <input
-          type="radio"
-          name="sellerType"
-          value="헬피"
-          id="helpySeller"
-          v-model="sellerType"
-        />
-        <label for="helpySeller">헬피</label>
+        <div class="filterTitle">
+          <span>셀러구분 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <input
+            type="radio"
+            name="sellerType"
+            value="전체"
+            id="sellerTypeAll"
+            v-model="sellerType"
+            checked
+          />
+          <label for="sellerTypeAll">전체</label>
+          <input
+            type="radio"
+            name="sellerType"
+            value="일반"
+            id="normalSeller"
+            v-model="sellerType"
+          />
+          <label for="normalSeller">일반</label>
+          <input
+            type="radio"
+            name="sellerType"
+            value="헬피"
+            id="helpySeller"
+            v-model="sellerType"
+          />
+          <label for="helpySeller">헬피</label>
+        </div>
         <span>{{ sellerType }}</span>
       </div>
       <div class="filterList">
-        <span class="filterTitle">배송구분 : </span>
-        <input
-          type="radio"
-          name="deliveryType"
-          value="전체"
-          id="deliveryTypeAll"
-          v-model="deliveryType"
-          checked
-        />
-        <label for="deliveryTypeAll">전체</label>
-        <input
-          type="radio"
-          name="deliveryType"
-          value="일반배송"
-          id="normalDelivery"
-          v-model="deliveryType"
-        />
-        <label for="normalDelivery">일반배송</label>
-        <input
-          type="radio"
-          name="deliveryType"
-          value="오늘출발"
-          id="sendToday"
-          v-model="deliveryType"
-        />
-        <label for="sendToday">오늘출발</label>
-        <input
-          type="radio"
-          name="deliveryType"
-          value="새벽도착"
-          id="arriveDawn"
-          v-model="deliveryType"
-        />
-        <label for="arriveDawn">새벽도착</label>
-        <input
-          type="radio"
-          name="deliveryType"
-          value="저녁도착"
-          id="arriveEvening"
-          v-model="deliveryType"
-        />
-        <label for="arriveEvening">저녁도착</label>
+        <div class="filterTitle">
+          <span>배송구분 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <input
+            type="radio"
+            name="deliveryType"
+            value="전체"
+            id="deliveryTypeAll"
+            v-model="deliveryType"
+            checked
+          />
+          <label for="deliveryTypeAll">전체</label>
+          <input
+            type="radio"
+            name="deliveryType"
+            value="일반배송"
+            id="normalDelivery"
+            v-model="deliveryType"
+          />
+          <label for="normalDelivery">일반배송</label>
+          <input
+            type="radio"
+            name="deliveryType"
+            value="오늘출발"
+            id="sendToday"
+            v-model="deliveryType"
+          />
+          <label for="sendToday">오늘출발</label>
+          <input
+            type="radio"
+            name="deliveryType"
+            value="새벽도착"
+            id="arriveDawn"
+            v-model="deliveryType"
+          />
+          <label for="arriveDawn">새벽도착</label>
+          <input
+            type="radio"
+            name="deliveryType"
+            value="저녁도착"
+            id="arriveEvening"
+            v-model="deliveryType"
+          />
+          <label for="arriveEvening">저녁도착</label>
+        </div>
         <span>{{ deliveryType }}</span>
       </div>
       <div class="searchBtnBox">
@@ -221,15 +253,29 @@
         <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
       </div>
     </div>
-    <div class="contentList">
-      <div class="handlePrepareBtns">
-        <span>전체 조회건 수 : {{ desserts.length }} 건</span>
-        <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
-          >배송준비처리</v-btn
-        >
-        <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
-          >주문취소처리</v-btn
-        >
+    <div class="tableContainer">
+      <div class="contentListHeaderBtns">
+        <div class="headerLeft">
+          <span class="totalQuantity"
+            >전체 조회건 수 : {{ desserts.length }} 건</span
+          >
+          <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+            >배송준비처리</v-btn
+          >
+          <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+            >주문취소처리</v-btn
+          >
+        </div>
+        <div class="headerRight">
+          <span>{{ itemsPerPage }}</span>
+          <select v-model="itemsPerPage" class="selectItemsPerPage">
+            <option value="10">10개씩 보기</option>
+            <option value="20">20개씩 보기</option>
+            <option value="30">30개씩 보기</option>
+            <option value="50">50개씩 보기</option>
+            <option value="150">150개씩 보기</option>
+          </select>
+        </div>
       </div>
       <div class="tableContainer">
         <table>
@@ -239,7 +285,7 @@
                 <v-checkbox
                   color="success"
                   hide-details
-                  v-model="selectAll"
+                  v-model="selectAllItems"
                 ></v-checkbox>
               </th>
               <th v-for="column in headers">
@@ -253,7 +299,7 @@
                 <v-checkbox
                   color="success"
                   :value="order.orderNo"
-                  v-model="selectedItem"
+                  v-model="selectedItems"
                   hide-details
                 ></v-checkbox>
               </td>
@@ -322,52 +368,34 @@
         <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
           >주문취소처리</v-btn
         >
+        <v-pagination v-model="currentPage" :length="5"></v-pagination>
+        <span>{{ currentPage }}</span>
       </div>
     </div>
   </div>
 </template>
 <script>
+// import adminHeader from "../common/AdminHeader";
+// import adminSideBar from "../common/AdminSideBar";
+// import adminFooter from "../common/AdminFooter";
+
 export default {
+  // name: "adminOrder",
+  // components: { adminHeader },
   data() {
     return {
       filterSelectedCondition: "",
       searchInputData: "",
-      payedCompletedDate: "3일",
-      sellerAttribute: "전체",
+      payedCompletedDate: "3",
+      sellerAttribute: ["전체"],
+      selectedsellerAttribute: [],
       sellerType: "전체",
       deliveryType: "전체",
-      selectedItem: [],
+      selectedItems: [],
+      startedDate: "",
       currentDate: "",
-      searchCondition: [
-        {
-          text: "주문번호",
-          value: "orderNo"
-        },
-        {
-          text: "주문상세번호",
-          value: "orderDetailNo"
-        },
-        {
-          text: "---------------",
-          value: ""
-        },
-        {
-          text: "주문자명",
-          value: "senderName"
-        },
-        {
-          text: "핸드폰번호",
-          value: "senderPhone"
-        },
-        {
-          text: "셀러명",
-          value: "sellerName"
-        },
-        {
-          text: "상품명",
-          value: "productName"
-        }
-      ],
+      currentPage: 1,
+      itemsPerPage: 30,
       headers: [
         { text: "주문번호", value: "orderNo" },
         { text: "결제일자", value: "paidDate" },
@@ -499,40 +527,83 @@ export default {
     filterReset: function(event) {
       (this.filterSelectedCondition = ""),
         (this.searchInputData = ""),
-        (this.payedCompletedDate = "3일"),
-        (this.sellerAttribute = "전체"),
+        (this.payedCompletedDate = "3"),
+        (this.sellerAttribute = ["전체"]),
         (this.sellerType = "전체"),
         (this.deliveryType = "전체");
     },
     prepareOrder: function(event) {
-      alert(`${this.selectedItem.length}개의 주문이 배송준비처리 되었습니다 !`);
+      if (this.selectedItems.length === 0) {
+        alert("선택된 것이 아무 것도 없습니다");
+      } else {
+        alert(
+          `${this.selectedItems.length}개의 주문이 배송준비처리 되었습니다 !`
+        );
+      }
     },
     cancelOrder: function(event) {
-      alert(`${this.selectedItem.length}개의 주문이 취소되었습니다 !`);
+      if (this.selectedItems.length === 0) {
+        alert("선택된 것이 아무 것도 없습니다");
+      } else {
+        alert(`${this.selectedItems.length}개의 주문이 취소되었습니다 !`);
+      }
     },
     getToday: function() {
-      let currentDate = new Date()
-        .toJSON()
-        .slice(0, 10)
-        .replace(/-/g, "/");
+      let currentDate = new Date().toJSON().slice(0, 10);
+      let today = new Date();
+      let year = today.getFullYear();
+      let month = today.getMonth();
+      let day = today.getDate();
       this.currentDate = currentDate;
+      // alert(`year: ${year}, month: ${month}, day: ${day}`);
     }
   },
   computed: {
-    selectAll: {
+    getStartedDate: {
+      function() {
+        let startedDate = this.startedDate;
+        let payedCompletedDate = parseInt(this.payedCompletedDate);
+        let today = new Date();
+        let year = parseInt(today.getFullYear());
+        let month = parseInt(today.getMonth());
+        let day = parseInt(today.getDate());
+
+        return (this.startedDate = `${year}-${month}-${day -
+          payedCompletedDate}`);
+      }
+    },
+
+    selectAllSellerAttribute: {
       get: function() {
-        return this.desserts
-          ? this.selectedItem.length === this.desserts.length
+        return this.sellerAttribute
+          ? this.selectedsellerAttribute.length === 5
           : false;
       },
       set: function(value) {
-        let selectedItem = [];
+        let selectedsellerAttribute = [];
         if (value) {
-          this.desserts.forEach(order => {
-            selectedItem.push(order.orderNo);
+          this.sellerAttribute.forEach(attribute => {
+            selectedsellerAttribute.push(attribute.value);
           });
         }
-        this.selectedItem = selectedItem;
+        this.selectedsellerAttribute = selectedsellerAttribute;
+      }
+    },
+
+    selectAllItems: {
+      get: function() {
+        return this.desserts
+          ? this.selectedItems.length === this.desserts.length
+          : false;
+      },
+      set: function(value) {
+        let selectedItems = [];
+        if (value) {
+          this.desserts.forEach(order => {
+            selectedItems.push(order.orderNo);
+          });
+        }
+        this.selectedItems = selectedItems;
       }
     }
   },
@@ -541,16 +612,17 @@ export default {
   }
 };
 </script>
+
 <style lang="scss" scoped>
 .AdminOrder {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 85%;
   padding: 10px;
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #f3f4f7;
 
-  .header {
+  .headerContainer {
     background-color: white;
     padding: 10px 10px 0 10px;
     border-radius: 10px;
@@ -580,7 +652,7 @@ export default {
     }
   }
 
-  .filter {
+  .filterContainer {
     width: 100%;
     height: 320px;
     margin: 10px auto;
@@ -617,7 +689,18 @@ export default {
     }
 
     .filterList {
+      display: flex;
+      align-items: center;
       margin: 15px;
+
+      .filterTitle {
+        width: 80px;
+        margin: 0 20px;
+        span {
+          font-size: 14px;
+        }
+      }
+
       :hover {
         cursor: pointer;
       }
@@ -649,9 +732,31 @@ export default {
         font-weight: 700;
       }
 
-      .filterTitle {
-        margin: 0 20px;
-        font-size: 14px;
+      input[type="checkbox"] {
+        display: none;
+      }
+
+      input[type="checkbox"] + label {
+        display: inline-block;
+        padding: 5px 0px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        font-size: 11px !important;
+        width: 80px;
+        text-align: center;
+      }
+
+      input[type="checkbox"]:checkbox + label {
+        background-image: none;
+        background-color: #3598dc;
+        color: #fff;
+      }
+
+      input[type="checkbox"]:checked + label {
+        background-color: #2b80d4;
+        border-color: #2b80d4;
+        color: #ffffff;
+        font-weight: 700;
       }
     }
     .searchBtnBox {
@@ -665,14 +770,36 @@ export default {
     }
   }
 
-  .contentList {
-    height: 100%;
-    margin-top: 10px;
+  .tableContainer {
     padding: 10px;
     border-radius: 10px;
     background-color: white;
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+    .contentListHeaderBtns {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+
+      .totalQuantity {
+        margin-right: 10px;
+        font-size: 14px;
+      }
+
+      .selectItemsPerPage {
+        width: 130px;
+        height: 30px;
+        margin-right: 20px;
+        font-size: 12px;
+        border: 1px solid #e5e5e5;
+        border-radius: 6px;
+        padding: 0 5px;
+
+        option {
+          text-align: center;
+        }
+      }
+    }
 
     .tableContainer {
       width: 100%;
