@@ -452,6 +452,26 @@ export default {
         { text: "결제수단", value: "paymentType" },
         { text: "주문상태", value: "orderStatus" }
       ],
+      headers: [
+        { text: "주문번호", value: "orderNo" },
+        { text: "결제일자", value: "paidDate" },
+        { text: "주문상세번호", value: "orderDetailNo" },
+        { text: "셀러명", value: "sellerName" },
+        { text: "셀러구분", value: "sellerType" },
+        { text: "헬피구분", value: "helpyType" },
+        { text: "배송구분", value: "deliveryType" },
+        { text: "상품명", value: "productName" },
+        { text: "옵션정보", value: "options" },
+        { text: "옵션추가금액", value: "optionsPrice" },
+        { text: "수량", value: "quantity" },
+        { text: "주문자명", value: "senderName" },
+        { text: "핸드폰번호", value: "senderPhone" },
+        { text: "결제금액", value: "paidPrice" },
+        { text: "사용포인트", value: "usedPoint" },
+        { text: "쿠폰할인", value: "discountCoupon" },
+        { text: "결제수단", value: "paymentType" },
+        { text: "주문상태", value: "orderStatus" },
+      ],
       desserts: [
         {
           orderNo: 20201218000028012,

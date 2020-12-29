@@ -1,38 +1,76 @@
 <template>
   <div class="SignUpPage">
     <div class="signUpForm">
-      <div class="inputbox">
-        <input type="text" placeholder="아이디" />
+      <div class="SignUpLogo">
+        <img src="../../assets/logo_admin.png" />
       </div>
-      <div class="inputbox">
-        <input type="text" placeholder="비밀번호" />
-      </div>
-      <div class="inputbox">
-        <input type="text" placeholder="비밀번호 재입력" />
-      </div>
-      <div class="inputbox">
-        <input type="text" placeholder="핸드폰 번호" />
-      </div>
-      <v-radio-group v-model="radioGroup" row>
-        <v-radio
-          v-for="info in checkInfo"
-          :key="info"
-          :label="info"
-          :value="info"
-        ></v-radio>
-      </v-radio-group>
-      <div class="inputbox">
-        <input type="text" placeholder="셀러명 (상호)" />
-      </div>
-      <div class="inputbox">
-        <input type="text" placeholder="영문 셀러명 (영문상호)" />
-      </div>
-      <div class="inputbox" @click="cancelClick">
-        <input type="text" placeholder="고객센터 전화번호" />
-      </div>
+      <v-container>
+        <v-form v-model="test">
+          <div class="infoHeader">가입 정보</div>
+          <v-text-field
+            v-model="memberData.id"
+            label="아이디"
+            :rules="idRules"
+            prepend-icon="mdi-account"
+          ></v-text-field>
+          <v-text-field
+            type="password"
+            v-model="memberData.password"
+            :rules="passwordRules"
+            label="비밀번호"
+            prepend-icon="mdi-lock"
+          ></v-text-field>
+          <v-text-field
+            type="password"
+            :rules="re_passwordRules"
+            label="비밀번호 확인"
+            prepend-icon="mdi-checkbox-marked-circle-outline"
+          ></v-text-field>
+          <div class="managerInfo">
+            담당자 정보<v-icon x-small>mdi-star</v-icon
+            ><span> 실제 샵을 운영하시는 분</span>
+          </div>
+          <v-text-field
+            v-model="memberData.managerPhonNumber"
+            :rules="phoneNumberRules"
+            label="핸드폰 번호"
+            prepend-icon="mdi-cellphone"
+          ></v-text-field>
+          <div class="managerInfoHelp">
+            <v-icon small>mdi-information-outline</v-icon>입점 신청 후 브랜디
+            담당자가 연락을 드릴 수 있으니 정확한 정보를 기입해주세요.
+          </div>
+          <div class="infoHeader">
+            셀러 정보
+          </div>
+          <v-radio-group v-model="memberData.sellerType" row class="sellerType">
+            <v-radio
+              v-for="info in checkInfo"
+              :key="info"
+              :label="info"
+              :value="info"
+            ></v-radio>
+          </v-radio-group>
+          <v-text-field
+            :rules="sellerNameRules"
+            label="셀러명(상호)"
+            prepend-icon="mdi-sign-text"
+          ></v-text-field>
+          <v-text-field
+            :rules="sellerEngNameRules"
+            label="셀러명(영문상호)"
+            prepend-icon="mdi-sign-text"
+          ></v-text-field>
+          <v-text-field
+            :rules="customerCenterNumber"
+            label="고객센터 전화번호"
+            prepend-icon="mdi-phone"
+          ></v-text-field>
+        </v-form>
+      </v-container>
       <div class="actionForm">
-        <div class="pushBtn">취소</div>
-        <div class="pushBtn">확인</div>
+        <div class="pushBtn" @click="cancelClick">취소</div>
+        <div class="pushBtn">가입하기</div>
       </div>
     </div>
   </div>
@@ -41,11 +79,28 @@
 export default {
   methods: {
     cancelClick() {
-      this.$router.push({ name: "signIn" });
+      this.$router.push({ name: "adminSignIn" });
+    },
+    serverValidCheck(aa) {
+      const result = this.$store.dispatch("test", aa);
+
+      return result.then(res => {
+        return res;
+      });
     }
   },
   data() {
     return {
+      test: false,
+      memberData: {
+        id: "",
+        password: "",
+        managerPhonNumber: "",
+        sellerType: "",
+        sellerName: "",
+        sellerEngName: "",
+        ServiceCenterPhon: ""
+      },
       checkInfo: [
         "쇼핑몰",
         "마켓",
@@ -54,6 +109,40 @@ export default {
         "제너럴브랜드",
         "내셔널브랜드",
         "뷰티"
+      ],
+      valid: false,
+      idRules: [
+        v => !!v || "아이디는 필수 입력항목입니다.",
+        v =>
+          /^[A-Za-z]{1}[A-Za-z0-9]{5,19}$/.test(v) ||
+          "길이는 6~20 사이, 한글 및 특수문자는 사용하실수 없습니다."
+        // async v => ((await this.serverValidCheck("")) ? "111" : "22")
+      ],
+      passwordRules: [
+        v => !!v || "비밀번호는 필수 입력항목입니다.",
+        v =>
+          /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,19}$/.test(v) ||
+          "비밀번호는 최소 8자 이상, 특수문자, 대문자, 소문자를 입력해주세요"
+      ],
+      re_passwordRules: [
+        v => !!v || "비밀번호 확인은 필수 입력항목입니다.",
+        v => this.memberData.password === v || "비밀번호가 일치하지 않습니다."
+      ],
+      sellerNameRules: [
+        v => !!v || "셀러명(상호)은 필수 입력항목입니다.",
+        v => /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\*]+$/.test(v) || "숫자만 입력해주세요."
+      ],
+      sellerEngNameRules: [
+        v => !!v || "셀러명(상호)은 필수 입력항목입니다.",
+        v => /[a-z]/.test(v) || "셀러 영문명은 소문자만 입력가능합니다."
+      ],
+      phoneNumberRules: [
+        v => !!v || "핸드폰 번호는 필수 입력항목입니다.",
+        v => /^\d{3}-\d{3,4}-\d{4}$/.test(v) || "000-0000-0000"
+      ],
+      customerCenterNumber: [
+        v => !!v || "고객센터 번호는 필수 입력항목입니다.",
+        v => /^\d{3}-\d{3,4}-\d{4}$/.test(v) || "숫자만 입력해주세요"
       ]
     };
   }
@@ -67,32 +156,79 @@ export default {
   position: relative;
   width: 100%;
   height: 100vh;
+  background-color: #fafafa;
 
   .signUpForm {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 500px;
-    /* height: 600px; */
+    width: 530px;
     padding: 20px 40px;
     border-radius: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
 
-    .inputbox {
-      width: 100%;
-      margin: 8px 0;
-      padding: 13px;
-      transition: 1s all;
+    .SignUpLogo {
+      display: flex;
+      align-items: center;
+      margin: 10px 0 30px 0;
 
-      input {
-        width: 100%;
-        outline: none;
-      }
-
-      &:focus-within {
-        border: 1px solid black;
+      img {
+        position: relative;
+        width: 150px;
       }
     }
+
+    .infoHeader {
+      position: relative;
+      top: 5px;
+      left: -5px;
+      font-size: 18px;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .managerInfo {
+      position: relative;
+      top: 5px;
+      left: -5px;
+      margin-top: 15px;
+      font-size: 17px;
+      color: rgba(0, 0, 0, 0.6);
+
+      i {
+        position: relative;
+        left: 2px;
+        top: 2px;
+        color: #1e90ff;
+      }
+
+      span {
+        position: relative;
+        top: 1px;
+        font-size: 12px;
+        color: #1e90ff;
+      }
+    }
+
+    .managerInfoHelp {
+      font-size: 12px;
+      color: #1e90ff;
+      margin-bottom: 30px;
+
+      i {
+        position: relative;
+        top: -1px;
+        margin-right: 5px;
+        color: #1e90ff;
+      }
+    }
+
+    .sellerType {
+      .v-radio {
+        margin: 5px 10px;
+      }
+    }
+
     .actionForm {
       display: flex;
       width: 100%;
@@ -107,6 +243,30 @@ export default {
         background-color: black;
         cursor: pointer;
       }
+    }
+  }
+
+  .v-messages__wrapper {
+    position: relative !important;
+    top: 1px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .SignUpPage {
+    align-items: flex-start;
+
+    .signUpForm {
+      width: 100%;
+      margin: 30px;
+    }
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .SignUpPage {
+    .signUpForm {
+      padding: 30px 10px;
     }
   }
 }
