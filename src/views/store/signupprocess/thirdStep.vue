@@ -8,35 +8,7 @@
       <div class="firstStep">정보입력</div>
       <div>가입완료</div>
     </div>
-    <!-- <div class="inputSection">
-      <div class="inputTop">
-        <input
-          type="text"
-          placeholder="아이디 입력"
-          v-model="state.id"
-          v-validate="'required | email'"
-        />
-        <v-text-field
-          v-model="state.email"
-          label="이메일"
-          :rules="idRules"
-          prepend-icon="mdi-account"
-        ></v-text-field>
-        <input type="email" placeholder="이메일 입력" v-model="state.email" />
-      </div>
-      <div class="inputMessage">이메일 정보는 비밀번호 찾기시 사용됩니다.</div>
-      <form class="inputBottom" @submit.prevent="onSubmit">
-        <input
-          type="password"
-          placeholder="비밀번호 입력"
-          v-model="state.password"
-        />
-        <input type="password" placeholder="비밀번호 확인" />
-        <div class="thrConfirmBtn">
-          <v-btn color="success" @click="postTest">가입 완료</v-btn>
-        </div>
-      </form>
-    </div> -->
+
     <v-container>
       <v-form v-model="test">
         <v-text-field
@@ -67,7 +39,9 @@
           label="비밀번호 확인"
           prepend-icon="mdi-checkbox-marked-circle-outline"
         ></v-text-field>
-        <v-btn color="success" @click="postTest">가입 완료</v-btn>
+        <v-btn class="gotoFinal" color="success" @click="postTest">
+          <a href="/signupDone">가입 완료</a></v-btn
+        >
       </v-form>
     </v-container>
     <Footer></Footer>
@@ -159,59 +133,10 @@ export default {
       padding: 12px 0;
     }
   }
-  .inputSection {
-    width: 730px;
-    margin: 0 auto;
-    .inputTop {
-      margin: 50px 0 20px 0;
-
-      input {
-        display: block;
-        width: 100%;
-        height: 50px;
-        padding-left: 15px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        border-radius: 3px;
-
-        &::placeholder {
-          color: rgba(0, 0, 0, 0.2);
-        }
-      }
-    }
-
-    .inputMessage {
-      text-align: left;
-      padding-left: 15px;
-    }
-
-    .inputBottom {
-      margin: 20px 0;
-
-      input {
-        display: block;
-        width: 100%;
-        height: 50px;
-        padding-left: 15px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        border-radius: 3px;
-
-        &::placeholder {
-          color: rgba(0, 0, 0, 0.2);
-        }
-      }
-    }
-    .thrConfirmBtn {
-      margin-top: 30px;
-      button {
-        background-color: black;
-        color: white;
-
-        a {
-          text-decoration: none;
-          color: black;
-          padding: 25px;
-        }
-      }
+  .gotoFinal {
+    a {
+      text-decoration: none;
+      color: white;
     }
   }
 }

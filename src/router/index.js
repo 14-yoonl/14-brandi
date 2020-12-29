@@ -11,6 +11,7 @@ import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
 //--service
 import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
+import productCard from "@//views/store/productCard";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
@@ -26,6 +27,11 @@ export default new Router({
       name: "home",
       component: home,
       meta: { admin: false }
+    },
+    {
+      path: "/products/:id?",
+      name: "productDetail",
+      component: productCard
     },
     {
       path: "/signIn",

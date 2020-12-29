@@ -21,6 +21,7 @@ export default {
   mutations: {
     test(state, info) {
       console.log("store", info);
+      console.log("id>>>", info.id);
     }
   }
 };
