@@ -12,9 +12,9 @@ export default {
     test(state, info) {
       console.log(state, info);
       axios.post(`${url}/signup`, {
-        id: state.id,
-        password: state.password,
-        email: state.email
+        id: info.id,
+        password: info.password,
+        email: info.email
       });
     }
   },
