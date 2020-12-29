@@ -31,17 +31,17 @@ export default {
     "originPrice",
     "discountRate",
     "discountedPrice",
-    "count"
+    "count",
   ],
   data() {
     return {
       newOriginPrice: Number(this.originPrice).toLocaleString(),
       newDiscountedPrice: Number(this.discountedPrice).toLocaleString(),
-      newCount: Number(this.count).toLocaleString()
+      newCount: Number(this.count).toLocaleString(),
     };
   },
   computed: {
-    params: function() {
+    params: function () {
       return this.$route.params;
     },
     created() {
@@ -50,8 +50,8 @@ export default {
       if (id === undefined) {
         this.$router.push("/");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

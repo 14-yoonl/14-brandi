@@ -1,4 +1,4 @@
-// import axios from "axios";
+import axios from "axios";
 
 const url = "http://localhost:5000";
 
@@ -18,6 +18,7 @@ export default {
       });
     }
   },
+
   mutations: {
     test(state, info) {
       console.log("store", info);
