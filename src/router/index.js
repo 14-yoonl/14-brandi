@@ -15,7 +15,7 @@ import productCard from "@//views/store/productCard";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
-import signUpDone from "@/views/store/signupprocess/signUpDone";
+// import signUpDone from "@/views/store/signupprocess/signUpDone";
 
 Vue.use(Router);
 
@@ -57,12 +57,12 @@ export default new Router({
       component: thirdStep,
       meta: { admin: false }
     },
-    {
-      path: "/signUpDone",
-      name: "signUpDone",
-      component: signUpDone,
-      meta: { admin: false }
-    },
+    // {
+    //   path: "/signUpDone",
+    //   name: "signUpDone",
+    //   component: signUpDone,
+    //   meta: { admin: false }
+    // },
     {
       path: "/admin/seller",
       name: "seller",
