@@ -9,6 +9,7 @@
           <option value="" disabled>조건을 선택해주세요 ▼ </option>
           <option
             v-for="condition in searchCondition"
+            :disabled="condition.disabled"
             v-bind:key="condition.id"
           >
             {{ condition.text }}
@@ -27,61 +28,23 @@
         <span>결제완료일 : </span>
       </div>
       <div class="filterBtnsGroup">
-        <input
-          type="radio"
-          name="payedDate"
-          value="전체"
-          id="payedDateAll"
-          v-model="payedCompletedDate"
-        />
-        <label for="payedDateAll">전체</label>
-        <input
-          type="radio"
-          name="payedDate"
-          value="0"
-          id="today"
-          v-model="payedCompletedDate"
-        />
-        <label for="today">오늘</label>
-        <input
-          type="radio"
-          name="payedDate"
-          value="3"
-          id="3days"
-          v-model="payedCompletedDate"
-          checked
-        />
-        <label for="3days">3일</label>
-        <input
-          type="radio"
-          name="payedDate"
-          value="7"
-          id="1week"
-          v-model="payedCompletedDate"
-        />
-        <label for="1week">1주일</label>
-        <input
-          type="radio"
-          name="payedDate"
-          value="30"
-          id="1month"
-          v-model="payedCompletedDate"
-        />
-        <label for="1month">1개월</label>
-        <input
-          type="radio"
-          name="payedDate"
-          value="90"
-          id="3month"
-          v-model="payedCompletedDate"
-        />
-        <label for="3month">3개월</label>
+        <div
+          v-for="dateOptions in payedCompletedDateList"
+          v-bind:key="dateOptions.id"
+        >
+          <input
+            type="radio"
+            :id="dateOptions.id"
+            :value="dateOptions.value"
+            v-model="payedCompletedDate"
+          />
+          <label :for="dateOptions.id">{{ dateOptions.text }}</label>
+        </div>
       </div>
       <span>{{ payedCompletedDate }}</span>
       <input type="date" v-model="getStartedDate" />
       <input type="date" v-model="currentDate" />
       <span>{{ startedDate }}</span>
-      <!-- <v-date-picker v-model="dates" range></v-date-picker> -->
     </div>
     <div class="filterList">
       <div class="filterTitle">
@@ -93,133 +56,63 @@
           name="sellerAttribute"
           value="전체"
           id="sellerAttributeAll"
-          v-model="sellerAttribute"
+          v-model="selectAllSellerAttribute"
         />
-        <!-- v-model="selectAllSellerAttribute" -->
         <label for="sellerAttributeAll">전체</label>
-        <input
-          type="checkbox"
-          name="sellerAttribute"
-          value="쇼핑몰"
-          id="shoppingmall"
-          v-model="sellerAttribute"
-        />
-        <label for="shoppingmall">쇼핑몰</label>
-        <input
-          type="checkbox"
-          name="sellerAttribute"
-          value="마켓"
-          id="market"
-          v-model="sellerAttribute"
-        />
-        <label for="market">마켓</label>
-        <input
-          type="checkbox"
-          name="sellerAttribute"
-          value="로드샵"
-          id="roadShop"
-          v-model="sellerAttribute"
-        />
-        <label for="roadShop">로드샵</label>
-        <input
-          type="checkbox"
-          name="sellerAttribute"
-          value="디자이너브랜드"
-          id="designerBrand"
-          v-model="sellerAttribute"
-        />
-        <label for="designerBrand">디자이너브랜드</label>
-        <input
-          type="checkbox"
-          name="sellerAttribute"
-          value="뷰티"
-          id="beauty"
-          v-model="sellerAttribute"
-        />
-        <label for="beauty">뷰티</label>
-        <span>{{ sellerAttribute }}</span>
+        <div
+          v-for="sellerAttributes in sellerAttributeList"
+          v-bind:key="sellerAttributes.id"
+        >
+          <input
+            type="checkbox"
+            :id="sellerAttributes.id"
+            :value="sellerAttributes.value"
+            v-model="sellerAttribute"
+          />
+          <label :for="sellerAttributes.id">{{ sellerAttributes.text }}</label>
+        </div>
       </div>
+      <span>{{ sellerAttribute }}</span>
     </div>
     <div class="filterList">
       <div class="filterTitle">
         <span>셀러구분 : </span>
       </div>
       <div class="filterBtnsGroup">
-        <input
-          type="radio"
-          name="sellerType"
-          value="전체"
-          id="sellerTypeAll"
-          v-model="sellerType"
-          checked
-        />
-        <label for="sellerTypeAll">전체</label>
-        <input
-          type="radio"
-          name="sellerType"
-          value="일반"
-          id="normalSeller"
-          v-model="sellerType"
-        />
-        <label for="normalSeller">일반</label>
-        <input
-          type="radio"
-          name="sellerType"
-          value="헬피"
-          id="helpySeller"
-          v-model="sellerType"
-        />
-        <label for="helpySeller">헬피</label>
+        <div v-for="sellerTypes in sellerTypeList" v-bind:key="sellerTypes.id">
+          <input
+            type="radio"
+            :id="sellerTypes.id"
+            :value="sellerTypes.value"
+            v-model="sellerType"
+          />
+          <label :for="sellerTypes.id">{{ sellerTypes.text }}</label>
+        </div>
       </div>
       <span>{{ sellerType }}</span>
     </div>
     <div class="filterList">
-      <div class="filterTitle">
-        <span>배송구분 : </span>
-      </div>
+      <slot name="filterTitle">
+        <div class="filterTitle">
+          <span>필터 타이틀</span>
+        </div>
+      </slot>
+      
       <div class="filterBtnsGroup">
-        <input
-          type="radio"
-          name="deliveryType"
-          value="전체"
-          id="deliveryTypeAll"
-          v-model="deliveryType"
-          checked
-        />
-        <label for="deliveryTypeAll">전체</label>
-        <input
-          type="radio"
-          name="deliveryType"
-          value="일반배송"
-          id="normalDelivery"
-          v-model="deliveryType"
-        />
-        <label for="normalDelivery">일반배송</label>
-        <input
-          type="radio"
-          name="deliveryType"
-          value="오늘출발"
-          id="sendToday"
-          v-model="deliveryType"
-        />
-        <label for="sendToday">오늘출발</label>
-        <input
-          type="radio"
-          name="deliveryType"
-          value="새벽도착"
-          id="arriveDawn"
-          v-model="deliveryType"
-        />
-        <label for="arriveDawn">새벽도착</label>
-        <input
-          type="radio"
-          name="deliveryType"
-          value="저녁도착"
-          id="arriveEvening"
-          v-model="deliveryType"
-        />
-        <label for="arriveEvening">저녁도착</label>
+        <div
+          v-for="deliveryTypes in deliveryTypeList"
+          v-bind:key="deliveryTypes.id"
+        >
+          <input
+            type="radio"
+            :id="deliveryTypes.id"
+            :value="deliveryTypes.value"
+            v-model="deliveryType"
+          />
+          <label :for="deliveryTypes.id">{{ deliveryTypes.text }}</label>
+        </div>
       </div>
+
       <span>{{ deliveryType }}</span>
     </div>
     <div class="searchBtnBox">
@@ -300,22 +193,32 @@ export default {
         return (this.startedDate = `${year}-${month}-${day -
           payedCompletedDate}`);
       }
-    }
+    },
 
-    // selectAllSellerAttribute: {
-    //   get: function() {
-    //     return this.sellerAttribute ? this.sellerAttribute.length === 6 : false;
-    //   },
-    //   set: function(value) {
-    //     let sellerAttribute = [];
-    //     if (value) {
-    //       this.sellerAttribute.forEach(attribute => {
-    //         sellerAttribute.push(attribute.value);
-    //       });
-    //     }
-    //     this.sellerAttribute = sellerAttribute;
-    //   }
-    // },
+    selectAllSellerAttribute: {
+      get: function(value) {
+        if (this.sellerAttribute.length === 0) {
+          return true;
+        } else if (
+          this.sellerAttribute.length < this.sellerAttributeList.length
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+      set: function(value) {
+        let sellerAttribute = [];
+        if (value < this.sellerAttributeList.length) {
+          this.sellerAttributeList.forEach(attribute => {
+            sellerAttribute.push(attribute.value);
+          });
+          this.sellerAttribute = sellerAttribute;
+        } else if (value === this.sellerAttributeList.length) {
+          this.sellerAttribute = [];
+        }
+      }
+    }
   },
   mounted() {
     this.getToday();
@@ -326,7 +229,6 @@ export default {
 <style lang="scss" scoped>
 .filterContainer {
   width: 100%;
-  /* height: 320px; */
   margin: 10px auto;
   background-color: white;
   border-radius: 10px;
@@ -373,62 +275,68 @@ export default {
       }
     }
 
-    :hover {
-      cursor: pointer;
-    }
+    .filterBtnsGroup {
+      display: flex;
 
-    input[type="radio"] {
-      display: none;
-    }
+      :hover {
+        cursor: pointer;
+      }
 
-    input[type="radio"] + label {
-      display: inline-block;
-      padding: 5px 0px;
-      background-color: #f5f5f5;
-      border: 1px solid #ccc;
-      font-size: 11px !important;
-      width: 80px;
-      text-align: center;
-    }
+      input[type="radio"] {
+        display: none;
+      }
 
-    input[type="radio"]:radio + label {
-      background-image: none;
-      background-color: #3598dc;
-      color: #fff;
-    }
+      input[type="radio"] + label {
+        display: inline-block;
+        margin: 0 2px;
+        padding: 5px 0px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        font-size: 11px !important;
+        width: 80px;
+        text-align: center;
+      }
 
-    input[type="radio"]:checked + label {
-      background-color: #2b80d4;
-      border-color: #2b80d4;
-      color: #ffffff;
-      font-weight: 700;
-    }
+      input[type="radio"]:radio + label {
+        background-image: none;
+        background-color: #3598dc;
+        color: #fff;
+      }
 
-    input[type="checkbox"] {
-      display: none;
-    }
+      input[type="radio"]:checked + label {
+        background-color: #2b80d4;
+        border-color: #2b80d4;
+        color: #ffffff;
+        font-weight: 700;
+      }
 
-    input[type="checkbox"] + label {
-      display: inline-block;
-      padding: 5px 0px;
-      background-color: #f5f5f5;
-      border: 1px solid #ccc;
-      font-size: 11px !important;
-      width: 80px;
-      text-align: center;
-    }
+      input[type="checkbox"] {
+        display: none;
+      }
 
-    input[type="checkbox"]:checkbox + label {
-      background-image: none;
-      background-color: #3598dc;
-      color: #fff;
-    }
+      input[type="checkbox"] + label {
+        display: inline-block;
+        margin: 0px 2px;
+        padding: 5px 0px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        font-size: 11px !important;
+        width: 80px;
+        text-align: center;
+      }
 
-    input[type="checkbox"]:checked + label {
-      background-color: #2b80d4;
-      border-color: #2b80d4;
-      color: #ffffff;
-      font-weight: 700;
+      input[type="checkbox"]:checkbox + label {
+        background-image: none;
+        background-color: #3598dc;
+        color: #fff;
+      }
+
+      input[type="checkbox"]:checked + label {
+        background-color: #2b80d4;
+        border-color: #2b80d4;
+        color: #ffffff;
+        font-weight: 700;
+      }
     }
   }
   .searchBtnBox {

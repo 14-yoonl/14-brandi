@@ -17,132 +17,135 @@
         </p>
       </template>
     </AdminHeader>
-    <div class="filterContainer">
-      <div class="filterList">
-        <div class="filterTitle">
-          <span>검색조건 : </span>
-        </div>
-        <div class="filterBtnsGroup">
-          <select v-model="filterSelectedCondition" class="searchCondition">
-            <option value="" disabled>조건을 선택해주세요 ▼ </option>
-            <option
-              v-for="condition in searchCondition"
-              :disabled="condition.disabled"
-              v-bind:key="condition.id"
-            >
-              {{ condition.text }}
-            </option>
-          </select>
-        </div>
-        <input
-          v-model="searchInputData"
-          class="searchInputBox"
-          placeholder="검색어를 입력하세요"
-        />
-        <span>{{ searchInputData }}</span>
-      </div>
-      <div class="filterList">
-        <div class="filterTitle">
-          <span>결제완료일 : </span>
-        </div>
-        <div class="filterBtnsGroup">
-          <div
-            v-for="dateOptions in payedCompletedDateList"
-            v-bind:key="dateOptions.id"
-          >
-            <input
-              type="radio"
-              :id="dateOptions.id"
-              :value="dateOptions.value"
-              v-model="payedCompletedDate"
-            />
-            <label :for="dateOptions.id">{{ dateOptions.text }}</label>
+
+    <AdminFilter>
+      <div class="filterContainer">
+        <div class="filterList">
+          <div class="filterTitle">
+            <span>검색조건 : </span>
           </div>
-        </div>
-        <span>{{ payedCompletedDate }}</span>
-        <input type="date" v-model="getStartedDate" />
-        <input type="date" v-model="currentDate" />
-        <span>{{ startedDate }}</span>
-        <!-- <v-date-picker v-model="dates" range></v-date-picker> -->
-      </div>
-      <div class="filterList">
-        <div class="filterTitle">
-          <span>셀러속성 : </span>
-        </div>
-        <div class="filterBtnsGroup">
+          <div class="filterBtnsGroup">
+            <select v-model="filterSelectedCondition" class="searchCondition">
+              <option value="" disabled>조건을 선택해주세요 ▼ </option>
+              <option
+                v-for="condition in searchCondition"
+                :disabled="condition.disabled"
+                v-bind:key="condition.id"
+              >
+                {{ condition.text }}
+              </option>
+            </select>
+          </div>
           <input
-            type="checkbox"
-            name="sellerAttribute"
-            value="전체"
-            id="sellerAttributeAll"
-            v-model="selectAllSellerAttribute"
+            v-model="searchInputData"
+            class="searchInputBox"
+            placeholder="검색어를 입력하세요"
           />
-          <label for="sellerAttributeAll">전체</label>
-          <div
-            v-for="sellerAttributes in sellerAttributeList"
-            v-bind:key="sellerAttributes.id"
-          >
+          <span>{{ searchInputData }}</span>
+        </div>
+        <div class="filterList">
+          <div class="filterTitle">
+            <span>결제완료일 : </span>
+          </div>
+          <div class="filterBtnsGroup">
+            <div
+              v-for="dateOptions in payedCompletedDateList"
+              v-bind:key="dateOptions.id"
+            >
+              <input
+                type="radio"
+                :id="dateOptions.id"
+                :value="dateOptions.value"
+                v-model="payedCompletedDate"
+              />
+              <label :for="dateOptions.id">{{ dateOptions.text }}</label>
+            </div>
+          </div>
+          <span>{{ payedCompletedDate }}</span>
+          <input type="date" v-model="getStartedDate" />
+          <input type="date" v-model="currentDate" />
+          <span>{{ startedDate }}</span>
+        </div>
+        <div class="filterList">
+          <div class="filterTitle">
+            <span>셀러속성 : </span>
+          </div>
+          <div class="filterBtnsGroup">
             <input
               type="checkbox"
-              :id="sellerAttributes.id"
-              :value="sellerAttributes.value"
-              v-model="sellerAttribute"
+              name="sellerAttribute"
+              value="전체"
+              id="sellerAttributeAll"
+              v-model="selectAllSellerAttribute"
             />
-            <label :for="sellerAttributes.id">{{
-              sellerAttributes.text
-            }}</label>
+            <label for="sellerAttributeAll">전체</label>
+            <div
+              v-for="sellerAttributes in sellerAttributeList"
+              v-bind:key="sellerAttributes.id"
+            >
+              <input
+                type="checkbox"
+                :id="sellerAttributes.id"
+                :value="sellerAttributes.value"
+                v-model="sellerAttribute"
+              />
+              <label :for="sellerAttributes.id">{{
+                sellerAttributes.text
+              }}</label>
+            </div>
           </div>
+          <span>{{ sellerAttribute }}</span>
         </div>
-        <span>{{ sellerAttribute }}</span>
-      </div>
-      <div class="filterList">
-        <div class="filterTitle">
-          <span>셀러구분 : </span>
-        </div>
-        <div class="filterBtnsGroup">
-          <div
-            v-for="sellerTypes in sellerTypeList"
-            v-bind:key="sellerTypes.id"
-          >
-            <input
-              type="radio"
-              :id="sellerTypes.id"
-              :value="sellerTypes.value"
-              v-model="sellerType"
-            />
-            <label :for="sellerTypes.id">{{ sellerTypes.text }}</label>
+        <div class="filterList">
+          <div class="filterTitle">
+            <span>셀러구분 : </span>
           </div>
-        </div>
-        <span>{{ sellerType }}</span>
-      </div>
-      <div class="filterList">
-        <div class="filterTitle">
-          <span>배송구분 : </span>
-        </div>
-        <div class="filterBtnsGroup">
-          <div
-            v-for="deliveryTypes in deliveryTypeList"
-            v-bind:key="deliveryTypes.id"
-          >
-            <input
-              type="radio"
-              :id="deliveryTypes.id"
-              :value="deliveryTypes.value"
-              v-model="deliveryType"
-            />
-            <label :for="deliveryTypes.id">{{ deliveryTypes.text }}</label>
+          <div class="filterBtnsGroup">
+            <div
+              v-for="sellerTypes in sellerTypeList"
+              v-bind:key="sellerTypes.id"
+            >
+              <input
+                type="radio"
+                :id="sellerTypes.id"
+                :value="sellerTypes.value"
+                v-model="sellerType"
+              />
+              <label :for="sellerTypes.id">{{ sellerTypes.text }}</label>
+            </div>
           </div>
+          <span>{{ sellerType }}</span>
         </div>
+        <div class="filterList">
+          <div class="filterTitle">
+            <span>배송구분 : </span>
+          </div>
+          <div class="filterBtnsGroup">
+            <div
+              v-for="deliveryTypes in deliveryTypeList"
+              v-bind:key="deliveryTypes.id"
+            >
+              <input
+                type="radio"
+                :id="deliveryTypes.id"
+                :value="deliveryTypes.value"
+                v-model="deliveryType"
+              />
+              <label :for="deliveryTypes.id">{{ deliveryTypes.text }}</label>
+            </div>
+          </div>
 
-        <span>{{ deliveryType }}</span>
+          <span>{{ deliveryType }}</span>
+        </div>
+        <div class="searchBtnBox">
+          <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
+            >검색</v-btn
+          >
+          <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
+        </div>
       </div>
-      <div class="searchBtnBox">
-        <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
-          >검색</v-btn
-        >
-        <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
-      </div>
-    </div>
+    </AdminFilter>
+
     <div class="tableContainer">
       <div class="tableContainerHeaderBtns">
         <div class="headerLeft">
