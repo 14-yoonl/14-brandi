@@ -14,7 +14,7 @@
       <h2 class="productHeader">당신을 위한 추천</h2>
       <div class="cardList">
         <productCard
-          v-for="item in items"
+          v-for="item in cards"
           :key="item"
           :seller="item.sellerName"
           :imageUrl="item.imageUrl"
@@ -23,6 +23,7 @@
           :discountRate="item.discountRate"
           :discountedPrice="item.discountedPrice"
           :count="item.count"
+          @click="goToDetail"
         />
       </div>
     </div>
@@ -52,7 +53,7 @@ export default {
           src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
         },
       ],
-      items: [
+      cards: [
         {
           id: 1,
           sellerName: "미우블랑",
@@ -82,6 +83,9 @@ export default {
     NavBar: NavBar,
     productCard: productCard,
     Footer: Footer,
+  },
+  methods: {
+    goToDetail() {},
   },
 };
 </script>
