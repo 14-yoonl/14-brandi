@@ -7,6 +7,7 @@ import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
 import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
+import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
 import AdminHome from "@/views/admin/AdminHome/AdminHome";
 
 //--service
@@ -16,7 +17,7 @@ import productCard from "@//views/store/productCard";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
-// import signUpDone from "@/views/store/signupprocess/signUpDone";
+// import signUpDone from "@/views/store/signupprocess/signUpDone"; //작업 중 (승윤)
 
 Vue.use(Router);
 
@@ -83,13 +84,18 @@ export default new Router({
     {
       path: "/admin/order",
       name: "AdminOrder",
-      component: AdminOrder, //<=== admin home component 추가해야함
+      component: AdminOrder,
       meta: { admin: true }
+    },
+    {
+      path: "/admin/products/regist",
+      name: "ProductManagement",
+      component: ProductManagement
     },
     {
       path: "/admin/home",
       name: "AdminHome",
-      component: AdminHome, //<=== admin home component 추가해야함
+      component: AdminHome,
       meta: { admin: true }
     }
   ]

@@ -1,7 +1,10 @@
 <template>
   <div class="AdminLayout">
     <adminHeader />
-    <div class="mainComponent"><adminSideBar /><slot /></div>
+    <div class="mainComponent">
+      <adminSideBar></adminSideBar>
+      <div class="content"><slot></slot></div>
+    </div>
     <adminFooter />
   </div>
 </template>
@@ -27,6 +30,13 @@ export default {
   .mainComponent {
     display: flex;
     height: 95%;
+
+    .content {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px 0 0 10px / 10px 0 0 10px;
+      background-color: #f3f4f7;
+    }
   }
 }
 </style>
