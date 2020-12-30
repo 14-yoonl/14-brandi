@@ -3,16 +3,16 @@
     <a href="">
       <ul>
         <li class="listImage">
-          <img :src="imageUrl" alt="다람쥐사진" />
+          <img :src="item.imageUrl" alt="다람쥐사진" />
         </li>
         <li class="listSeller">
-          <span>{{ seller }}</span>
+          <span>{{ item.sellerName }}</span>
         </li>
         <li class="listTitle">
-          <em>{{ name }}</em>
+          <em>{{ item.name }}</em>
         </li>
         <li class="listPrice">
-          <span class="dcPercent">{{ discountRate }}%</span>
+          <span class="dcPercent">{{ item.discountRate }}%</span>
           <span class="bPrice">{{ newDiscountedPrice }}</span>
           <span class="aPrice">{{ newOriginPrice }}</span>
         </li>
@@ -24,34 +24,14 @@
 
 <script>
 export default {
-  props: [
-    "seller",
-    "imageUrl",
-    "name",
-    "originPrice",
-    "discountRate",
-    "discountedPrice",
-    "count",
-  ],
+  props: ["item"],
   data() {
     return {
-      newOriginPrice: Number(this.originPrice).toLocaleString(),
-      newDiscountedPrice: Number(this.discountedPrice).toLocaleString(),
-      newCount: Number(this.count).toLocaleString(),
+      newOriginPrice: Number(this.item.originPrice).toLocaleString(),
+      newDiscountedPrice: Number(this.item.discountedPrice).toLocaleString(),
+      newCount: Number(this.item.count).toLocaleString()
     };
-  },
-  computed: {
-    params: function () {
-      return this.$route.params;
-    },
-    created() {
-      const id = this.$route.params.id;
-
-      if (id === undefined) {
-        this.$router.push("/");
-      }
-    },
-  },
+  }
 };
 </script>
 
