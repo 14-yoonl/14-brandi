@@ -465,7 +465,6 @@ export default {
       .etcBox {
         display: flex;
         flex-direction: column;
-        /* justify-content: space-between; */
         width: 560px;
         height: 500px;
         background-color: #ffffff;
