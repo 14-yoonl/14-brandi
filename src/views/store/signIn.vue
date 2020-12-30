@@ -10,9 +10,9 @@
         <div class="loginBottom">
           <input type="text" class="idInput" placeholder="아이디 입력" />
           <input type="text" class="pwInput" placeholder="비밀번호 입력" />
-          <button class="logInButtom"><a href="/">로그인</a></button>
-          <button class="signUpButtom"><a href="/signUp">회원가입</a></button>
+          <button class="logInButton"><a href="/">로그인</a></button>
 
+          <button class="signUpButton"><a href="/signUp">회원가입</a></button>
           <button class="socialLogin">
             <img
               src="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/5rH/image/aFrEyVpANu07FvoBZQbIB4aF_uc"
@@ -72,7 +72,7 @@ export default {
           border-radius: 3px;
         }
 
-        .logInButtom {
+        .logInButton {
           height: 50px;
           margin: 10px 0 2px 0;
           color: white;
@@ -83,14 +83,15 @@ export default {
             color: white;
           }
         }
-        .signUpButtom {
+        .signUpButton {
           a {
+            padding: 15px 250px;
             text-decoration: none;
             color: black;
           }
         }
 
-        .signUpButtom,
+        .signUpButton,
         .socialLogin {
           height: 50px;
           margin: 10px 0 2px 0;
