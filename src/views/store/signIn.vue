@@ -13,13 +13,7 @@
           <button class="logInButton"><a href="/">로그인</a></button>
 
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
-          <!-- <button class="socialLogin">
-            <img
-              src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
-              alt="구글 로고"
-            />
-            <span>구글계정으로 로그인하기</span>
-          </button> -->
+
           <GoogleLogin :params="params" :onSuccess="onSuccess">
             <img
               src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
@@ -36,6 +30,7 @@
 <script>
 import GoogleLogin from "vue-google-login";
 import NavBar from "./NavBar";
+import API from "@/store/config.js";
 export default {
   data() {
     return {
@@ -55,10 +50,10 @@ export default {
     onSuccess(googleUser) {
       this.updateAccess({ access: googleUser.wc.access_token });
       axios
-        .post(API, {
-          access_token: googleUser.wc.access_token
+        .post("`${API}/social-signin`", {
+          Authorization: googleUser.wc.access_token
         })
-        .then(console.log("GOOGLE>>>", googleUser.wc.access_token))
+        .then(res => res.json())
         .then(googleUser => {
           localStorage.setItem("accessToken", googleUser.data.access_token);
         });
