@@ -7,6 +7,7 @@ import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
 import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
+import AdminHome from "@/views/admin/Home/AdminHome";
 
 //--service
 import signIn from "@/views/store/SignIn";
@@ -83,6 +84,12 @@ export default new Router({
       path: "/admin/order",
       name: "AdminOrder",
       component: AdminOrder, //<=== admin home component 추가해야함
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/home",
+      name: "AdminHome",
+      component: AdminHome, //<=== admin home component 추가해야함
       meta: { admin: true }
     }
   ]
