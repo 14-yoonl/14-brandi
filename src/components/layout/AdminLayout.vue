@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import adminHeader from "../common/AdminHeader";
-import adminSideBar from "../common/AdminSideBar";
-import adminFooter from "../common/AdminFooter";
+import adminHeader from "./AdminHeader";
+import adminSideBar from "./AdminSideBar";
+import adminFooter from "./AdminFooter";
 
 export default {
   name: "AdminLayout",

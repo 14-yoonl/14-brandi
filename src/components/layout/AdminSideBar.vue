@@ -1,11 +1,11 @@
 <template>
   <aside class="AdminSideBar">
-    <ul v-for="(topValue, menuList, index) in menuList">
+    <ul v-for="(topValue, menuList, index) in menuList" v-bind:key="index">
       <li>
         <input type="radio" name="navList" :id="`nav` + index" />
         <label :for="`nav` + index" class="navbtn">{{ menuList }}</label>
         <div class="submenu">
-          <a v-for="(menu, topValue) in topValue">
+          <a v-for="(menu, topValue) in topValue" v-bind:key="menu">
             {{ topValue }}
           </a>
         </div>
@@ -56,7 +56,7 @@ export default {
   font-weight: 300;
 
   ul {
-    width: 200px;
+    width: 100%;
     padding: 0;
     list-style: none;
 
