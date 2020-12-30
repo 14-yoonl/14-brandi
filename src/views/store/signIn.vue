@@ -13,13 +13,20 @@
           <button class="logInButton"><a href="/">로그인</a></button>
 
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
-          <button class="socialLogin">
+          <!-- <button class="socialLogin">
             <img
-              src="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/5rH/image/aFrEyVpANu07FvoBZQbIB4aF_uc"
+              src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
               alt="구글 로고"
             />
-            <span>구글계정으로 계속하기</span>
-          </button>
+            <span>구글계정으로 로그인하기</span>
+          </button> -->
+          <GoogleLogin :params="params" :onSuccess="onSuccess">
+            <img
+              src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
+              alt="구글 로고"
+            />
+            <span>구글계정으로 로그인하기</span>
+          </GoogleLogin>
         </div>
       </div>
     </div>
@@ -27,11 +34,37 @@
 </template>
 
 <script>
+import GoogleLogin from "vue-google-login";
 import NavBar from "./NavBar";
 export default {
+  data() {
+    return {
+      params: {
+        client_id:
+          "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
+      }
+    };
+    console.log("this>>>>", params);
+  },
+
   components: {
     navbar: NavBar,
+    GoogleLogin
   },
+  methods: {
+    onSuccess(googleUser) {
+      this.updateAccess({ access: googleUser.wc.access_token });
+      axios
+        .post(API, {
+          access_token: googleUser.wc.access_token
+        })
+        .then(console.log("GOOGLE>>>", googleUser.wc.access_token))
+        .then(googleUser => {
+          localStorage.setItem("accessToken", googleUser.data.access_token);
+        });
+      alert("Google Login Success ");
+    }
+  }
 };
 </script>
 
