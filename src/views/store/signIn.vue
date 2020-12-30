@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import NavBar from "./NavBar";
+import NavBar from "./navBar";
 export default {
   components: {
-    navbar: NavBar,
-  },
+    navbar: NavBar
+  }
 };
 </script>
 

@@ -39,8 +39,8 @@ export default {
     return {};
   },
   components: {
-    NavBar: NavBar,
-  },
+    NavBar: NavBar
+  }
 };
 </script>
 

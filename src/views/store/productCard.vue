@@ -1,24 +1,22 @@
 <template>
   <div class="productList">
-    <a href="">
-      <ul>
-        <li class="listImage">
-          <img :src="imageUrl" alt="다람쥐사진" />
-        </li>
-        <li class="listSeller">
-          <span>{{ seller }}</span>
-        </li>
-        <li class="listTitle">
-          <em>{{ name }}</em>
-        </li>
-        <li class="listPrice">
-          <span class="dcPercent">{{ discountRate }}%</span>
-          <span class="bPrice">{{ newDiscountedPrice }}</span>
-          <span class="aPrice">{{ newOriginPrice }}</span>
-        </li>
-        <li class="productCount">{{ newCount }}개 판매중</li>
-      </ul>
-    </a>
+    <ul>
+      <li class="listImage">
+        <img :src="imageUrl" alt="다람쥐사진" />
+      </li>
+      <li class="listSeller">
+        <span>{{ seller }}</span>
+      </li>
+      <li class="listTitle">
+        <em>{{ name }}</em>
+      </li>
+      <li class="listPrice">
+        <span class="dcPercent">{{ discountRate }}%</span>
+        <span class="bPrice">{{ newDiscountedPrice }}</span>
+        <span class="aPrice">{{ newOriginPrice }}</span>
+      </li>
+      <li class="productCount">{{ newCount }}개 판매중</li>
+    </ul>
   </div>
 </template>
 
@@ -31,17 +29,17 @@ export default {
     "originPrice",
     "discountRate",
     "discountedPrice",
-    "count",
+    "count"
   ],
   data() {
     return {
       newOriginPrice: Number(this.originPrice).toLocaleString(),
       newDiscountedPrice: Number(this.discountedPrice).toLocaleString(),
-      newCount: Number(this.count).toLocaleString(),
+      newCount: Number(this.count).toLocaleString()
     };
   },
   computed: {
-    params: function () {
+    params: function() {
       return this.$route.params;
     },
     created() {
@@ -50,8 +48,8 @@ export default {
       if (id === undefined) {
         this.$router.push("/");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

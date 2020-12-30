@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import NavBar from "../NavBar";
+import NavBar from "../navBar";
 import Footer from "../footer";
 export default {
   data() {
@@ -57,30 +57,30 @@ export default {
       state: {
         id: "",
         password: "",
-        email: "",
+        email: ""
       },
       idRules: [
-        (v) => !!v || "아이디는 필수 입력항목입니다.",
-        (v) =>
+        v => !!v || "아이디는 필수 입력항목입니다.",
+        v =>
           /^[A-Za-z]{1}[A-Za-z0-9]{5,19}$/.test(v) ||
-          "길이는 6~20 사이, 한글 및 특수문자는 사용하실수 없습니다.",
+          "길이는 6~20 사이, 한글 및 특수문자는 사용하실수 없습니다."
         // async v => ((await this.serverValidCheck("")) ? "111" : "22")
       ],
       passwordRules: [
-        (v) => !!v || "비밀번호는 필수 입력항목입니다.",
-        (v) =>
+        v => !!v || "비밀번호는 필수 입력항목입니다.",
+        v =>
           /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,19}$/.test(v) ||
-          "비밀번호는 최소 8자 이상, 특수문자, 대문자, 소문자를 입력해주세요",
+          "비밀번호는 최소 8자 이상, 특수문자, 대문자, 소문자를 입력해주세요"
       ],
       re_passwordRules: [
-        (v) => !!v || "비밀번호 확인은 필수 입력항목입니다.",
-        (v) => this.state.password === v || "비밀번호가 일치하지 않습니다.",
-      ],
+        v => !!v || "비밀번호 확인은 필수 입력항목입니다.",
+        v => this.state.password === v || "비밀번호가 일치하지 않습니다."
+      ]
     };
   },
   components: {
     NavBar: NavBar,
-    Footer: Footer,
+    Footer: Footer
   },
   methods: {
     postTest() {
@@ -92,8 +92,8 @@ export default {
       if (!this.errors.any()) {
         alert("submit");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

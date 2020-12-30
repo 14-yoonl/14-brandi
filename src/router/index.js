@@ -19,7 +19,7 @@ import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
 import productsDetail from "@/views/store/products/productsDetail";
-import signUpDone from "@/views/store/signupprocess/signUpDone";
+// import signUpDone from "@/views/store/signupprocess/signUpDone";
 
 Vue.use(Router);
 
@@ -67,12 +67,12 @@ export default new Router({
       component: productsDetail,
       meta: { admin: false }
     },
-    {
-      path: "/signUpDone",
-      name: "signUpDone",
-      component: signUpDone,
-      meta: { admin: false }
-    },
+    // {
+    //   path: "/signUpDone",
+    //   name: "signUpDone",
+    //   component: signUpDone,
+    //   meta: { admin: false }
+    // },
     {
       path: "/admin/seller",
       name: "seller",
