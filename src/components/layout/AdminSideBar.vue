@@ -1,11 +1,11 @@
 <template>
   <aside class="AdminSideBar">
-    <ul v-for="(topValue, menuList, index) in menuList">
+    <ul v-for="(topValue, menuList, index) in menuList" v-bind:key="index">
       <li>
         <input type="radio" name="navList" :id="`nav` + index" />
         <label :for="`nav` + index" class="navbtn">{{ menuList }}</label>
         <div class="submenu">
-          <a v-for="(menu, topValue) in topValue">
+          <a v-for="(menu, topValue) in topValue" v-bind:key="menu">
             {{ topValue }}
           </a>
         </div>
@@ -28,20 +28,20 @@ export default {
           상품준비관리: {},
           배송중관리: {},
           배송완료관리: {},
-          구매확정관리: {},
+          구매확정관리: {}
         },
         "취소/환불관리": {
           환불요청관리: {},
           환불완료관리: {},
-          주문취소완료관리: {},
+          주문취소완료관리: {}
         },
         상품관리: { 상품관리: {}, 상품등록: {} },
         고객응대관리: { "Q&A관리": {}, 텍스트리뷰: {} },
         "기획전/쿠폰관리": { 기회적관리: {}, 쿠폰관리: {} },
-        회원관리: { 회원관리: {}, 셀러관리: {} },
-      },
+        회원관리: { 회원관리: {}, 셀러관리: {} }
+      }
     };
-  },
+  }
 };
 </script>
 
