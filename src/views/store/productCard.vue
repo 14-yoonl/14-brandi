@@ -1,6 +1,6 @@
 <template>
-  <div class="productList">
-    <a href="">
+  <router-link :to="`products/${item.id}`" class="cardsLink">
+    <div class="productList">
       <ul>
         <li class="listImage">
           <img :src="item.imageUrl" alt="다람쥐사진" />
@@ -18,8 +18,8 @@
         </li>
         <li class="productCount">{{ newCount }}개 판매중</li>
       </ul>
-    </a>
-  </div>
+    </div>
+  </router-link>
 </template>
 
 <script>
@@ -31,16 +31,20 @@ export default {
       newDiscountedPrice: Number(this.item.discountedPrice).toLocaleString(),
       newCount: Number(this.item.count).toLocaleString()
     };
+  },
+  created() {
+    const userName = this.$route.params.id;
+    this.$store.dispatch("FETCH_USER", userName);
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.cardsLink {
+  text-decoration: none;
+  color: black;
+}
 .productList {
-  a {
-    text-decoration: none;
-    color: black;
-  }
   ul {
     display: flex;
     flex-direction: column;

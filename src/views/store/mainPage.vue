@@ -13,12 +13,8 @@
     <div class="mainProducts">
       <h2 class="productHeader">당신을 위한 추천</h2>
       <div class="cardList">
-        <productCard
-          v-for="item in cards"
-          :key="item.id"
-          :item="item"
-          @click="goToDetail"
-        />
+        <productCard v-for="item in cards" :key="item.id" :item="item">
+        </productCard>
       </div>
     </div>
     <Footer></Footer>
@@ -77,9 +73,6 @@ export default {
     NavBar: NavBar,
     productCard: productCard,
     Footer: Footer
-  },
-  methods: {
-    goToDetail() {}
   }
 };
 </script>
