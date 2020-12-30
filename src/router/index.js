@@ -6,7 +6,7 @@ import Router from "vue-router";
 import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
-import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
+import AdminOrder from "@/views/admin/OrderManagement/AdminOrder";
 import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
 import AdminHome from "@/views/admin/AdminHome/AdminHome";
 
