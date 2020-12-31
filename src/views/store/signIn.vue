@@ -14,7 +14,11 @@
 
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
 
-          <GoogleLogin :params="params" :onSuccess="onSuccess">
+          <GoogleLogin
+            :params="params"
+            :onSuccess="onSuccess"
+            :onFailure="onFailure"
+          >
             <img
               src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
               alt="구글 로고"
@@ -30,7 +34,7 @@
 <script>
 import GoogleLogin from "vue-google-login";
 import NavBar from "./NavBar";
-import API from "@/store/config.js";
+// import API from "@/store/config.js";
 export default {
   data() {
     return {
@@ -39,25 +43,29 @@ export default {
           "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
       }
     };
-    console.log("this>>>>", params);
   },
 
   components: {
     navbar: NavBar,
     GoogleLogin
   },
+  // methods: {
+  //   loginSuccess(googleUser) {
+  //     axios
+  //       .post("`${API}/social-signin`", {
+  //         Authorization: googleUser.wc.access_token
+  //       })
+  //       .then(res => res.json())
+  //       .then(googleUser => {
+  //         localStorage.setItem("accessToken", googleUser.data.access_token);
+  //         alert("Google Login Success");
+  //       });
+  //   }
+  // }
   methods: {
     onSuccess(googleUser) {
-      this.updateAccess({ access: googleUser.wc.access_token });
-      axios
-        .post("`${API}/social-signin`", {
-          Authorization: googleUser.wc.access_token
-        })
-        .then(res => res.json())
-        .then(googleUser => {
-          localStorage.setItem("accessToken", googleUser.data.access_token);
-        });
-      alert("Google Login Success ");
+      console.log("구글유저>>>>", googleUser);
+      console.log("basicprofile>>>>>", googleUser.getBasicProfile());
     }
   }
 };
