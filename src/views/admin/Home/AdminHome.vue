@@ -268,7 +268,6 @@ export default {
       padding: 8,
       radius: 10,
       value1: [
-        10000,
         25000,
         60000,
         50000,
@@ -283,7 +282,6 @@ export default {
         800000
       ],
       value2: [
-        100,
         250,
         600,
         500,
