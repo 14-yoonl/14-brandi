@@ -8,7 +8,7 @@ import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
 import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
 import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
-import AdminHome from "@/views/admin/AdminHome/AdminHome";
+import AdminHome from "@/views/admin/Home/AdminHome";
 
 //--service
 import signIn from "@/views/store/SignIn";

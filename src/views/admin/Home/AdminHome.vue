@@ -3,57 +3,33 @@
     <div class="wrap">
       <div class="processContainer">
         <div class="processBox">
-          <div class="contentsList">
-            <span>상품 준비 : </span>
-            <span>0건</span>
-          </div>
-          <div class="contentsList">
-            <span>배송 준비 : </span>
-            <span>0건</span>
-          </div>
-          <div class="contentsList">
-            <span>배송 중 : </span>
-            <span>0건</span>
-          </div>
-          <div class="contentsList">
-            <span>배송 완료 : </span>
-            <span>0건</span>
-          </div>
-          <div class="contentsList">
-            <span>구매 확정 : </span>
-            <span>0건</span>
+          <div
+            class="contentsList"
+            v-for="item in processList"
+            v-bind:key="item"
+          >
+            <span>{{ item.text }}</span>
+            <span>{{ item.value }}건</span>
           </div>
         </div>
         <div class="processBox">
-          <div class="contentsList">
-            <span>환불 요청 : </span>
-            <span>0건</span>
-          </div>
-          <div class="contentsList">
-            <span>반품 진행 : </span>
-            <span>0건</span>
-          </div>
-          <div class="contentsList">
-            <span>주문 취소중 : </span>
-            <span>0건</span>
-          </div>
-          <div class="contentsList">
-            <span>환불 승인중 : </span>
-            <span>0건</span>
+          <div
+            class="contentsList"
+            v-for="item in refundList"
+            v-bind:key="item"
+          >
+            <span>{{ item.text }}</span>
+            <span>{{ item.value }}건</span>
           </div>
         </div>
         <div class="processBox">
-          <div class="contentsList">
-            <span>즐겨찾기 수 : </span>
-            <span>0건</span>
-          </div>
-          <div class="contentsList">
-            <span>전체 상품 수 : </span>
-            <span>0건</span>
-          </div>
-          <div class="contentsList">
-            <span>노출 상품 수 : </span>
-            <span>0건</span>
+          <div
+            class="contentsList"
+            v-for="item in productList"
+            v-bind:key="item"
+          >
+            <span>{{ item.text }}</span>
+            <span>{{ item.value }}건</span>
           </div>
         </div>
       </div>
@@ -66,13 +42,13 @@
             >
           </div>
           <v-sparkline
-            :labels="labels"
+            :labels="sparkLineLabels"
             :fill="fill"
             :gradient="gradient"
             :line-width="width"
             :padding="padding"
             :smooth="radius || false"
-            :value="value2"
+            :value="orderCnt"
             auto-draw
           ></v-sparkline>
         </div>
@@ -84,13 +60,13 @@
             >
           </div>
           <v-sparkline
-            :labels="labels"
+            :labels="sparkLineLabels"
             :fill="fill"
             :gradient="gradient"
             :line-width="width"
             :padding="padding"
             :smooth="radius || false"
-            :value="value1"
+            :value="salesCnt"
             auto-draw
           ></v-sparkline>
         </div>
@@ -98,14 +74,13 @@
       <div class="etcContainer">
         <div class="etcBox">
           <div class="header">
-            <span> Q&A 미답변(0건)</span>
+            <span> Q&A 미답변({{ noAnswer.length }}건)</span>
           </div>
 
           <v-card>
             <v-tabs v-model="tabs" centered>
               <v-tab v-for="item in items" :key="item"> {{ item }} </v-tab>
             </v-tabs>
-
             <v-tabs-items v-model="tabs">
               <v-tab-item>
                 <v-card flat>
@@ -267,23 +242,7 @@ export default {
       gradients,
       padding: 8,
       radius: 10,
-      value1: [
-        10000,
-        25000,
-        60000,
-        50000,
-        130000,
-        250000,
-        300000,
-        500000,
-        350000,
-        250000,
-        400000,
-        550000,
-        800000
-      ],
-      value2: [
-        100,
+      orderCnt: [
         250,
         600,
         500,
@@ -297,8 +256,22 @@ export default {
         5500,
         8000
       ],
+      salesCnt: [
+        25000,
+        60000,
+        50000,
+        130000,
+        250000,
+        300000,
+        500000,
+        350000,
+        250000,
+        400000,
+        550000,
+        800000
+      ],
       width: 2,
-      labels: [
+      sparkLineLabels: [
         "1월",
         "2월",
         "3월",
@@ -360,6 +333,72 @@ export default {
           title: "[필독] 우리 본사를 이전합니다 !",
           writer: "brandi",
           date: "2020-12-30"
+        }
+      ],
+      processList: [
+        {
+          id: 0,
+          text: "상품 준비",
+          value: 0
+        },
+        {
+          id: 1,
+          text: "배송 준비",
+          value: 0
+        },
+        {
+          id: 2,
+          text: "배송 중",
+          value: 0
+        },
+        {
+          id: 3,
+          text: "배송 완료",
+          value: 0
+        },
+        {
+          id: 4,
+          text: "구매 확정",
+          value: 0
+        }
+      ],
+      refundList: [
+        {
+          id: 0,
+          text: "환불 요청",
+          value: 0
+        },
+        {
+          id: 1,
+          text: "반품 진행",
+          value: 0
+        },
+        {
+          id: 2,
+          text: "주문 취소중",
+          value: 0
+        },
+        {
+          id: 3,
+          text: "환불 승인중",
+          value: 0
+        }
+      ],
+      productList: [
+        {
+          id: 0,
+          text: "즐겨찾기 수",
+          value: 0
+        },
+        {
+          id: 1,
+          text: "전체 상품 수",
+          value: 0
+        },
+        {
+          id: 2,
+          text: "노출 상품 수",
+          value: 0
         }
       ]
     };
@@ -465,7 +504,6 @@ export default {
       .etcBox {
         display: flex;
         flex-direction: column;
-        /* justify-content: space-between; */
         width: 560px;
         height: 500px;
         background-color: #ffffff;
