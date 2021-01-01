@@ -12,11 +12,15 @@ export default {
   actions: {
     test(state, info) {
       console.log(state, info);
-      axios.post(`${url}/signup`, {
-        id: info.id,
-        password: info.password,
-        email: info.email
-      });
+      axios
+        .post(`${url}/signup`, {
+          username: info.id,
+          password: info.password,
+          email: info.email
+        })
+        .then(res => res.json())
+        .then(localStorage.setItem(res.data.token));
+      this.$router.push("/signUpDone");
     },
     FETCH_USER({ commit }, name) {
       LOCAL_API(name)
@@ -28,10 +32,6 @@ export default {
   },
 
   mutations: {
-    // test(state, info) {
-    //   console.log("store", info);
-    //   console.log("id>>>", info.id);
-    // },
     SET_ITEM(state, item) {
       state.item = item;
     }
