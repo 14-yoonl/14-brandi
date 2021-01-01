@@ -11,11 +11,15 @@ export default {
   actions: {
     test(state, info) {
       console.log(state, info);
-      axios.post(`${url}/signup`, {
-        id: state.id,
-        password: state.password,
-        email: state.email
-      });
+      axios
+        .post(`${url}/signup`, {
+          username: info.id,
+          password: info.password,
+          email: info.email
+        })
+        .then(res => res.json())
+        .then(localStorage.setItem(res.data.token));
+      this.$router.push("/signUpDone");
     }
   },
 

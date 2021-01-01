@@ -13,13 +13,18 @@
           <button class="logInButton"><a href="/">로그인</a></button>
 
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
-          <button class="socialLogin">
+
+          <GoogleLogin
+            :params="params"
+            :onSuccess="onSuccess"
+            :onFailure="onFailure"
+          >
             <img
-              src="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/5rH/image/aFrEyVpANu07FvoBZQbIB4aF_uc"
+              src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
               alt="구글 로고"
             />
-            <span>구글계정으로 계속하기</span>
-          </button>
+            <span>구글계정으로 로그인하기</span>
+          </GoogleLogin>
         </div>
       </div>
     </div>
@@ -27,11 +32,41 @@
 </template>
 
 <script>
+import GoogleLogin from "vue-google-login";
 import NavBar from "./NavBar";
+// import API from "@/store/config.js";
 export default {
+  data() {
+    return {
+      params: {
+        client_id:
+          "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
+      }
+    };
+  },
+
   components: {
     navbar: NavBar,
+    GoogleLogin
   },
+
+  methods: {
+    onSuccess(googleUser) {
+      console.log("구글유저>>>>", googleUser.xc.access_token);
+      console.log("basicprofile>>>>>", googleUser.getBasicProfile());
+      axios
+        .post("`${API}/social-signin`", {
+          Authorization: googleUser.xc.access_token
+        })
+        .then(function(response) {
+          localStorage.setItem("access_token", res.data.token);
+        })
+        .then.catch(function(error) {
+          console.log(error);
+        });
+      this.$router.push("/home");
+    }
+  }
 };
 </script>
 
