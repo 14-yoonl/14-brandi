@@ -18,7 +18,8 @@ export default {
           email: info.email
         })
         .then(res => res.json())
-        .then(localStorage.setItem(res.token));
+        .then(localStorage.setItem(res.data.token));
+      this.$router.push("/signUpDone");
     }
   },
 

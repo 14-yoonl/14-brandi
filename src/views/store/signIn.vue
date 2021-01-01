@@ -49,23 +49,22 @@ export default {
     navbar: NavBar,
     GoogleLogin
   },
-  // methods: {
-  //   loginSuccess(googleUser) {
-  //     axios
-  //       .post("`${API}/social-signin`", {
-  //         Authorization: googleUser.wc.access_token
-  //       })
-  //       .then(res => res.json())
-  //       .then(googleUser => {
-  //         localStorage.setItem("accessToken", googleUser.data.access_token);
-  //         alert("Google Login Success");
-  //       });
-  //   }
-  // }
+
   methods: {
     onSuccess(googleUser) {
-      console.log("구글유저>>>>", googleUser);
+      console.log("구글유저>>>>", googleUser.xc.access_token);
       console.log("basicprofile>>>>>", googleUser.getBasicProfile());
+      axios
+        .post("`${API}/social-signin`", {
+          Authorization: googleUser.xc.access_token
+        })
+        .then(function(response) {
+          localStorage.setItem("access_token", res.data.token);
+        })
+        .then.catch(function(error) {
+          console.log(error);
+        });
+      this.$router.push("/home");
     }
   }
 };
