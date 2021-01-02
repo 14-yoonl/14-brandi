@@ -2,11 +2,11 @@
   <div class="filterContainer">
     <div class="filterList">
       <div class="filterTitle">
-        <span>검색조건 : </span>
+        <slot name="filterTitle1"> <span>필터 </span> </slot>
       </div>
       <div class="filterBtnsGroup">
         <select v-model="filterSelectedCondition" class="searchCondition">
-          <option value="" disabled>조건을 선택해주세요 ▼ </option>
+          <option value="" disabled>조건을 선택해주세요 ▼</option>
           <option
             v-for="condition in searchCondition"
             :disabled="condition.disabled"
@@ -25,20 +25,24 @@
     </div>
     <div class="filterList">
       <div class="filterTitle">
-        <span>결제완료일 : </span>
+        <slot name="filtertitle2">
+          <span>결제완료일 : </span>
+        </slot>
       </div>
       <div class="filterBtnsGroup">
         <div
           v-for="dateOptions in payedCompletedDateList"
           v-bind:key="dateOptions.id"
         >
-          <input
-            type="radio"
-            :id="dateOptions.id"
-            :value="dateOptions.value"
-            v-model="payedCompletedDate"
-          />
-          <label :for="dateOptions.id">{{ dateOptions.text }}</label>
+          <slot name="filterRadioBtn1">
+            <input
+              type="radio"
+              :id="dateOptions.id"
+              :value="dateOptions.value"
+              v-model="payedCompletedDate"
+            />
+            <label :for="dateOptions.id">{{ dateOptions.text }}</label>
+          </slot>
         </div>
       </div>
       <span>{{ payedCompletedDate }}</span>
@@ -48,68 +52,82 @@
     </div>
     <div class="filterList">
       <div class="filterTitle">
-        <span>셀러속성 : </span>
+        <slot name="filterTitle3">
+          <span>셀러속성 : </span>
+        </slot>
       </div>
       <div class="filterBtnsGroup">
-        <input
-          type="checkbox"
-          name="sellerAttribute"
-          value="전체"
-          id="sellerAttributeAll"
-          v-model="selectAllSellerAttribute"
-        />
-        <label for="sellerAttributeAll">전체</label>
+        <slot name="filterRadioBtn2">
+          <input
+            type="checkbox"
+            name="sellerAttribute"
+            value="전체"
+            id="sellerAttributeAll"
+            v-model="selectAllSellerAttribute"
+          />
+          <label for="sellerAttributeAll">전체</label>
+        </slot>
         <div
           v-for="sellerAttributes in sellerAttributeList"
           v-bind:key="sellerAttributes.id"
         >
-          <input
-            type="checkbox"
-            :id="sellerAttributes.id"
-            :value="sellerAttributes.value"
-            v-model="sellerAttribute"
-          />
-          <label :for="sellerAttributes.id">{{ sellerAttributes.text }}</label>
+          <slot name="filterCheckBoxBtn">
+            <input
+              type="checkbox"
+              :id="sellerAttributes.id"
+              :value="sellerAttributes.value"
+              v-model="sellerAttribute"
+            />
+            <label :for="sellerAttributes.id">{{
+              sellerAttributes.text
+            }}</label>
+          </slot>
         </div>
       </div>
       <span>{{ sellerAttribute }}</span>
     </div>
     <div class="filterList">
       <div class="filterTitle">
-        <span>셀러구분 : </span>
+        <slot name="filterTitle">
+          <span>셀러구분 : </span>
+        </slot>
       </div>
       <div class="filterBtnsGroup">
         <div v-for="sellerTypes in sellerTypeList" v-bind:key="sellerTypes.id">
-          <input
-            type="radio"
-            :id="sellerTypes.id"
-            :value="sellerTypes.value"
-            v-model="sellerType"
-          />
-          <label :for="sellerTypes.id">{{ sellerTypes.text }}</label>
+          <slot name="filterRadioBtn">
+            <input
+              type="radio"
+              :id="sellerTypes.id"
+              :value="sellerTypes.value"
+              v-model="sellerType"
+            />
+            <label :for="sellerTypes.id">{{ sellerTypes.text }}</label>
+          </slot>
         </div>
       </div>
       <span>{{ sellerType }}</span>
     </div>
     <div class="filterList">
-      <slot name="filterTitle">
-        <div class="filterTitle">
+      <div class="filterTitle">
+        <slot name="filterTitle">
           <span>필터 타이틀</span>
-        </div>
-      </slot>
-      
+        </slot>
+      </div>
+
       <div class="filterBtnsGroup">
         <div
           v-for="deliveryTypes in deliveryTypeList"
           v-bind:key="deliveryTypes.id"
         >
-          <input
-            type="radio"
-            :id="deliveryTypes.id"
-            :value="deliveryTypes.value"
-            v-model="deliveryType"
-          />
-          <label :for="deliveryTypes.id">{{ deliveryTypes.text }}</label>
+          <slot name="filterRadioBtn">
+            <input
+              type="radio"
+              :id="deliveryTypes.id"
+              :value="deliveryTypes.value"
+              v-model="deliveryType"
+            />
+            <label :for="deliveryTypes.id">{{ deliveryTypes.text }}</label>
+          </slot>
         </div>
       </div>
 
