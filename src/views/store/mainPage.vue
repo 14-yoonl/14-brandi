@@ -27,6 +27,7 @@
         />
       </div>
     </div>
+
     <Footer></Footer>
   </div>
 </template>
@@ -41,17 +42,17 @@ export default {
     return {
       slideitems: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-        },
+          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+        }
       ],
       cards: [
         {
@@ -63,7 +64,7 @@ export default {
           originPrice: 9800,
           discountRate: 0,
           discountedPrice: 9800,
-          count: 432,
+          count: 432
         },
         {
           id: 2,
@@ -74,19 +75,23 @@ export default {
           originPrice: 26000,
           discountRate: 18,
           discountedPrice: 18720,
-          count: 1136,
-        },
+          count: 1136
+        }
       ],
+      params: {
+        client_id:
+          "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
+      }
     };
   },
   components: {
     NavBar: NavBar,
     productCard: productCard,
-    Footer: Footer,
+    Footer: Footer
   },
   methods: {
-    goToDetail() {},
-  },
+    goToDetail() {}
+  }
 };
 </script>
 
