@@ -90,7 +90,8 @@ export default new Router({
     {
       path: "/admin/products/regist",
       name: "ProductManagement",
-      component: ProductManagement
+      component: ProductManagement,
+      meta: { admin: true }
     },
     {
       path: "/admin/home",

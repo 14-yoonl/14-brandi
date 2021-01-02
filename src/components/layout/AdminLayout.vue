@@ -29,7 +29,7 @@ export default {
 
   .mainComponent {
     display: flex;
-    height: 95%;
+    height: 100%;
 
     .content {
       width: 100%;

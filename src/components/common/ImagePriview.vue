@@ -1,7 +1,7 @@
 <template>
   <div class="imagePriview">
     <div class="priviewList">
-      <div class="priviewImg" v-for="(file, index) in imageFiles">
+      <div class="priviewImg" v-for="(file, index) in setImages">
         <v-icon class="removeImageBtn" @click="removeImage" :name="index"
           >mdi-close-circle-outline</v-icon
         >
@@ -10,12 +10,15 @@
       <div
         class="isnertImgForm"
         v-if="
-          (type === `nomal` && imageFiles.length < 1) ||
-            (type !== `nomal` && imageFiles.length < 4)
+          (type === `nomal` && setImages.length < 1) ||
+            (type !== `nomal` && setImages.length < 5)
         "
       >
         <v-icon x-large>mdi-file-image-outline</v-icon>
-        <div class="formHeade">이미지 업로드</div>
+        <div class="formHeade">
+          <span v-if="setImages.length < 1">대표</span>
+          이미지 업로드
+        </div>
         <div class="formContent">
           640 * 720 사이즈 이상 가능하며<br />
           확장자는 jpg 만 등록 가능합니다.
@@ -37,9 +40,12 @@
 <script>
 export default {
   props: {
+    setImages: {
+      type: Array
+    },
     type: {
       type: String,
-      default: "nomal"
+      default: "multiple"
     }
   },
   data() {
@@ -50,27 +56,24 @@ export default {
   methods: {
     imageUpload() {
       const imageList = this.$refs.files.files; //Object List
+      let imageFiles = [...this.setImages];
 
       Object.keys(imageList).forEach(imageNumber => {
-        if (
-          (this.type === "nomal" && this.imageFiles.length < 1) ||
-          (this.type !== "nomal" && this.imageFiles.length < 4)
-        ) {
-          this.imageFiles = [
-            ...this.imageFiles,
-            {
-              file: imageList[imageNumber],
-              preview: URL.createObjectURL(imageList[imageNumber])
-            }
-          ];
+        if (this.type !== "nomal" && imageFiles.length < 5) {
+          imageFiles.push({
+            file: imageList[imageNumber],
+            preview: URL.createObjectURL(imageList[imageNumber])
+          });
         }
       });
+      this.$emit("update:setImages", imageFiles);
     },
 
     removeImage({ target }) {
-      this.imageFiles = this.imageFiles.filter((file, fileIndex) => {
+      const filterImage = this.setImages.filter((file, fileIndex) => {
         return fileIndex !== Number(target.getAttribute("name"));
       });
+      this.$emit("update:setImages", filterImage);
     }
   }
 };

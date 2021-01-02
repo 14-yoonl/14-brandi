@@ -17,7 +17,7 @@
           v-on="on"
         ></v-text-field>
       </template>
-      <v-date-picker v-model="date" scrollable>
+      <v-date-picker v-model="date" scrollable locale="ko-KR">
         <v-spacer></v-spacer>
         <v-btn flat color="primary" @click="dateModal = false">Cancel</v-btn>
         <v-btn flat color="primary" @click="timeModal = true">OK</v-btn>
@@ -45,7 +45,14 @@
 <script>
 export default {
   name: "DateTimePicker",
-  props: ["label"],
+  props: {
+    label: {
+      type: String
+    },
+    setDate: {
+      type: String
+    }
+  },
   data: () => ({
     date: "",
     dateModal: false,
@@ -57,6 +64,7 @@ export default {
       this.date = this.date + " " + this.time;
       this.$refs.dialog.save(this.date);
       this.$refs.dialog2.save(this.time);
+      this.$emit("update:setDate", this.date);
     }
   }
 };
