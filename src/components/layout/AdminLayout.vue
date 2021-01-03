@@ -1,15 +1,18 @@
 <template>
   <div class="AdminLayout">
     <adminHeader />
-    <div class="mainComponent"><adminSideBar /><slot /></div>
+    <div class="mainComponent">
+      <adminSideBar></adminSideBar>
+      <div class="content"><slot></slot></div>
+    </div>
     <adminFooter />
   </div>
 </template>
 
 <script>
-import adminHeader from "../common/AdminHeader";
-import adminSideBar from "../common/AdminSideBar";
-import adminFooter from "../common/AdminFooter";
+import adminHeader from "./AdminHeader";
+import adminSideBar from "./AdminSideBar";
+import adminFooter from "./AdminFooter";
 
 export default {
   name: "AdminLayout",
@@ -27,6 +30,13 @@ export default {
   .mainComponent {
     display: flex;
     height: 95%;
+
+    .content {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px 0 0 10px / 10px 0 0 10px;
+      background-color: #f3f4f7;
+    }
   }
 }
 </style>

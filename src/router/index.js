@@ -7,6 +7,8 @@ import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
 import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
+import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
+import AdminHome from "@/views/admin/AdminHome/AdminHome";
 
 //--service
 import signIn from "@/views/store/SignIn";
@@ -19,7 +21,7 @@ import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
 import productsDetail from "@/views/store/products/productsDetail";
-// import signUpDone from "@/views/store/signupprocess/signUpDone";
+import signUpDone from "@/views/store/signupprocess/signUpDone";
 
 Vue.use(Router);
 
@@ -61,18 +63,20 @@ export default new Router({
       component: thirdStep,
       meta: { admin: false }
     },
+
     {
       path: "/detail",
       name: "productsDetail",
       component: productsDetail,
       meta: { admin: false }
     },
-    // {
-    //   path: "/signUpDone",
-    //   name: "signUpDone",
-    //   component: signUpDone,
-    //   meta: { admin: false }
-    // },
+
+    {
+      path: "/signUpDone",
+      name: "signUpDone",
+      component: signUpDone,
+      meta: { admin: false }
+    },
     {
       path: "/admin/seller",
       name: "seller",
@@ -92,7 +96,18 @@ export default new Router({
     {
       path: "/admin/order",
       name: "AdminOrder",
-      component: AdminOrder, //<=== admin home component 추가해야함
+      component: AdminOrder,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/products/regist",
+      name: "ProductManagement",
+      component: ProductManagement
+    },
+    {
+      path: "/admin/home",
+      name: "AdminHome",
+      component: AdminHome,
       meta: { admin: true }
     }
   ]
