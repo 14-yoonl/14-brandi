@@ -77,15 +77,7 @@ export default {
           discountedPrice: 18720,
           count: 1136
         }
-<<<<<<< HEAD
       ]
-=======
-      ],
-      params: {
-        client_id:
-          "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
-      }
->>>>>>> main
     };
   },
   components: {
