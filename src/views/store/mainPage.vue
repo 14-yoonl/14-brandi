@@ -13,18 +13,8 @@
     <div class="mainProducts">
       <h2 class="productHeader">당신을 위한 추천</h2>
       <div class="cardList">
-        <productCard
-          v-for="item in cards"
-          :key="item"
-          :seller="item.sellerName"
-          :imageUrl="item.imageUrl"
-          :name="item.name"
-          :originPrice="item.originPrice"
-          :discountRate="item.discountRate"
-          :discountedPrice="item.discountedPrice"
-          :count="item.count"
-          @click="goToDetail"
-        />
+        <productCard v-for="item in cards" :key="item.id" :item="item">
+        </productCard>
       </div>
     </div>
 
@@ -77,20 +67,13 @@ export default {
           discountedPrice: 18720,
           count: 1136
         }
-      ],
-      params: {
-        client_id:
-          "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
-      }
+      ]
     };
   },
   components: {
     NavBar: NavBar,
     productCard: productCard,
     Footer: Footer
-  },
-  methods: {
-    goToDetail() {}
   }
 };
 </script>
