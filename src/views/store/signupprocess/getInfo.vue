@@ -15,7 +15,7 @@
         <span>모두 동의</span>
       </div>
       <div class="selectBox">
-        <div v-for="user in users" class="selectOption">
+        <div v-for="user in users" class="selectOption" :key="user.id">
           <input type="checkbox" v-model="selected" :value="user.id" />
           <span>{{ user.name }}</span>
         </div>
@@ -38,50 +38,48 @@ export default {
       users: [
         {
           id: "1",
-          name: "브랜디 약관 동의 (필수)",
+          name: "브랜디 약관 동의 (필수)"
         },
         {
           id: "2",
-          name: "개인정보수집 및 이용에 대한 안내 (필수)",
+          name: "개인정보수집 및 이용에 대한 안내 (필수)"
         },
         {
           id: "3",
-          name: "이벤트/마케팅 수신 동의(선택)",
+          name: "이벤트/마케팅 수신 동의(선택)"
         },
         {
           id: "4",
-          name: "야간 혜택 알림 수신동의 (선택)",
-        },
+          name: "야간 혜택 알림 수신동의 (선택)"
+        }
       ],
-      selected: [],
+      selected: []
     };
   },
   computed: {
     selectAll: {
-      get: function () {
+      get: function() {
         return this.users ? this.selected.length == this.users.length : false;
       },
-      set: function (value) {
+      set: function(value) {
         var selected = [];
 
         if (value) {
-          this.users.forEach(function (user) {
+          this.users.forEach(function(user) {
             selected.push(user.id);
           });
         }
 
         this.selected = selected;
-      },
-    },
+      }
+    }
   },
   components: {
     NavBar: NavBar,
-    Footer: Footer,
-  },
+    Footer: Footer
+  }
 };
 </script>
-
-
 
 <style lang="scss" scoped>
 .signUpContainer {

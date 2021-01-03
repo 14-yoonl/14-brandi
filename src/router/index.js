@@ -8,15 +8,16 @@ import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
 import AdminOrder from "@/views/admin/OrderManagement/AdminOrder";
 import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
-import AdminHome from "@/views/admin/AdminHome/AdminHome";
+import AdminHome from "@/views/admin/Home/AdminHome";
 
 //--service
 import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
-import productCard from "@//views/store/productCard";
+import productsDetail from "@/views/store/products/productsDetail";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
+
 // import signUpDone from "@/views/store/signupprocess/signUpDone"; //작업 중 (승윤)
 
 Vue.use(Router);
@@ -31,9 +32,9 @@ export default new Router({
       meta: { admin: false }
     },
     {
-      path: "/products/:id?",
-      name: "productDetail",
-      component: productCard
+      path: "/products/:id",
+      name: "productsDetail",
+      component: productsDetail
     },
     {
       path: "/signIn",

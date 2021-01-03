@@ -13,20 +13,11 @@
     <div class="mainProducts">
       <h2 class="productHeader">당신을 위한 추천</h2>
       <div class="cardList">
-        <productCard
-          v-for="item in cards"
-          :key="item"
-          :seller="item.sellerName"
-          :imageUrl="item.imageUrl"
-          :name="item.name"
-          :originPrice="item.originPrice"
-          :discountRate="item.discountRate"
-          :discountedPrice="item.discountedPrice"
-          :count="item.count"
-          @click="goToDetail"
-        />
+        <productCard v-for="item in cards" :key="item.id" :item="item">
+        </productCard>
       </div>
     </div>
+
     <Footer></Footer>
   </div>
 </template>
@@ -41,17 +32,17 @@ export default {
     return {
       slideitems: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-        },
+          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+        }
       ],
       cards: [
         {
@@ -63,7 +54,7 @@ export default {
           originPrice: 9800,
           discountRate: 0,
           discountedPrice: 9800,
-          count: 432,
+          count: 432
         },
         {
           id: 2,
@@ -74,19 +65,16 @@ export default {
           originPrice: 26000,
           discountRate: 18,
           discountedPrice: 18720,
-          count: 1136,
-        },
-      ],
+          count: 1136
+        }
+      ]
     };
   },
   components: {
     NavBar: NavBar,
     productCard: productCard,
-    Footer: Footer,
-  },
-  methods: {
-    goToDetail() {},
-  },
+    Footer: Footer
+  }
 };
 </script>
 
