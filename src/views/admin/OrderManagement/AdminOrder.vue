@@ -18,7 +18,7 @@
       </template>
     </AdminHeader>
 
-    <AdminFilter>
+    <!-- <AdminFilter> -->
       <div class="filterContainer">
         <div class="filterList">
           <div class="filterTitle">
@@ -144,7 +144,7 @@
           <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
         </div>
       </div>
-    </AdminFilter>
+    <!-- </AdminFilter> -->
 
     <div class="tableContainer">
       <div class="tableContainerHeaderBtns">
