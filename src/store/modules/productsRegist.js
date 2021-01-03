@@ -5,16 +5,31 @@ const uri = "http://brandi-intern.tplinkdns.com:9090";
 
 export default {
   state: {
+    filterList: [],
     options: {},
     searchSeller: [],
+    searchSellerLodingState: false,
+    lodingSpinner: false,
+    filterList: {
+      is_sale: "", //판매여부
+      end_date: "", //조회 끝 날짜
+      start_date: "", //조회 시작 날짜
+      is_display: "", //진열여부
+      product_id: "", //상품번호
+      product_code: "", //상품코드
+      product_name: "", //상품명
+      discount_rate: "", //할인여부
+      seller_attribute_type: "" //셀러속성
+    },
     categoryList: {
       main: [],
       sub: []
-    },
-    searchSellerLodingState: false,
-    lodingSpinner: false
+    }
   },
   getters: {
+    getFilterList(state) {
+      return state.filterList;
+    },
     getOptions(state) {
       return state.options;
     },
@@ -104,8 +119,6 @@ export default {
       //   formData.append("image_files", img);
       // });
 
-      // ////-------------
-
       axios
         .post(`${uri}/admin/product/productRegist`, formData, {
           headers: {
@@ -119,6 +132,28 @@ export default {
         .finally(() => {
           commit("TOGLE_LODING_SPINNER");
         });
+    },
+
+    searchFilterList({ commit }, query) {
+      const result = Object.keys(query).reduce((accValue, value, index) => {
+        if (query[value]) {
+          accValue += index
+            ? `&${value}=${query[value]}`
+            : `?${value}=${query[value]}`;
+        }
+        return accValue;
+      }, "");
+
+      console.log(result, "++++++|||||");
+      console.log(`${uri}/admin/products${result}`);
+
+      axios
+        .get(`${uri}/admin/products${result}`)
+        .then(res => commit("SET_SEARCH_FILTER_LIST", res.data.result))
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {});
     }
   },
   mutations: {
@@ -137,6 +172,9 @@ export default {
     },
     TOGLE_LODING_SPINNER(state) {
       state.lodingSpinner = !state.lodingSpinner;
+    },
+    SET_SEARCH_FILTER_LIST(state, list) {
+      state.filterList = list;
     }
   }
 };

@@ -9,6 +9,7 @@ import adminSignUp from "@/views/admin/signUp";
 import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
 import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
 import AdminHome from "@/views/admin/Home/AdminHome";
+import ProductManageList from "@/views/admin/ProductManageMent/ProductManageList";
 
 //--service
 import signIn from "@/views/store/SignIn";
@@ -97,6 +98,12 @@ export default new Router({
       path: "/admin/home",
       name: "AdminHome",
       component: AdminHome,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/products",
+      name: "ProductManageList",
+      component: ProductManageList,
       meta: { admin: true }
     }
   ]
