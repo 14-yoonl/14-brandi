@@ -215,8 +215,8 @@ export default {
   },
 
   mounted() {
-    this.maximumQuantityType = !this.maximumQuantity ? true : false;
-    this.minimumQuantityType = !this.minimumQuantity ? true : false;
+    this.maximumQuantityType = this.maximumQuantity ? true : false;
+    this.minimumQuantityType = this.minimumQuantity ? true : false;
   },
 
   data() {

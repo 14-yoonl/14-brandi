@@ -17,8 +17,8 @@
               :items="$store.getters.getSearchList"
               :search-input.sync="searchSeller"
               :label="seller ? `` : `셀러를 선택하세요`"
-              item-text="name"
-              item-value="account_id"
+              item-text="seller_id"
+              item-value="account_name"
               chips
             >
               <template v-slot:selection="data">
@@ -30,7 +30,7 @@
                   <v-avatar left>
                     <v-img :src="data.item.profile_image_url"></v-img>
                   </v-avatar>
-                  {{ data.item.name }}
+                  {{ data.item.seller_name }}
                 </v-chip>
               </template>
               <template v-slot:item="data">
@@ -43,7 +43,7 @@
                   </v-list-item-avatar>
                   <v-list-item-content @click="selectSeller">
                     <v-list-item-title
-                      v-html="data.item.name"
+                      v-html="data.item.seller_name"
                     ></v-list-item-title>
                   </v-list-item-content>
                 </template>
@@ -106,8 +106,8 @@
                     <v-select
                       @input="setData('mainCategory', $event)"
                       :items="setCategory('main')"
-                      item-text="name"
-                      item-value="id"
+                      item-text="main_category_name"
+                      item-value="main_category_id"
                       :label="!mainCategory && '1차 카테고리를 선택해주세요.'"
                     >
                       <template v-slot:selection="{ item }">
@@ -115,7 +115,7 @@
                           class="d-flex justify-center"
                           style="width: 100%;"
                         >
-                          {{ item.name }}
+                          {{ item.main_category_name }}
                         </span>
                       </template>
                     </v-select>
@@ -124,8 +124,8 @@
                     <v-select
                       @input="setData('subCategory', $event)"
                       :items="setCategory('sub')"
-                      item-text="name"
-                      item-value="id"
+                      item-text="sub_category_name"
+                      item-value="sub_category_id"
                       :label="
                         mainCategory
                           ? !subCategory && '2차 카테고리를 선택해주세요.'
@@ -137,7 +137,7 @@
                           class="d-flex justify-center"
                           style="width: 100%;"
                         >
-                          {{ item.name }}
+                          {{ item.sub_category_name }}
                         </span>
                       </template></v-select
                     >
@@ -192,8 +192,8 @@
                 <span>원산지 : </span>
                 <v-select
                   :items="getOptions"
-                  item-text="name"
-                  item-value="id"
+                  item-text="product_origin_type_name"
+                  item-value="product_origin_type_id"
                   @change="setData('productOriginTypeId', $event)"
                   :label="!productOriginTypeId && '원산지를 입력해주세요.'"
                 ></v-select>
@@ -299,7 +299,9 @@ export default {
 
   computed: {
     setData() {
-      return (param, value) => this.$emit(`update:${param}`, value);
+      return (param, value) => (
+        this.$emit(`update:${param}`, value), console.log("데이터:", value)
+      );
     },
     setCategory() {
       return value => this.$store.getters.getCategory[value];

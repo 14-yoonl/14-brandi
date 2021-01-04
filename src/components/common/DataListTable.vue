@@ -19,9 +19,7 @@
           </tbody>
         </table>
       </div>
-      <div class="tableContainerFooterBtns">
-        <!-- <v-pagination v-model="currentPage" :length="5"></v-pagination> -->
-      </div>
+      <div class="tableContainerFooterBtns"></div>
     </div>
   </div>
 </template>
@@ -72,8 +70,13 @@ export default {};
 
     .tableBody {
       background-color: #f9f9f9;
+      width: auto;
+      overflow-x: scroll;
 
       table {
+        table-layout: fixed;
+        /* margin: 40px auto 0px auto; */
+
         margin: 0 15px;
         text-align: center;
         font-size: 13px;
@@ -84,8 +87,6 @@ export default {};
           tr {
             background-color: #eee;
             th {
-              width: auto;
-
               >>> .v-input--selection-controls {
                 margin: 0;
                 padding: 0;
@@ -101,8 +102,8 @@ export default {};
         tbody {
           tr {
             td {
-              min-width: 100px;
               border: 1px solid #ddd;
+              width: 200px;
 
               >>> .v-input--selection-controls {
                 margin: 0;

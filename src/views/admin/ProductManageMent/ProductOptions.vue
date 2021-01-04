@@ -36,8 +36,8 @@
                     <v-autocomplete
                       v-model="optionsList.color[index]"
                       :items="getOptions('color_list')"
-                      item-value="id"
-                      item-text="name"
+                      item-value="color_id"
+                      item-text="color_name"
                       :label="
                         optionsList.color[index]
                           ? ''
@@ -50,7 +50,7 @@
                             @click="
                               duplicateList($event, data.item.id, `color`)
                             "
-                            v-text="data.item.name"
+                            v-text="data.item.color_name"
                           ></v-list-item-content>
                         </template>
                       </template>
@@ -93,14 +93,14 @@
                           ? ``
                           : `사이즈 옵션을 선택해 주세요.`
                       "
-                      item-text="name"
-                      item-value="id"
+                      item-text="size_name"
+                      item-value="size_id"
                     >
                       <template v-slot:item="data">
                         <template>
                           <v-list-item-content
                             @click="duplicateList($event, data.item.id, `size`)"
-                            v-text="data.item.name"
+                            v-text="data.item.size_name"
                           ></v-list-item-content>
                         </template>
                       </template>
@@ -178,8 +178,8 @@
                     <v-autocomplete
                       v-model="info.color"
                       :items="getOptions('color_list')"
-                      item-value="id"
-                      item-text="name"
+                      item-value="color_id"
+                      item-text="color_name"
                       :label="info.color ? '' : `색상 옵션을 선택해 주세요.`"
                     >
                       <template v-slot:item="data">
@@ -188,7 +188,7 @@
                             @click="
                               duplicateCrossList($event, data.item.id, `color`)
                             "
-                            v-text="data.item.name"
+                            v-text="data.item.color_name"
                           ></v-list-item-content>
                         </template>
                       </template>
@@ -199,8 +199,8 @@
                       v-model="info.size"
                       :items="getOptions('size_list')"
                       :label="info.size ? `` : `사이즈 옵션을 선택해 주세요.`"
-                      item-text="name"
-                      item-value="id"
+                      item-text="size_name"
+                      item-value="size_id"
                     >
                       <template v-slot:item="data">
                         <template>
@@ -208,7 +208,7 @@
                             @click="
                               duplicateCrossList($event, data.item.id, `size`)
                             "
-                            v-text="data.item.name"
+                            v-text="data.item.size_name"
                           ></v-list-item-content>
                         </template>
                       </template>

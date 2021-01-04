@@ -95,6 +95,12 @@ export default new Router({
       meta: { admin: true }
     },
     {
+      path: "/admin/products/:id",
+      name: "ProductDetail",
+      component: ProductManagement,
+      meta: { admin: true }
+    },
+    {
       path: "/admin/home",
       name: "AdminHome",
       component: AdminHome,

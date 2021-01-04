@@ -32,7 +32,7 @@ export default {
     height: 100%;
 
     .content {
-      width: 100%;
+      width: calc(100% - 150px);
       padding: 10px;
       border-radius: 10px 0 0 10px / 10px 0 0 10px;
       background-color: #f3f4f7;

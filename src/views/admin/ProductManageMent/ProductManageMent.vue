@@ -57,6 +57,7 @@ export default {
     LodingSpinner
   },
   created() {
+    console.log(this);
     this.$store.dispatch("loadOptions");
   },
   data() {
@@ -87,74 +88,74 @@ export default {
 
   methods: {
     submitData(e) {
-      // if (!this.seller) {
-      //   alert("셀러 선택은 필수입니다.");
-      //   return;
-      // }
+      if (!this.seller) {
+        alert("셀러 선택은 필수입니다.");
+        return;
+      }
 
-      // if (!this.mainCategory) {
-      //   alert("1차 카테고리는 필수입니다.");
-      //   return;
-      // }
-      // if (!this.subCategory) {
-      //   alert("2차 카테고리는 필수입니다.");
-      //   return;
-      // }
+      if (!this.mainCategory) {
+        alert("1차 카테고리는 필수입니다.");
+        return;
+      }
+      if (!this.subCategory) {
+        alert("2차 카테고리는 필수입니다.");
+        return;
+      }
 
-      // if (this.isProductNotice === 1) {
-      //   if (!this.manufacturer) {
-      //     alert(
-      //       "상품 정보 고시 직접입력을 선택하셨으면, 제조사 입력은 필수입니다."
-      //     );
-      //   } else if (!this.manufacturingDate) {
-      //     alert(
-      //       "상품 정보 고시 직접입력을 선택하셨으면, 제조사일자는 필수입니다."
-      //     );
-      //   } else if (!ths.productOriginTypeId) {
-      //     alert("상품 정보 고시 직접입력을 선택하셨으면, 원산지는 필수입니다.");
-      //   }
-      //   return;
-      // }
+      if (this.isProductNotice === 1) {
+        if (!this.manufacturer) {
+          alert(
+            "상품 정보 고시 직접입력을 선택하셨으면, 제조사 입력은 필수입니다."
+          );
+        } else if (!this.manufacturingDate) {
+          alert(
+            "상품 정보 고시 직접입력을 선택하셨으면, 제조사일자는 필수입니다."
+          );
+        } else if (!ths.productOriginTypeId) {
+          alert("상품 정보 고시 직접입력을 선택하셨으면, 원산지는 필수입니다.");
+        }
+        return;
+      }
 
-      // if (!this.productName) {
-      //   alert("상품명은 필수로 작성해야합니다.");
-      //   return;
-      // }
+      if (!this.productName) {
+        alert("상품명은 필수로 작성해야합니다.");
+        return;
+      }
 
-      // if (!this.images.length) {
-      //   alert("상품 이미지 등록은 필수입니다.");
-      //   return;
-      // }
+      if (!this.images.length) {
+        alert("상품 이미지 등록은 필수입니다.");
+        return;
+      }
 
-      // if (!this.options.length) {
-      //   alert("기본옵션을 체크가 되었다면 옵션 정보 입력은 필수 입니다.");
-      //   return;
-      // }
-      // if (!this.originPrice) {
-      //   alert("판매가 입력은 필수 입니다.");
-      //   return;
-      // }
+      if (!this.options.length) {
+        alert("기본옵션을 체크가 되었다면 옵션 정보 입력은 필수 입니다.");
+        return;
+      }
+      if (!this.originPrice) {
+        alert("판매가 입력은 필수 입니다.");
+        return;
+      }
 
-      // if (this.discountState) {
-      //   if (!this.discountStartDate || !this.discountEndDate) {
-      //     alert("기한설정을 선택하셨으면, 기간선택은 필수 입니다.");
-      //   }
-      // }
+      if (this.discountState) {
+        if (!this.discountStartDate || !this.discountEndDate) {
+          alert("기한설정을 선택하셨으면, 기간선택은 필수 입니다.");
+        }
+      }
 
-      // if (this.minimumQuantity > 20) {
-      //   alert("최소 판매 수량은 20개 초과 입력은 불가능합니다.");
-      //   return;
-      // }
+      if (this.minimumQuantity > 20) {
+        alert("최소 판매 수량은 20개 초과 입력은 불가능합니다.");
+        return;
+      }
 
-      // if (this.maximumQuantity > 20) {
-      //   alert("최대 판매 수량은 20개 초과 입력은 불가능합니다.");
-      //   return;
-      // }
+      if (this.maximumQuantity > 20) {
+        alert("최대 판매 수량은 20개 초과 입력은 불가능합니다.");
+        return;
+      }
 
-      // if (this.maximumQuantity < this.minimumQuantity) {
-      //   alert("최소 판매수량은 최대 판매수량 보다 많을 수 없습니다.");
-      //   return;
-      // }
+      if (this.maximumQuantity < this.minimumQuantity) {
+        alert("최소 판매수량은 최대 판매수량 보다 많을 수 없습니다.");
+        return;
+      }
 
       const setImages = this.images.reduce((files, file) => {
         files.push(file.file);

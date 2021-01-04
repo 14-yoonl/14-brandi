@@ -40,12 +40,6 @@
           </v-menu>
         </div>
         <div class="rowAll">
-          <span>셀러명</span>
-          <v-text-field
-            v-model="filters.sellerName"
-            color="blue darken-2"
-            required
-          ></v-text-field>
           <span>상품정보</span>
           <v-select :items="searchInfoList" item-text="name" item-value="key" label="Select" v-model="setSearchState" dense solo></v-select>
            <v-text-field
@@ -54,11 +48,17 @@
             required
           ></v-text-field>
           </v-select>
+          <span>셀러명</span>
+          <v-text-field
+            v-model="filters.sellerName"
+            color="blue darken-2"
+            required
+          ></v-text-field>
         </div>
         <div class="rowAll">
           <span>셀러속성 : </span>
           <div>
-            <v-btn-toggle v-model="setSellerAttributeType" tile multiple>
+            <v-btn-toggle v-model="setSellerAttributeType" multiple dense group>
               <v-btn :value="0">
                 전체
               </v-btn>
@@ -89,7 +89,7 @@
         <div class="rowAll">
           <span>판매여부 : </span>
           <div>
-            <v-btn-toggle v-model="filters.isSale" tile mandatory>
+            <v-btn-toggle v-model="filters.isSale" dense group>
               <v-btn :value="0">
                 전체
               </v-btn>
@@ -97,13 +97,13 @@
                 판매
               </v-btn>
               <v-btn :value="2">
-                마켓
+                미판매
               </v-btn>
             </v-btn-toggle>
           </div>
           <span>진열여부 : </span>
           <div>
-            <v-btn-toggle v-model="filters.isDisplay" tile mandatory>
+            <v-btn-toggle v-model="filters.isDisplay"dense group>
               <v-btn :value="0">
                 전체
               </v-btn>
@@ -119,7 +119,7 @@
         <div class="rowAll">
           <span>할인여부 : </span>
           <div>
-            <v-btn-toggle v-model="filters.isDiscount" tile mandatory>
+            <v-btn-toggle v-model="filters.isDiscount" dense group>
               <v-btn :value="0">
                 전체
               </v-btn>
@@ -171,8 +171,6 @@
           <td>
             <v-checkbox
               color="success"
-              :value="product.product_id"
-              v-model="selectProduct"
               hide-details
             ></v-checkbox>
           </td>
@@ -180,10 +178,11 @@
             등록완료
           </td>
           <td v-for="column in listColumn">
-            <img
-              :src="product[column.key]"
-              v-if="column.value === '대표이미지'"
-            />
+            <span v-if="column.value === '대표이미지'"><img :src="product[column.key]"/></span>
+            <span v-else-if="column.value === '상품코드'"><router-link :to="{ name: 'ProductDetail', params: { productKey: product[column.key] }}">{{product[column.key]}}</router-link></span>
+            <span v-else-if="column.value === '판매여부'">{{ product[column.key] === 1 ?"판매":"미판매" }}</span>
+            <span v-else-if="column.value === '진열여부'">{{ product[column.key] === 1 ?"진열":"미진열" }}</span>
+            <span v-else-if="column.value === '할인여부'">{{ product[column.key] === 1 ?"할인":"미할인" }}</span>
             <span v-else>
               {{ product[column.key] }}
             </span>
@@ -198,14 +197,16 @@
         :length="Math.ceil(setData.total_count / listPerpage)"
       ></v-pagination>
     </div>
+    <LodingSpinner v-if="$store.getters.getLodingSpinner" />
   </div>
 </template>
 <script>
 import DataListTable from "../../../components/common/DataListTable";
+import LodingSpinner from "../../../components/common/LodingSpinner";
 
 export default {
   name: "ProductManageList",
-  components: { DataListTable },
+  components: { DataListTable ,LodingSpinner},
   created() {
     this.searchBtn();
   },
@@ -310,12 +311,17 @@ export default {
       set: function(value) {
         const inputData = value[value.length - 1];
 
+        console.log("====인",value)
+
         if (inputData === 0 || inputData === undefined) {
           this.filters.sellerAttributeType = [0];
         } else {
+          
           const result = value.filter(list => list != 0);
           this.filters.sellerAttributeType = result;
         }
+
+
       }
     },
     selectAll: {
@@ -375,17 +381,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tableTool {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
+.ProductManageList{
+  .tableTool {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  img{
+    width : 130px;
+    height: 130px;
+    object-fit: cover;
+    margin: 10px;
+  }
 }
 
-.v-menu__content {
-  min-width: auto !important;
-}
-
->>> .v-text-field__details{
+ .v-text-field__details{
   display: none;
 }
+
+>>>.v-menu__content {
+    min-width: auto !important;
+    background-color:red !important;
+  }
 </style>
