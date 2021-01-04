@@ -9,6 +9,7 @@ import adminSignUp from "@/views/admin/signUp";
 import AdminPrepareOrder from "@/views/admin/OrderManagement/PrepareOrder";
 import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
 import AdminHome from "@/views/admin/Home/AdminHome";
+import ProductManageList from "@/views/admin/ProductManageMent/ProductManageList";
 import AdminInDelivery from "@/views/admin/OrderManagement/InDelivery";
 import AdminDoneDelivery from "@/views/admin/OrderManagement/DoneDelivery";
 import AdminConfirmOrder from "@/views/admin/OrderManagement/ConfirmOrder";
@@ -93,7 +94,8 @@ export default new Router({
     {
       path: "/admin/signup",
       name: "signUp",
-      component: adminSignUp
+      component: adminSignUp,
+      meta: { admin: true }
     },
     {
       path: "/admin/prepareOrder",
@@ -104,13 +106,25 @@ export default new Router({
     {
       path: "/admin/products/regist",
       name: "ProductManagement",
-      component: ProductManagement
+      component: ProductManagement,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/products/:id",
+      name: "ProductDetail",
+      component: ProductManagement,
+      meta: { admin: true }
     },
     {
       path: "/admin/home",
       name: "AdminHome",
       component: AdminHome,
       meta: { admin: true }
+    },
+    {
+      path: "/admin/products",
+      name: "ProductManageList",
+      component: ProductManageList
     },
     {
       path: "/admin/inDelivery",
