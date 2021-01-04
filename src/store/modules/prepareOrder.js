@@ -18,5 +18,10 @@ export default {
     itemsPerPage: 30
   },
   actions: {},
+  getters: {
+    getState(state) {
+      return state;
+    }
+  },
   mutation: {}
 };

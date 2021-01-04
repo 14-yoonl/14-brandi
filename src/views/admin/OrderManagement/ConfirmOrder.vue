@@ -18,139 +18,131 @@
       </template>
     </AdminHeader>
 
-    <AdminFilter>
-      <div class="filterContainer">
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>검색조건 : </span>
-          </div>
-          <div class="filterBtnsGroup">
-            <select v-model="filterSelectedCondition" class="searchCondition">
-              <option value="" disabled>조건을 선택해주세요 ▼ </option>
-              <option
-                v-for="condition in searchCondition"
-                :disabled="condition.disabled"
-                v-bind:key="condition.id"
-              >
-                {{ condition.text }}
-              </option>
-            </select>
-          </div>
-          <input
-            v-model="searchInputData"
-            class="searchInputBox"
-            placeholder="검색어를 입력하세요"
-          />
-          <span>{{ searchInputData }}</span>
+    <div class="filterContainer">
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>검색조건 : </span>
         </div>
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>결제완료일 : </span>
-          </div>
-          <div class="filterBtnsGroup">
-            <div
-              v-for="dateOptions in payedCompletedDateList"
-              v-bind:key="dateOptions.id"
+        <div class="filterBtnsGroup">
+          <select v-model="filterSelectedCondition" class="searchCondition">
+            <option value="" disabled>조건을 선택해주세요 ▼</option>
+            <option
+              v-for="condition in searchCondition"
+              :disabled="condition.disabled"
+              v-bind:key="condition.id"
             >
-              <input
-                type="radio"
-                :id="dateOptions.id"
-                :value="dateOptions.value"
-                v-model="payedCompletedDate"
-              />
-              <label :for="dateOptions.id">{{ dateOptions.text }}</label>
-            </div>
-          </div>
-          <span>{{ payedCompletedDate }}</span>
-          <input type="date" v-model="getStartedDate" />
-          <input type="date" v-model="currentDate" />
-          <span>{{ startedDate }}</span>
+              {{ condition.text }}
+            </option>
+          </select>
         </div>
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>셀러속성 : </span>
+        <input
+          v-model="searchInputData"
+          class="searchInputBox"
+          placeholder="검색어를 입력하세요"
+        />
+      </div>
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>결제완료일 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <div
+            v-for="dateOptions in payedCompletedDateList"
+            v-bind:key="dateOptions.id"
+          >
+            <input
+              type="radio"
+              :id="dateOptions.id"
+              :value="dateOptions.value"
+              v-model="payedCompletedDate"
+              @change="getStartedDate()"
+            />
+            <label :for="dateOptions.id">{{ dateOptions.text }}</label>
           </div>
-          <div class="filterBtnsGroup">
+        </div>
+        <input type="date" class="dateBox" v-model="startedDate" />
+        <input type="date" class="dateBox" v-model="endDate" />
+      </div>
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>셀러속성 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <input
+            type="checkbox"
+            name="sellerAttribute"
+            value="전체"
+            id="sellerAttributeAll"
+            v-model="selectAllSellerAttribute"
+          />
+          <label for="sellerAttributeAll">전체</label>
+          <div
+            v-for="sellerAttributes in sellerAttributeList"
+            v-bind:key="sellerAttributes.id"
+          >
             <input
               type="checkbox"
-              name="sellerAttribute"
-              value="전체"
-              id="sellerAttributeAll"
-              v-model="selectAllSellerAttribute"
+              :id="sellerAttributes.id"
+              :value="sellerAttributes.value"
+              v-model="sellerAttribute"
             />
-            <label for="sellerAttributeAll">전체</label>
-            <div
-              v-for="sellerAttributes in sellerAttributeList"
-              v-bind:key="sellerAttributes.id"
-            >
-              <input
-                type="checkbox"
-                :id="sellerAttributes.id"
-                :value="sellerAttributes.value"
-                v-model="sellerAttribute"
-              />
-              <label :for="sellerAttributes.id">{{
-                sellerAttributes.text
-              }}</label>
-            </div>
+            <label :for="sellerAttributes.id">{{
+              sellerAttributes.text
+            }}</label>
           </div>
-          <span>{{ sellerAttribute }}</span>
-        </div>
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>셀러구분 : </span>
-          </div>
-          <div class="filterBtnsGroup">
-            <div
-              v-for="sellerTypes in sellerTypeList"
-              v-bind:key="sellerTypes.id"
-            >
-              <input
-                type="radio"
-                :id="sellerTypes.id"
-                :value="sellerTypes.value"
-                v-model="sellerType"
-              />
-              <label :for="sellerTypes.id">{{ sellerTypes.text }}</label>
-            </div>
-          </div>
-          <span>{{ sellerType }}</span>
-        </div>
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>배송구분 : </span>
-          </div>
-          <div class="filterBtnsGroup">
-            <div
-              v-for="deliveryTypes in deliveryTypeList"
-              v-bind:key="deliveryTypes.id"
-            >
-              <input
-                type="radio"
-                :id="deliveryTypes.id"
-                :value="deliveryTypes.value"
-                v-model="deliveryType"
-              />
-              <label :for="deliveryTypes.id">{{ deliveryTypes.text }}</label>
-            </div>
-          </div>
-
-          <span>{{ deliveryType }}</span>
-        </div>
-        <div class="searchBtnBox">
-          <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
-            >검색</v-btn
-          >
-          <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
         </div>
       </div>
-    </AdminFilter>
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>셀러구분 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <div
+            v-for="sellerTypes in sellerTypeList"
+            v-bind:key="sellerTypes.id"
+          >
+            <input
+              type="radio"
+              :id="sellerTypes.id"
+              :value="sellerTypes.value"
+              v-model="sellerType"
+            />
+            <label :for="sellerTypes.id">{{ sellerTypes.text }}</label>
+          </div>
+        </div>
+      </div>
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>배송구분 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <div
+            v-for="deliveryTypes in deliveryTypeList"
+            v-bind:key="deliveryTypes.id"
+          >
+            <input
+              type="radio"
+              :id="deliveryTypes.id"
+              :value="deliveryTypes.value"
+              v-model="deliveryType"
+            />
+            <label :for="deliveryTypes.id">{{ deliveryTypes.text }}</label>
+          </div>
+        </div>
+      </div>
+      <div class="searchBtnBox">
+        <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
+          >검색</v-btn
+        >
+        <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
+      </div>
+    </div>
 
     <div class="tableContainer">
       <div class="tableContainerHeaderBtns">
         <div class="headerLeft">
           <span class="totalQuantity"
-            >전체 조회건 수 : {{ desserts.length }} 건</span
+            >전체 조회건 수 : {{ totalCount }} 건</span
           >
           <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
             >배송준비처리</v-btn
@@ -160,10 +152,20 @@
           >
         </div>
         <div class="headerRight">
+          <span>{{ itemsOrder }}</span>
+          <select
+            v-model="itemsOrder"
+            class="selectBox"
+            @change="handleItemsOrder"
+          >
+            <option value="desc">최신주문일순</option>
+            <option value="asc">주문일의 역순</option>
+          </select>
+
           <span>{{ itemsPerPage }}</span>
           <select
             v-model="itemsPerPage"
-            class="selectItemsPerPage"
+            class="selectBox"
             @change="handleItemsPerPage"
           >
             <option value="10">10개씩 보기</option>
@@ -195,64 +197,46 @@
               <td>
                 <v-checkbox
                   color="success"
-                  :value="order.orderDetailNo"
+                  :value="order.id"
                   v-model="selectedItems"
                   hide-details
                 ></v-checkbox>
               </td>
               <td>
-                {{ order.orderNo }}
+                {{ order.order_number }}
               </td>
               <td>
-                {{ order.paidDate }}
+                {{ order.created_at_date }}
               </td>
               <td>
-                {{ order.orderDetailNo }}
+                {{ order.order_detail_number }}
               </td>
               <td>
-                {{ order.sellerName }}
+                {{ order.seller_name }}
               </td>
               <td>
-                {{ order.sellerType }}
+                {{ order.product_name }}
               </td>
               <td>
-                {{ order.helpyType }}
+                {{ order.option_information }}
               </td>
               <td>
-                {{ order.deliveryType }}
-              </td>
-              <td>
-                {{ order.productName }}
-              </td>
-              <td>
-                {{ order.options }}
-              </td>
-              <td>
-                {{ order.optionsPrice }}
+                {{ order.option_extra_cost }}
               </td>
               <td>
                 {{ order.quantity }}
               </td>
               <td>
-                {{ order.senderName }}
+                {{ order.customer_name }}
               </td>
               <td>
-                {{ order.senderPhone }}
+                {{ order.customer_phone }}
               </td>
               <td>
-                {{ order.paidPrice }}
+                {{ order.total_price }}
               </td>
               <td>
-                {{ order.usedPoint }}
-              </td>
-              <td>
-                {{ order.discountCoupon }}
-              </td>
-              <td>
-                {{ order.paymentType }}
-              </td>
-              <td>
-                {{ order.orderStatus }}
+                {{ order.status }}
               </td>
             </tr>
           </tbody>
@@ -266,15 +250,20 @@
           >주문취소처리</v-btn
         >
         <span>{{ selectedItems }}</span>
-        <v-pagination v-model="currentPage" :length="5"></v-pagination>
+        <v-pagination
+          v-model="currentPage"
+          :length="paginationLength"
+        ></v-pagination>
         <span>{{ currentPage }}</span>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { filterSelectedCondition, searchInputData } from "vuex";
 import AdminHeader from "../../../components/common/adminDataTable/AdminHeader";
 import AdminFilter from "../../../components/common/adminDataTable/AdminFilter";
+import axios from "axios";
 
 export default {
   name: "adminOrder",
@@ -284,24 +273,33 @@ export default {
       filterSelectedCondition: "",
       searchInputData: "",
       payedCompletedDate: "3",
-      sellerAttribute: [],
       sellerType: "전체",
       deliveryType: "전체",
-      selectedItems: [],
       startedDate: "",
-      currentDate: "",
+      endDate: "",
+      sellerAttribute: [],
+      itemsOrder: "desc",
       currentPage: 1,
+      paginationLength: 5,
       itemsPerPage: 30,
+      totalCount: 1,
+      selectedItems: [],
+
       searchCondition: [
         { text: "주문번호", value: "orderNo", disabled: false },
         { text: "주문상세번호", value: "orderDetailNo", disabled: false },
-        { text: "--------------------", value: "", disabled: true }
+        { text: "--------------------", value: "", disabled: true },
+        { text: "주문자명", value: "senderName", disabled: false },
+        { text: "핸드폰번호", value: "senderPhone", disabled: false },
+        { text: "--------------------", value: "", disabled: true },
+        { text: "셀러명", value: "sellerName", disabled: false },
+        { text: "상품명", value: "productName", disabled: false }
       ],
 
       payedCompletedDateList: [
         {
           name: "payedDate",
-          value: "전체",
+          value: "",
           id: "payedDateAll",
           text: "전체"
         },
@@ -425,131 +423,47 @@ export default {
       ],
 
       headers: [
-        { text: "주문번호", value: "orderNo" },
-        { text: "결제일자", value: "paidDate" },
-        { text: "주문상세번호", value: "orderDetailNo" },
-        { text: "셀러명", value: "sellerName" },
-        { text: "셀러구분", value: "sellerType" },
-        { text: "헬피구분", value: "helpyType" },
-        { text: "배송구분", value: "deliveryType" },
-        { text: "상품명", value: "productName" },
-        { text: "옵션정보", value: "options" },
-        { text: "옵션추가금액", value: "optionsPrice" },
+        { text: "주문번호", value: "order_number" },
+        { text: "결제일자", value: "created_at_date" },
+        { text: "주문상세번호", value: "order_detail_number" },
+        { text: "셀러명", value: "seller_name" },
+        { text: "상품명", value: "product_name" },
+        { text: "옵션정보", value: "option_information" },
+        { text: "옵션추가금액", value: "option_extra_cost" },
         { text: "수량", value: "quantity" },
-        { text: "주문자명", value: "senderName" },
-        { text: "핸드폰번호", value: "senderPhone" },
-        { text: "결제금액", value: "paidPrice" },
-        { text: "사용포인트", value: "usedPoint" },
-        { text: "쿠폰할인", value: "discountCoupon" },
-        { text: "결제수단", value: "paymentType" },
-        { text: "주문상태", value: "orderStatus" }
+        { text: "주문자명", value: "customer_name" },
+        { text: "핸드폰번호", value: "customer_phone" },
+        { text: "결제금액", value: "total_price" },
+        { text: "주문상태", value: "status" }
       ],
       desserts: [
         {
-          orderNo: 20201218000028012,
-          paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C100",
-          sellerName: "모디무드",
-          sellerType: "헬피셀러",
-          helpyType: "헬피1",
-          deliveryType: "일반배송",
-          productName: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
-          options: "아이보리/free",
-          optionsPrice: 0,
+          id: 0,
+          order_number: 20201218000028000,
+          created_at_date: "2020-12-18 17:01:45",
+          order_detail_number: "B202012180001C873",
+          seller_name: "모디무드",
+          product_name: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
+          option_information: "아이보리/free",
+          option_extra_cost: 0,
           quantity: 1,
-          senderName: "장호철",
-          senderPhone: "010-8516-1399",
-          paidPrice: 9800,
-          usedPoint: 0,
-          discountCoupon: 0,
-          paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
-        },
-        {
-          orderNo: 20201218000021230,
-          paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C121",
-          sellerName: "모디무드",
-          sellerType: "헬피셀러",
-          helpyType: "헬피1",
-          deliveryType: "일반배송",
-          productName: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
-          options: "아이보리/free",
-          optionsPrice: 0,
-          quantity: 1,
-          senderName: "장호철",
-          senderPhone: "010-8516-1399",
-          paidPrice: 9800,
-          usedPoint: 0,
-          discountCoupon: 0,
-          paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
-        },
-        {
-          orderNo: 20201218000028000,
-          paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C521",
-          sellerName: "모디무드",
-          sellerType: "헬피셀러",
-          helpyType: "헬피1",
-          deliveryType: "일반배송",
-          productName: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
-          options: "아이보리/free",
-          optionsPrice: 0,
-          quantity: 1,
-          senderName: "장호철",
-          senderPhone: "010-8516-1399",
-          paidPrice: 9800,
-          usedPoint: 0,
-          discountCoupon: 0,
-          paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
-        },
-        {
-          orderNo: 20201218000028000,
-          paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C541",
-          sellerName: "모디무드",
-          sellerType: "헬피셀러",
-          helpyType: "헬피1",
-          deliveryType: "일반배송",
-          productName: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
-          options: "아이보리/free",
-          optionsPrice: 0,
-          quantity: 1,
-          senderName: "장호철",
-          senderPhone: "010-8516-1399",
-          paidPrice: 9800,
-          usedPoint: 0,
-          discountCoupon: 0,
-          paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
-        },
-        {
-          orderNo: 20201218000028000,
-          paidDate: "2020-12-18 17:01:45",
-          orderDetailNo: "B202012180001C873",
-          sellerName: "모디무드",
-          sellerType: "헬피셀러",
-          helpyType: "헬피1",
-          deliveryType: "일반배송",
-          productName: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
-          options: "아이보리/free",
-          optionsPrice: 0,
-          quantity: 1,
-          senderName: "장호철",
-          senderPhone: "010-8516-1399",
-          paidPrice: 9800,
-          usedPoint: 0,
-          discountCoupon: 0,
-          paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
+          customer_name: "장호철",
+          customer_phone: "010-8516-1399",
+          total_price: 9800,
+          status: "상품준비"
         }
       ]
     };
   },
+  watch: {
+    payedCompletedDate(value) {
+      setStartedDate();
+    }
+  },
+
   methods: {
     filterSearch: function(event) {
+      getOrderListData();
       alert("검색 완료!");
     },
     filterReset: function(event) {
@@ -564,6 +478,11 @@ export default {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
+        for (let i = 0; i < this.selectedItems.length; i++) {
+          axios.patch(
+            `http://192.168.40.107:5000/admin/orders?id=${this.selectedItems[i]}&status_id=1`
+          );
+        }
         alert(
           `${this.selectedItems.length}개의 주문이 배송준비처리 되었습니다 !`
         );
@@ -580,30 +499,38 @@ export default {
       console.log(`아이템 갯수가 ${this.itemsPerPage}로 바뀜 `);
     },
     getToday: function() {
-      let currentDate = new Date().toJSON().slice(0, 10);
-      let today = new Date();
-      let year = today.getFullYear();
-      let month = today.getMonth();
-      let day = today.getDate();
-      this.currentDate = currentDate;
-      // alert(`year: ${year}, month: ${month}, day: ${day}`);
+      let endDate = new Date().toJSON().slice(0, 10);
+      this.endDate = endDate;
+    },
+    getStartedDate: function() {
+      let payedCompletedDate = this.payedCompletedDate;
+      let endDate = this.endDate;
+      let newDt = new Date(endDate);
+      if (payedCompletedDate === null) {
+        return false;
+      } else {
+        newDt.setDate(newDt.getDate() - payedCompletedDate);
+        return (this.startedDate = newDt.toJSON().slice(0, 10));
+      }
+    },
+    getOrderListData: function() {
+      axios
+        .get(
+          `http://192.168.40.107:5000/admin/orders?status=1&start_date=${this.startedDate}&end_date=${this.endDate}&page=${this.currentPage}&length=${this.itemsPerPage}`
+        )
+        .then(res => {
+          this.totalCount = res.data.totalCount;
+          this.desserts = res.data.results;
+        });
     }
   },
   computed: {
-    getStartedDate: {
-      function() {
-        let startedDate = this.startedDate;
-        let payedCompletedDate = parseInt(this.payedCompletedDate);
-        let today = new Date();
-        let year = parseInt(today.getFullYear());
-        let month = parseInt(today.getMonth());
-        let day = parseInt(today.getDate());
-
-        return (this.startedDate = `${year}-${month}-${day -
-          payedCompletedDate}`);
-      }
+    getPaginationLength: function() {
+      let totalCount = this.totalCount;
+      let itemPerPage = this.itemsPerPage;
+      let paginationLength = parseInt(1 + totalCount / itemPerPage);
+      return (this.paginationLength = paginationLength);
     },
-
     selectAllSellerAttribute: {
       get: function(value) {
         if (this.sellerAttribute.length === 0) {
@@ -639,7 +566,7 @@ export default {
         let selectedItems = [];
         if (value) {
           this.desserts.forEach(order => {
-            selectedItems.push(order.orderDetailNo);
+            selectedItems.push(order.id);
           });
         }
         this.selectedItems = selectedItems;
@@ -648,6 +575,9 @@ export default {
   },
   mounted() {
     this.getToday();
+    this.getStartedDate();
+    this.getOrderListData();
+    this.getPaginationLength();
   }
 };
 </script>
@@ -722,12 +652,12 @@ export default {
 
         input[type="radio"] + label {
           display: inline-block;
+          width: 80px;
           margin: 0 2px;
           padding: 5px 0px;
           background-color: #f5f5f5;
           border: 1px solid #ccc;
           font-size: 11px !important;
-          width: 80px;
           text-align: center;
         }
 
@@ -750,12 +680,12 @@ export default {
 
         input[type="checkbox"] + label {
           display: inline-block;
+          width: 80px;
           margin: 0px 2px;
           padding: 5px 0px;
           background-color: #f5f5f5;
           border: 1px solid #ccc;
           font-size: 11px !important;
-          width: 80px;
           text-align: center;
         }
 
@@ -771,6 +701,28 @@ export default {
           color: #ffffff;
           font-weight: 700;
         }
+      }
+      [type="date"] {
+        background: #fff
+          url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)
+          97% 50% no-repeat;
+      }
+      [type="date"]::-webkit-inner-spin-button {
+        display: none;
+      }
+      [type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 0;
+      }
+
+      input[type="date"] {
+        width: 50px;
+        height: 28px;
+        border: 1px solid #c4c4c4;
+        border-radius: 5px;
+        background-color: #fff;
+        padding: 3px 5px;
+        margin: 0 5px;
+        width: 190px;
       }
     }
     .searchBtnBox {
@@ -800,7 +752,7 @@ export default {
         font-size: 14px;
       }
 
-      .selectItemsPerPage {
+      .selectBox {
         width: 130px;
         height: 30px;
         margin-right: 20px;
