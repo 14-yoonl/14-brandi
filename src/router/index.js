@@ -6,18 +6,22 @@ import Router from "vue-router";
 import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
-import AdminOrder from "@/views/admin/AdminOrder/AdminOrder";
+import AdminPrepareOrder from "@/views/admin/OrderManagement/prepareOrder";
 import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
-import AdminHome from "@/views/admin/AdminHome/AdminHome";
+import AdminHome from "@/views/admin/Home/AdminHome";
+import AdminInOrder from "@/views/admin/OrderManagement/inDelivery";
 
 //--service
 import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
-import productCard from "@//views/store/productCard";
+
+//--service_signup
+
+import signUpDone from "@/views/store/signupprocess/signUpDone";
+import productsDetail from "@/views/store/products/productsDetail";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
-// import signUpDone from "@/views/store/signupprocess/signUpDone"; //작업 중 (승윤)
 
 Vue.use(Router);
 
@@ -31,9 +35,9 @@ export default new Router({
       meta: { admin: false }
     },
     {
-      path: "/products/:id?",
-      name: "productDetail",
-      component: productCard
+      path: "/products/:id",
+      name: "productsDetail",
+      component: productsDetail
     },
     {
       path: "/signIn",
@@ -59,12 +63,20 @@ export default new Router({
       component: thirdStep,
       meta: { admin: false }
     },
-    // {
-    //   path: "/signUpDone",
-    //   name: "signUpDone",
-    //   component: signUpDone,
-    //   meta: { admin: false }
-    // },
+
+    {
+      path: "/detail",
+      name: "productsDetail",
+      component: productsDetail,
+      meta: { admin: false }
+    },
+
+    {
+      path: "/signUpDone",
+      name: "signUpDone",
+      component: signUpDone,
+      meta: { admin: false }
+    },
     {
       path: "/admin/seller",
       name: "seller",
@@ -82,9 +94,9 @@ export default new Router({
       component: adminSignUp
     },
     {
-      path: "/admin/order",
-      name: "AdminOrder",
-      component: AdminOrder,
+      path: "/admin/prepareOrder",
+      name: "AdminPrepareOrder",
+      component: AdminPrepareOrder,
       meta: { admin: true }
     },
     {
@@ -96,6 +108,12 @@ export default new Router({
       path: "/admin/home",
       name: "AdminHome",
       component: AdminHome,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/inDelivery",
+      name: "AdminInOrder",
+      component: AdminInOrder,
       meta: { admin: true }
     }
   ]
