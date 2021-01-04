@@ -33,7 +33,7 @@
 
 <script>
 import GoogleLogin from "vue-google-login";
-import NavBar from "./NavBar";
+import NavBar from "./navBar";
 import API from "@/store/config.js";
 
 export default {

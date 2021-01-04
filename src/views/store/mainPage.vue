@@ -15,19 +15,12 @@
       <div class="cardList">
         <productCard
           v-for="item in cards"
-          :key="item"
-          :seller="item.sellerName"
-          :imageUrl="item.imageUrl"
-          :name="item.name"
-          :originPrice="item.originPrice"
-          :discountRate="item.discountRate"
-          :discountedPrice="item.discountedPrice"
-          :count="item.count"
-          @click="goToDetail"
+          :key="item.id"
+          :item="item"
+          v-on:click="petchData"
         />
       </div>
     </div>
-
     <Footer></Footer>
   </div>
 </template>
@@ -36,6 +29,7 @@
 import productCard from "./productCard.vue";
 import NavBar from "./navBar";
 import Footer from "./footer";
+import axios from "axios";
 
 export default {
   data() {
@@ -86,7 +80,9 @@ export default {
     Footer: Footer
   },
   methods: {
-    goToDetail() {}
+    petchData() {
+      axios.get(`"http://localhost:5000/products/${item.id}"`);
+    }
   }
 };
 </script>
