@@ -61,6 +61,7 @@
           </div>
         </div>
         <input type="date" class="dateBox" v-model="startedDate" />
+        <span>~</span>
         <input type="date" class="dateBox" v-model="endDate" />
       </div>
       <div class="filterList">
@@ -131,10 +132,10 @@
         </div>
       </div>
       <div class="searchBtnBox">
-        <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
+        <v-btn elevation="2" md color="primary" v-on:click="handleFilterSearch"
           >검색</v-btn
         >
-        <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
+        <v-btn elevation="2" md v-on:click="handleFilterReset">초기화</v-btn>
       </div>
     </div>
 
@@ -144,10 +145,18 @@
           <span class="totalQuantity"
             >전체 조회건 수 : {{ totalCount }} 건</span
           >
-          <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+          <v-btn
+            elevation="1"
+            x-small
+            color="primary"
+            v-on:click="handlePrepareOrder"
             >배송준비처리</v-btn
           >
-          <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+          <v-btn
+            elevation="1"
+            x-small
+            color="primary"
+            v-on:click="handleCancelOrder"
             >주문취소처리</v-btn
           >
         </div>
@@ -209,7 +218,9 @@
                 {{ order.created_at_date }}
               </td>
               <td>
-                {{ order.order_detail_number }}
+                <a>
+                  {{ order.order_detail_number }}
+                </a>
               </td>
               <td>
                 {{ order.seller_name }}
@@ -243,10 +254,18 @@
         </table>
       </div>
       <div class="tableContainerFooterBtns">
-        <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+        <v-btn
+          elevation="1"
+          x-small
+          color="primary"
+          v-on:click="handlePrepareOrder"
           >배송준비처리</v-btn
         >
-        <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+        <v-btn
+          elevation="1"
+          x-small
+          color="primary"
+          v-on:click="handleCancelOrder"
           >주문취소처리</v-btn
         >
         <span>{{ selectedItems }}</span>
@@ -462,11 +481,11 @@ export default {
   },
 
   methods: {
-    filterSearch: function(event) {
+    handleFilterSearch: function(event) {
       getOrderListData();
       alert("검색 완료!");
     },
-    filterReset: function(event) {
+    handleFilterReset: function(event) {
       (this.filterSelectedCondition = ""),
         (this.searchInputData = ""),
         (this.payedCompletedDate = "3"),
@@ -474,7 +493,7 @@ export default {
         (this.sellerType = "전체"),
         (this.deliveryType = "전체");
     },
-    prepareOrder: function(event) {
+    handlePrepareOrder: function(event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
@@ -488,7 +507,7 @@ export default {
         );
       }
     },
-    cancelOrder: function(event) {
+    handleCancelOrder: function(event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {

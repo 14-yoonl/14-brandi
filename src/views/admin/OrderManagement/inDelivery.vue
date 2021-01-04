@@ -51,9 +51,10 @@
         </div>
         <span>{{ deliveryStartedDate }}</span>
         <input type="date" class="dateBox" v-model="startedDate" />
-        <input type="date" class="dateBox" v-model="currentDate" />
+        <span>~</span>
+        <input type="date" class="dateBox" v-model="endDate" />
         <span>{{ startedDate }}</span>
-        <span>{{ currentDate }}</span>
+        <span>{{ endDate }}</span>
       </div>
       <div class="filterList">
         <div class="filterTitle">
@@ -218,13 +219,15 @@
                 {{ order.paidDate }}
               </td>
               <td>
-                {{ order.deliveryStartedDate }}
+                {{ order.deliveryDate }}
               </td>
               <td>
                 {{ order.orderNo }}
               </td>
               <td>
-                {{ order.orderDetailNo }}
+                <a>
+                  {{ order.orderDetailNo }}
+                </a>
               </td>
               <td>
                 {{ order.sellerName }}
@@ -256,7 +259,10 @@
           >주문취소처리</v-btn
         >
         <span>{{ selectedItems }}</span>
-        <v-pagination v-model="currentPage" :length="5"></v-pagination>
+        <v-pagination
+          v-model="currentPage"
+          :length="paginationLength"
+        ></v-pagination>
         <span>{{ currentPage }}</span>
       </div>
     </div>
@@ -277,11 +283,12 @@ export default {
       deliveryType: "전체",
       selectedItems: [],
       startedDate: "",
-      currentDate: "",
+      endDate: "",
       currentPage: 1,
+      paginationLength: 5,
       itemsOrder: "desc",
       itemsPerPage: 30,
-      totalCount: 5,
+      totalCount: 1,
       searchCondition: [
         { text: "주문번호", value: "orderNo", disabled: false },
         { text: "주문상세번호", value: "orderDetailNo", disabled: false },
@@ -421,7 +428,7 @@ export default {
 
       headers: [
         { text: "결제일자", value: "paidDate" },
-        { text: "배송시작일", value: "deliveryStartedDate" },
+        { text: "배송시작일", value: "deliveryDate" },
         { text: "주문번호", value: "orderNo" },
         { text: "주문상세번호", value: "orderDetailNo" },
         { text: "셀러명", value: "sellerName" },
@@ -436,7 +443,8 @@ export default {
           id: 0,
           orderNo: 20201218000028012,
           paidDate: "2020-12-18 17:01:45",
-          deliveryStartedDate: "2020-12-18 17:01:45",
+          deliveryDate: "2020-12-18 17:01:45",
+          deliveryStartedDate: "3",
           orderDetailNo: "B202012180001C100",
           sellerName: "모디무드",
           productName: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
@@ -450,6 +458,11 @@ export default {
         }
       ]
     };
+  },
+  watch: {
+    deliveryStartedDate(value) {
+      setStartedDate();
+    }
   },
   methods: {
     filterSearch: function(event) {
@@ -489,15 +502,19 @@ export default {
       console.log(`아이템 갯수가 ${this.itemsPerPage}로 바뀜 `);
     },
     getToday: function() {
-      let currentDate = new Date().toJSON().slice(0, 10);
-      this.currentDate = currentDate;
+      let endDate = new Date().toJSON().slice(0, 10);
+      this.endDate = endDate;
     },
-    setStartedDate: function() {
+    getStartedDate: function() {
       let deliveryStartedDate = this.deliveryStartedDate;
-      let currentDate = this.currentDate;
-      let newDt = new Date(currentDate);
-      newDt.setDate(newDt.getDate() - deliveryStartedDate);
-      return (this.startedDate = newDt.toJSON().slice(0, 10));
+      let endDate = this.endDate;
+      let newDt = new Date(endDate);
+      if (deliveryStartedDate === null) {
+        return false;
+      } else {
+        newDt.setDate(newDt.getDate() - deliveryStartedDate);
+        return (this.startedDate = newDt.toJSON().slice(0, 10));
+      }
     },
     getOrderListData: function() {
       axios
@@ -511,18 +528,11 @@ export default {
     }
   },
   computed: {
-    getStartedDate: function() {
-      let startedDate = this.startedDate;
-      let deliveryStartedDate = this.deliveryStartedDate;
-      let currentDate = this.currentDate;
-      let newDate = new Date(currentDate);
-      newDate.setDate(newDate.getDate() - deliveryStartedDate);
-      let year = newDate.getFullYear();
-      let month = newDate.getMonth() + 1;
-      let day = newDate.getDate();
-      let fullDay = [year, month, day].join("-");
-      return console.log(fullDay);
-      this.startedDate = fullDay;
+    getPaginationLength: function() {
+      let totalCount = this.totalCount;
+      let itemPerPage = this.itemsPerPage;
+      let paginationLength = parseInt(1 + totalCount / itemPerPage);
+      return (this.paginationLength = paginationLength);
     },
 
     selectAllSellerAttribute: {
@@ -569,8 +579,9 @@ export default {
   },
   mounted() {
     this.getToday();
-    this.setStartedDate();
+    this.getStartedDate();
     this.getOrderListData();
+    this.getPaginationLength();
   }
 };
 </script>
