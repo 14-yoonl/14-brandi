@@ -20,23 +20,19 @@ export default {
         phone: "01036464663"
       });
     },
-    signin() {
+    signin(state, loginInfo) {
+      console.log(state, loginInfo);
       axios
         .post("http://192.168.40.116:5000/users/signin", {
-          username: "kyouk1a",
-          password: "1q2w3e$R"
+          username: loginInfo.id,
+          password: loginInfo.pw
         })
-        .then(res => console.log(res))
-        .then(localStorage.setItem("token", res.data.token));
-      // this.$router.push("/signUpDone");
+        .then(res => {
+          localStorage.setItem("token", res.data.token);
+          console.log(res.data.token);
+          this.$router.push("/");
+        });
     }
-    // FETCH_USER({ commit }, name) {
-    //   LOCAL_API(name)
-    //     .then(({ data }) => {
-    //       commit("SET_USER", data);
-    //     })
-    //     .catch(error => console.log(error));
-    // }
   },
 
   mutations: {

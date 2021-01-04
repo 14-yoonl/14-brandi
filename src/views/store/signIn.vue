@@ -8,8 +8,19 @@
           <div>무료배송으로 내일 받는 브랜디 LOGIN</div>
         </div>
         <div class="loginBottom">
-          <input type="text" class="idInput" placeholder="아이디 입력" />
-          <input type="password" class="pwInput" placeholder="비밀번호 입력" />
+          <input
+            type="text"
+            class="idInput"
+            placeholder="아이디 입력"
+            v-model="state.id"
+          />
+
+          <input
+            type="password"
+            class="pwInput"
+            placeholder="비밀번호 입력"
+            v-model="state.pw"
+          />
           <button class="logInButton" @click="signin">
             <a href="/">로그인</a>
           </button>
@@ -20,7 +31,7 @@
             :params="params"
             :onSuccess="onSuccess"
             :onFailure="onFailure"
-            @click="onlist"
+            @click="signin"
           >
             <img
               src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
@@ -42,6 +53,10 @@ import API from "@/store/config.js";
 export default {
   data() {
     return {
+      state: {
+        id: "",
+        pw: ""
+      },
       params: {
         client_id:
           "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
@@ -68,10 +83,10 @@ export default {
         .then.catch(function(error) {
           console.log(error);
         });
-      this.$router.push("/home");
+      this.$router.push("/");
     },
     signin() {
-      this.$store.dispatch("signin");
+      this.$store.dispatch("signin", this.state);
     }
   }
 };
