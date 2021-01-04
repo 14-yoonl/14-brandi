@@ -57,7 +57,8 @@ export default {
       state: {
         id: "",
         password: "",
-        email: ""
+        email: "",
+        phoneNum: "01036464663"
       },
       idRules: [
         v => !!v || "아이디는 필수 입력항목입니다.",
@@ -83,7 +84,7 @@ export default {
   },
   methods: {
     postTest() {
-      this.$store.commit("test", this.state);
+      this.$store.dispatch("jebal", this.state);
     }
   }
 };
