@@ -50,7 +50,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 10%;
-  min-width: 150px;
+  min-width: 160px;
   margin-top: 80px;
   color: #f1f1f1;
   font-size: 14px;
