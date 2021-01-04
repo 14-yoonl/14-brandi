@@ -34,8 +34,10 @@
 
 <script>
 import NavBar from "../navBar";
+import axios from "axios";
 export default {
   data() {
+    axios.get("");
     return {};
   },
   components: {

@@ -9,8 +9,10 @@
         </div>
         <div class="loginBottom">
           <input type="text" class="idInput" placeholder="아이디 입력" />
-          <input type="text" class="pwInput" placeholder="비밀번호 입력" />
-          <button class="logInButton"><a href="/">로그인</a></button>
+          <input type="password" class="pwInput" placeholder="비밀번호 입력" />
+          <button class="logInButton" @click="signin">
+            <a href="/">로그인</a>
+          </button>
 
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
 
@@ -18,6 +20,7 @@
             :params="params"
             :onSuccess="onSuccess"
             :onFailure="onFailure"
+            @click="onlist"
           >
             <img
               src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
@@ -33,8 +36,9 @@
 
 <script>
 import GoogleLogin from "vue-google-login";
-import NavBar from "./NavBar";
-// import API from "@/store/config.js";
+import NavBar from "./navBar";
+import API from "@/store/config.js";
+
 export default {
   data() {
     return {
@@ -55,7 +59,7 @@ export default {
       console.log("구글유저>>>>", googleUser.xc.access_token);
       console.log("basicprofile>>>>>", googleUser.getBasicProfile());
       axios
-        .post("`${API}/social-signin`", {
+        .post("http://192.168.40.116:5000/users/social-signin", {
           Authorization: googleUser.xc.access_token
         })
         .then(function(response) {
@@ -65,6 +69,9 @@ export default {
           console.log(error);
         });
       this.$router.push("/home");
+    },
+    signin() {
+      this.$store.dispatch("signin");
     }
   }
 };

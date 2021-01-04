@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import NavBar from "../NavBar";
+import NavBar from "../navBar";
 import Footer from "../footer";
 
 export default {

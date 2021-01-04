@@ -13,12 +13,14 @@ import AdminHome from "@/views/admin/Home/AdminHome";
 //--service
 import signIn from "@/views/store/SignIn";
 import home from "@/views/store/mainPage";
+
+//--service_signup
+
+import signUpDone from "@/views/store/signupprocess/signUpDone";
 import productsDetail from "@/views/store/products/productsDetail";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
-
-// import signUpDone from "@/views/store/signupprocess/signUpDone"; //작업 중 (승윤)
 
 Vue.use(Router);
 
@@ -60,12 +62,20 @@ export default new Router({
       component: thirdStep,
       meta: { admin: false }
     },
-    // {
-    //   path: "/signUpDone",
-    //   name: "signUpDone",
-    //   component: signUpDone,
-    //   meta: { admin: false }
-    // },
+
+    {
+      path: "/detail",
+      name: "productsDetail",
+      component: productsDetail,
+      meta: { admin: false }
+    },
+
+    {
+      path: "/signUpDone",
+      name: "signUpDone",
+      component: signUpDone,
+      meta: { admin: false }
+    },
     {
       path: "/admin/seller",
       name: "seller",
