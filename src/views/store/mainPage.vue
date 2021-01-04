@@ -49,28 +49,31 @@ export default {
         }
       ],
       cards: [
-        // {
-        //   id: 1,
-        //   sellerName: "미우블랑",
-        //   imageUrl:
-        //     "https://image.brandi.me/cproduct/2019/12/16/12635118_1576508021_image1_M.jpg",
-        //   name: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
-        //   originPrice: 9800,
-        //   discountRate: 0,
-        //   discountedPrice: 9800,
-        //   count: 432
-        // },
-        // {
-        //   id: 2,
-        //   sellerName: "로젠하이",
-        //   imageUrl:
-        //     "https://image.brandi.me/cproduct/2019/06/25/9350924_1561425223_image1_M.jpg",
-        //   name: "일론 스티치 반팔 미니-원피스(린넨55%)",
-        //   originPrice: 26000,
-        //   discountRate: 18,
-        //   discountedPrice: 18720,
-        //   count: 1136
-        // }
+        {
+          message: "success",
+          result: {
+            event: [
+              {
+                id: 1,
+                banner_image: "url"
+              }
+            ],
+            product_list: [
+              {
+                discount_rate: 0.1,
+                discounted_price: 9000.0,
+                image_url:
+                  "https://img.freepik.com/free-psd/simple-black-men-s-tee-mockup_53876-57893.jpg?size=338&ext=jpg&ga=GA1.2.1060993109.1605750477",
+                origin_price: 10000.0,
+                product_id: 99,
+                product_name: "성보의하루99",
+                sales_count: 55,
+                seller_id: 4,
+                seller_name: "나는셀러4"
+              }
+            ]
+          }
+        }
       ],
       cardList: []
     };
@@ -82,11 +85,7 @@ export default {
   },
   methods: {
     petchData() {
-      axios.get(
-        `"http://localhost:5000/products/${item.id}"`.then(function(res) {
-          this.$store.commit("list", this.cardList);
-        })
-      );
+      axios.get(`http://192.168.40.116:5000/products?offset=0"`);
     }
   }
 };

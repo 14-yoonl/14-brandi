@@ -12,7 +12,6 @@ export default {
   },
   actions: {
     jebal(state, info) {
-      console.log(state, info);
       axios.post("http://192.168.40.116:5000/users/signup", {
         username: info.id,
         password: info.password,
@@ -29,9 +28,8 @@ export default {
         })
         .then(res => {
           localStorage.setItem("token", res.data.token);
-          console.log(res.data.token);
-          this.$router.push("/");
-        });
+        })
+        .then(alert("loginSuccess"));
     }
   },
 

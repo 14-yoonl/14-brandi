@@ -22,7 +22,7 @@
             v-model="state.pw"
           />
           <button class="logInButton" @click="signin">
-            <a href="/">로그인</a>
+            로그인
           </button>
 
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
@@ -31,7 +31,6 @@
             :params="params"
             :onSuccess="onSuccess"
             :onFailure="onFailure"
-            @click="signin"
           >
             <img
               src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
@@ -78,15 +77,15 @@ export default {
           Authorization: googleUser.xc.access_token
         })
         .then(function(response) {
-          localStorage.setItem("access_token", res.data.token);
+          localStorage.setItem("access_token", response.data.token);
         })
         .then.catch(function(error) {
           console.log(error);
+          this.$router.push("/");
         });
-      this.$router.push("/");
     },
     signin() {
-      this.$store.dispatch("signin", this.state);
+      this.$store.dispatch("signin", this.state).then(this.$router.push("/"));
     }
   }
 };
@@ -130,15 +129,11 @@ export default {
         }
 
         .logInButton {
+          width: 570px;
           height: 50px;
           margin: 10px 0 2px 0;
           color: white;
           background-color: black;
-
-          a {
-            text-decoration: none;
-            color: white;
-          }
         }
         .signUpButton {
           a {
