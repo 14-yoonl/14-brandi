@@ -27,11 +27,7 @@
 
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
 
-          <GoogleLogin
-            :params="params"
-            :onSuccess="onSuccess"
-            :onFailure="onFailure"
-          >
+          <GoogleLogin :params="params" :onSuccess="onSuccess">
             <img
               src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
               alt="구글 로고"

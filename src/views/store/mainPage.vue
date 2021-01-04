@@ -14,12 +14,13 @@
       <h2 class="productHeader">당신을 위한 추천</h2>
       <div class="cardList">
         <productCard
-          v-for="item in cards"
-          :key="item.id"
+          v-for="item in cardList"
+          :key="item.product_id"
           :item="item"
           v-on:click="petchData"
         />
       </div>
+      <v-btn @click="more">더보기</v-btn>
     </div>
     <Footer></Footer>
   </div>
@@ -36,58 +37,36 @@ export default {
     return {
       slideitems: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
+          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
+          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
+          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
-        }
+          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
+        },
       ],
-      cards: [
-        {
-          message: "success",
-          result: {
-            event: [
-              {
-                id: 1,
-                banner_image: "url"
-              }
-            ],
-            product_list: [
-              {
-                discount_rate: 0.1,
-                discounted_price: 9000.0,
-                image_url:
-                  "https://img.freepik.com/free-psd/simple-black-men-s-tee-mockup_53876-57893.jpg?size=338&ext=jpg&ga=GA1.2.1060993109.1605750477",
-                origin_price: 10000.0,
-                product_id: 99,
-                product_name: "성보의하루99",
-                sales_count: 55,
-                seller_id: 4,
-                seller_name: "나는셀러4"
-              }
-            ]
-          }
-        }
-      ],
-      cardList: []
+      cardList: [],
     };
   },
   components: {
     NavBar: NavBar,
     productCard: productCard,
-    Footer: Footer
+    Footer: Footer,
   },
   methods: {
-    petchData() {
-      axios.get(`http://192.168.40.116:5000/products?offset=0"`);
-    }
-  }
+    petchData() {},
+  },
+  mounted() {
+    axios
+      .get("http://192.168.40.116:5000/products?offset=0")
+      .then((response) => {
+        this.cardList = response.data.result.product_list;
+      });
+  },
 };
 </script>
 
