@@ -4,9 +4,9 @@ import signIn from "./modules/signIn";
 import signUp from "./modules/signUp";
 import productsRegist from "./modules/productsRegist";
 import servicesignUp from "./modules/servicesignUp";
-import adminOrder from "./modules/AdminOrder";
+import prepareOrder from "./modules/prepareOrder";
 
 Vue.use(Vuex);
 export const store = new Vuex.Store({
-  modules: { signIn, signUp, servicesignUp, productsRegist, adminOrder }
+  modules: { signIn, signUp, servicesignUp, productsRegist, prepareOrder }
 });

@@ -6,9 +6,10 @@ import Router from "vue-router";
 import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
-import AdminOrder from "@/views/admin/OrderManagement/AdminOrder";
+import AdminPrepareOrder from "@/views/admin/OrderManagement/prepareOrder";
 import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
 import AdminHome from "@/views/admin/Home/AdminHome";
+import AdminInOrder from "@/views/admin/OrderManagement/inDelivery";
 
 //--service
 import signIn from "@/views/store/SignIn";
@@ -83,9 +84,9 @@ export default new Router({
       component: adminSignUp
     },
     {
-      path: "/admin/order",
-      name: "AdminOrder",
-      component: AdminOrder,
+      path: "/admin/prepareOrder",
+      name: "AdminPrepareOrder",
+      component: AdminPrepareOrder,
       meta: { admin: true }
     },
     {
@@ -97,6 +98,12 @@ export default new Router({
       path: "/admin/home",
       name: "AdminHome",
       component: AdminHome,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/inDelivery",
+      name: "AdminInOrder",
+      component: AdminInOrder,
       meta: { admin: true }
     }
   ]
