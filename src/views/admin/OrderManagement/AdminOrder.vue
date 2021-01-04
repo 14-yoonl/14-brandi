@@ -19,131 +19,133 @@
     </AdminHeader>
 
     <!-- <AdminFilter> -->
-      <div class="filterContainer">
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>검색조건 : </span>
-          </div>
-          <div class="filterBtnsGroup">
-            <select v-model="filterSelectedCondition" class="searchCondition">
-              <option value="" disabled>조건을 선택해주세요 ▼ </option>
-              <option
-                v-for="condition in searchCondition"
-                :disabled="condition.disabled"
-                v-bind:key="condition.id"
-              >
-                {{ condition.text }}
-              </option>
-            </select>
-          </div>
-          <input
-            v-model="searchInputData"
-            class="searchInputBox"
-            placeholder="검색어를 입력하세요"
-          />
-          <span>{{ searchInputData }}</span>
+    <div class="filterContainer">
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>검색조건 : </span>
         </div>
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>결제완료일 : </span>
-          </div>
-          <div class="filterBtnsGroup">
-            <div
-              v-for="dateOptions in payedCompletedDateList"
-              v-bind:key="dateOptions.id"
+        <div class="filterBtnsGroup">
+          <select v-model="filterSelectedCondition" class="searchCondition">
+            <option value="" disabled>조건을 선택해주세요 ▼</option>
+            <option
+              v-for="condition in searchCondition"
+              :disabled="condition.disabled"
+              v-bind:key="condition.id"
             >
-              <input
-                type="radio"
-                :id="dateOptions.id"
-                :value="dateOptions.value"
-                v-model="payedCompletedDate"
-              />
-              <label :for="dateOptions.id">{{ dateOptions.text }}</label>
-            </div>
-          </div>
-          <span>{{ payedCompletedDate }}</span>
-          <input type="date" v-model="getStartedDate" />
-          <input type="date" v-model="currentDate" />
-          <span>{{ startedDate }}</span>
+              {{ condition.text }}
+            </option>
+          </select>
         </div>
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>셀러속성 : </span>
+        <input
+          v-model="$store.searchInputData"
+          class="searchInputBox"
+          placeholder="검색어를 입력하세요"
+        />
+        <span>{{ $store.searchInputData }}</span>
+      </div>
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>결제완료일 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <div
+            v-for="dateOptions in payedCompletedDateList"
+            v-bind:key="dateOptions.id"
+          >
+            <input
+              type="radio"
+              :id="dateOptions.id"
+              :value="dateOptions.value"
+              v-model="payedCompletedDate"
+              @change="getStartedDate()"
+            />
+            <label :for="dateOptions.id">{{ dateOptions.text }}</label>
           </div>
-          <div class="filterBtnsGroup">
+        </div>
+        <span>{{ payedCompletedDate }}</span>
+        <input type="date" class="dateBox" v-model="startedDate" />
+        <input type="date" class="dateBox" v-model="currentDate" />
+        <span>{{ startedDate }}</span>
+        <span>{{ currentDate }}</span>
+      </div>
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>셀러속성 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <input
+            type="checkbox"
+            name="sellerAttribute"
+            value="전체"
+            id="sellerAttributeAll"
+            v-model="selectAllSellerAttribute"
+          />
+          <label for="sellerAttributeAll">전체</label>
+          <div
+            v-for="sellerAttributes in sellerAttributeList"
+            v-bind:key="sellerAttributes.id"
+          >
             <input
               type="checkbox"
-              name="sellerAttribute"
-              value="전체"
-              id="sellerAttributeAll"
-              v-model="selectAllSellerAttribute"
+              :id="sellerAttributes.id"
+              :value="sellerAttributes.value"
+              v-model="sellerAttribute"
             />
-            <label for="sellerAttributeAll">전체</label>
-            <div
-              v-for="sellerAttributes in sellerAttributeList"
-              v-bind:key="sellerAttributes.id"
-            >
-              <input
-                type="checkbox"
-                :id="sellerAttributes.id"
-                :value="sellerAttributes.value"
-                v-model="sellerAttribute"
-              />
-              <label :for="sellerAttributes.id">{{
-                sellerAttributes.text
-              }}</label>
-            </div>
+            <label :for="sellerAttributes.id">{{
+              sellerAttributes.text
+            }}</label>
           </div>
-          <span>{{ sellerAttribute }}</span>
         </div>
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>셀러구분 : </span>
-          </div>
-          <div class="filterBtnsGroup">
-            <div
-              v-for="sellerTypes in sellerTypeList"
-              v-bind:key="sellerTypes.id"
-            >
-              <input
-                type="radio"
-                :id="sellerTypes.id"
-                :value="sellerTypes.value"
-                v-model="sellerType"
-              />
-              <label :for="sellerTypes.id">{{ sellerTypes.text }}</label>
-            </div>
-          </div>
-          <span>{{ sellerType }}</span>
-        </div>
-        <div class="filterList">
-          <div class="filterTitle">
-            <span>배송구분 : </span>
-          </div>
-          <div class="filterBtnsGroup">
-            <div
-              v-for="deliveryTypes in deliveryTypeList"
-              v-bind:key="deliveryTypes.id"
-            >
-              <input
-                type="radio"
-                :id="deliveryTypes.id"
-                :value="deliveryTypes.value"
-                v-model="deliveryType"
-              />
-              <label :for="deliveryTypes.id">{{ deliveryTypes.text }}</label>
-            </div>
-          </div>
-
-          <span>{{ deliveryType }}</span>
-        </div>
-        <div class="searchBtnBox">
-          <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
-            >검색</v-btn
-          >
-          <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
-        </div>
+        <span>{{ sellerAttribute }}</span>
       </div>
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>셀러구분 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <div
+            v-for="sellerTypes in sellerTypeList"
+            v-bind:key="sellerTypes.id"
+          >
+            <input
+              type="radio"
+              :id="sellerTypes.id"
+              :value="sellerTypes.value"
+              v-model="sellerType"
+            />
+            <label :for="sellerTypes.id">{{ sellerTypes.text }}</label>
+          </div>
+        </div>
+        <span>{{ sellerType }}</span>
+      </div>
+      <div class="filterList">
+        <div class="filterTitle">
+          <span>배송구분 : </span>
+        </div>
+        <div class="filterBtnsGroup">
+          <div
+            v-for="deliveryTypes in deliveryTypeList"
+            v-bind:key="deliveryTypes.id"
+          >
+            <input
+              type="radio"
+              :id="deliveryTypes.id"
+              :value="deliveryTypes.value"
+              v-model="deliveryType"
+            />
+            <label :for="deliveryTypes.id">{{ deliveryTypes.text }}</label>
+          </div>
+        </div>
+
+        <span>{{ deliveryType }}</span>
+      </div>
+      <div class="searchBtnBox">
+        <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
+          >검색</v-btn
+        >
+        <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
+      </div>
+    </div>
     <!-- </AdminFilter> -->
 
     <div class="tableContainer">
@@ -273,6 +275,7 @@
   </div>
 </template>
 <script>
+import { filterSelectedCondition, searchInputData } from "vuex";
 import AdminHeader from "../../../components/common/adminDataTable/AdminHeader";
 import AdminFilter from "../../../components/common/adminDataTable/AdminFilter";
 
@@ -281,8 +284,8 @@ export default {
   components: { AdminHeader, AdminFilter },
   data() {
     return {
-      filterSelectedCondition: "",
-      searchInputData: "",
+      // filterSelectedCondition: "",
+      // searchInputData: "",
       payedCompletedDate: "3",
       sellerAttribute: [],
       sellerType: "전체",
@@ -295,7 +298,12 @@ export default {
       searchCondition: [
         { text: "주문번호", value: "orderNo", disabled: false },
         { text: "주문상세번호", value: "orderDetailNo", disabled: false },
-        { text: "--------------------", value: "", disabled: true }
+        { text: "--------------------", value: "", disabled: true },
+        { text: "주문자명", value: "senderName", disabled: false },
+        { text: "핸드폰번호", value: "senderPhone", disabled: false },
+        { text: "--------------------", value: "", disabled: true },
+        { text: "셀러명", value: "sellerName", disabled: false },
+        { text: "상품명", value: "productName", disabled: false },
       ],
 
       payedCompletedDateList: [
@@ -303,38 +311,38 @@ export default {
           name: "payedDate",
           value: "전체",
           id: "payedDateAll",
-          text: "전체"
+          text: "전체",
         },
         {
           name: "payedDate",
           value: "0",
           id: "today",
-          text: "오늘"
+          text: "오늘",
         },
         {
           name: "payedDate",
           value: "3",
           id: "3days",
-          text: "3일"
+          text: "3일",
         },
         {
           name: "payedDate",
           value: "7",
           id: "7days",
-          text: "1주일"
+          text: "1주일",
         },
         {
           name: "payedDate",
           value: "30",
           id: "30days",
-          text: "1개월"
+          text: "1개월",
         },
         {
           name: "payedDate",
           value: "90",
           id: "3month",
-          text: "3개월"
-        }
+          text: "3개월",
+        },
       ],
 
       sellerAttributeList: [
@@ -342,32 +350,32 @@ export default {
           name: "sellerAttribute",
           value: "쇼핑몰",
           id: "shoppingmall",
-          text: "쇼핑몰"
+          text: "쇼핑몰",
         },
         {
           name: "sellerAttribute",
           value: "마켓",
           id: "market",
-          text: "마켓"
+          text: "마켓",
         },
         {
           name: "sellerAttribute",
           value: "로드샵",
           id: "roadShop",
-          text: "로드샵"
+          text: "로드샵",
         },
         {
           name: "sellerAttribute",
           value: "디자이너브랜드",
           id: "designerBrand",
-          text: "디자이너브랜드"
+          text: "디자이너브랜드",
         },
         {
           name: "sellerAttribute",
           value: "뷰티",
           id: "beauty",
-          text: "뷰티"
-        }
+          text: "뷰티",
+        },
       ],
 
       sellerTypeList: [
@@ -375,20 +383,20 @@ export default {
           name: "sellerType",
           value: "전체",
           id: "sellerTypeAll",
-          text: "전체"
+          text: "전체",
         },
         {
           name: "sellerType",
           value: "일반",
           id: "normalSeller",
-          text: "일반"
+          text: "일반",
         },
         {
           name: "sellerType",
           value: "헬피",
           id: "helpySeller",
-          text: "헬피"
-        }
+          text: "헬피",
+        },
       ],
 
       deliveryTypeList: [
@@ -396,32 +404,32 @@ export default {
           name: "deliveryType",
           value: "전체",
           id: "deliveryTypeAll",
-          text: "전체"
+          text: "전체",
         },
         {
           name: "deliveryType",
           value: "일반배송",
           id: "normalDelivery",
-          text: "일반배송"
+          text: "일반배송",
         },
         {
           name: "deliveryType",
           value: "오늘출발",
           id: "sendToday",
-          text: "오늘출발"
+          text: "오늘출발",
         },
         {
           name: "deliveryType",
           value: "새벽도착",
           id: "arriveDawn",
-          text: "새벽도착"
+          text: "새벽도착",
         },
         {
           name: "deliveryType",
           value: "저녁도착",
           id: "arriveEvening",
-          text: "저녁도착"
-        }
+          text: "저녁도착",
+        },
       ],
 
       headers: [
@@ -442,7 +450,7 @@ export default {
         { text: "사용포인트", value: "usedPoint" },
         { text: "쿠폰할인", value: "discountCoupon" },
         { text: "결제수단", value: "paymentType" },
-        { text: "주문상태", value: "orderStatus" }
+        { text: "주문상태", value: "orderStatus" },
       ],
       desserts: [
         {
@@ -463,7 +471,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
+          orderStatus: "상품준비",
         },
         {
           orderNo: 20201218000021230,
@@ -483,7 +491,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
+          orderStatus: "상품준비",
         },
         {
           orderNo: 20201218000028000,
@@ -503,7 +511,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
+          orderStatus: "상품준비",
         },
         {
           orderNo: 20201218000028000,
@@ -523,7 +531,7 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
+          orderStatus: "상품준비",
         },
         {
           orderNo: 20201218000028000,
@@ -543,24 +551,24 @@ export default {
           usedPoint: 0,
           discountCoupon: 0,
           paymentType: "네이버페이주문형(신용카드)",
-          orderStatus: "상품준비"
-        }
-      ]
+          orderStatus: "상품준비",
+        },
+      ],
     };
   },
   methods: {
-    filterSearch: function(event) {
+    filterSearch: function (event) {
       alert("검색 완료!");
     },
-    filterReset: function(event) {
+    filterReset: function (event) {
       (this.filterSelectedCondition = ""),
-        (this.searchInputData = ""),
+        ($store.searchInputData = ""),
         (this.payedCompletedDate = "3"),
         (this.sellerAttribute = []),
         (this.sellerType = "전체"),
         (this.deliveryType = "전체");
     },
-    prepareOrder: function(event) {
+    prepareOrder: function (event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
@@ -569,43 +577,45 @@ export default {
         );
       }
     },
-    cancelOrder: function(event) {
+    cancelOrder: function (event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
         alert(`${this.selectedItems.length}개의 주문이 취소되었습니다 !`);
       }
     },
-    handleItemsPerPage: function() {
+    handleItemsPerPage: function () {
       console.log(`아이템 갯수가 ${this.itemsPerPage}로 바뀜 `);
     },
-    getToday: function() {
+    getToday: function () {
       let currentDate = new Date().toJSON().slice(0, 10);
-      let today = new Date();
-      let year = today.getFullYear();
-      let month = today.getMonth();
-      let day = today.getDate();
       this.currentDate = currentDate;
-      // alert(`year: ${year}, month: ${month}, day: ${day}`);
-    }
+    },
+    setStartedDate: function () {
+      let payedCompletedDate = this.payedCompletedDate;
+      let currentDate = this.currentDate;
+      let newDt = new Date(currentDate);
+      newDt.setDate(newDt.getDate() - payedCompletedDate);
+      return (this.startedDate = newDt.toJSON().slice(0, 10));
+    },
   },
   computed: {
-    getStartedDate: {
-      function() {
-        let startedDate = this.startedDate;
-        let payedCompletedDate = parseInt(this.payedCompletedDate);
-        let today = new Date();
-        let year = parseInt(today.getFullYear());
-        let month = parseInt(today.getMonth());
-        let day = parseInt(today.getDate());
-
-        return (this.startedDate = `${year}-${month}-${day -
-          payedCompletedDate}`);
-      }
+    getStartedDate: function () {
+      let startedDate = this.startedDate;
+      let payedCompletedDate = this.payedCompletedDate;
+      let currentDate = this.currentDate;
+      let newDate = new Date(currentDate);
+      newDate.setDate(newDate.getDate() - payedCompletedDate);
+      let year = newDate.getFullYear();
+      let month = newDate.getMonth() + 1;
+      let day = newDate.getDate();
+      let fullDay = [year, month, day].join("-");
+      return console.log(fullDay);
+      this.startedDate = fullDay;
     },
 
     selectAllSellerAttribute: {
-      get: function(value) {
+      get: function (value) {
         if (this.sellerAttribute.length === 0) {
           return true;
         } else if (
@@ -616,39 +626,40 @@ export default {
           return true;
         }
       },
-      set: function(value) {
+      set: function (value) {
         let sellerAttribute = [];
         if (value < this.sellerAttributeList.length) {
-          this.sellerAttributeList.forEach(attribute => {
+          this.sellerAttributeList.forEach((attribute) => {
             sellerAttribute.push(attribute.value);
           });
           this.sellerAttribute = sellerAttribute;
         } else if (value === this.sellerAttributeList.length) {
           this.sellerAttribute = [];
         }
-      }
+      },
     },
 
     selectAllItems: {
-      get: function() {
+      get: function () {
         return this.desserts
           ? this.selectedItems.length === this.desserts.length
           : false;
       },
-      set: function(value) {
+      set: function (value) {
         let selectedItems = [];
         if (value) {
-          this.desserts.forEach(order => {
+          this.desserts.forEach((order) => {
             selectedItems.push(order.orderDetailNo);
           });
         }
         this.selectedItems = selectedItems;
-      }
-    }
+      },
+    },
   },
   mounted() {
     this.getToday();
-  }
+    this.setStartedDate();
+  },
 };
 </script>
 
@@ -722,12 +733,12 @@ export default {
 
         input[type="radio"] + label {
           display: inline-block;
+          width: 80px;
           margin: 0 2px;
           padding: 5px 0px;
           background-color: #f5f5f5;
           border: 1px solid #ccc;
           font-size: 11px !important;
-          width: 80px;
           text-align: center;
         }
 
@@ -750,12 +761,12 @@ export default {
 
         input[type="checkbox"] + label {
           display: inline-block;
+          width: 80px;
           margin: 0px 2px;
           padding: 5px 0px;
           background-color: #f5f5f5;
           border: 1px solid #ccc;
           font-size: 11px !important;
-          width: 80px;
           text-align: center;
         }
 
@@ -771,6 +782,28 @@ export default {
           color: #ffffff;
           font-weight: 700;
         }
+      }
+      [type="date"] {
+        background: #fff
+          url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)
+          97% 50% no-repeat;
+      }
+      [type="date"]::-webkit-inner-spin-button {
+        display: none;
+      }
+      [type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 0;
+      }
+
+      input[type="date"] {
+        width: 50px;
+        height: 28px;
+        border: 1px solid #c4c4c4;
+        border-radius: 5px;
+        background-color: #fff;
+        padding: 3px 5px;
+        margin: 0 5px;
+        width: 190px;
       }
     }
     .searchBtnBox {

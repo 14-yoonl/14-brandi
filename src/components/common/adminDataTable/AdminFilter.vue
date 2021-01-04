@@ -17,11 +17,11 @@
         </select>
       </div>
       <input
-        v-model="searchInputData"
+        v-model="$store.getters.searchInputData"
         class="searchInputBox"
         placeholder="검색어를 입력하세요"
       />
-      <span>{{ searchInputData }}</span>
+      <span>{{ $store.getters.searchInputData }}</span>
     </div>
     <div class="filterList">
       <div class="filterTitle">
@@ -147,7 +147,7 @@ export default {
   data() {
     return {
       filterSelectedCondition: "",
-      searchInputData: "",
+      // searchInputData: "",
       payedCompletedDate: "3",
       sellerAttribute: [],
       selectedsellerAttribute: [],
@@ -164,31 +164,31 @@ export default {
         { text: "핸드폰번호", value: "senderPhone", disabled: false },
         { text: "--------------------", value: "", disabled: true },
         { text: "셀러명", value: "sellerName", disabled: false },
-        { text: "상품명", value: "productName", disabled: false }
+        { text: "상품명", value: "productName", disabled: false },
       ],
       payedCompletedDateList: [
         {
           name: "payedDate",
           value: "전체",
           id: "payedDateAll",
-          model: "payedCompletedDate"
-        }
-      ]
+          model: "payedCompletedDate",
+        },
+      ],
     };
   },
   methods: {
-    filterSearch: function(event) {
+    filterSearch: function (event) {
       alert("검색 완료!");
     },
-    filterReset: function(event) {
+    filterReset: function (event) {
       (this.filterSelectedCondition = ""),
-        (this.searchInputData = ""),
+        ($store.getters.searchInputData = ""),
         (this.payedCompletedDate = "3"),
         (this.sellerAttribute = ["전체"]),
         (this.sellerType = "전체"),
         (this.deliveryType = "전체");
     },
-    getToday: function() {
+    getToday: function () {
       let currentDate = new Date().toJSON().slice(0, 10);
       let today = new Date();
       let year = today.getFullYear();
@@ -196,7 +196,7 @@ export default {
       let day = today.getDate();
       this.currentDate = currentDate;
       // alert(`year: ${year}, month: ${month}, day: ${day}`);
-    }
+    },
   },
   computed: {
     getStartedDate: {
@@ -208,13 +208,14 @@ export default {
         let month = parseInt(today.getMonth());
         let day = parseInt(today.getDate());
 
-        return (this.startedDate = `${year}-${month}-${day -
-          payedCompletedDate}`);
-      }
+        return (this.startedDate = `${year}-${month}-${
+          day - payedCompletedDate
+        }`);
+      },
     },
 
     selectAllSellerAttribute: {
-      get: function(value) {
+      get: function (value) {
         if (this.sellerAttribute.length === 0) {
           return true;
         } else if (
@@ -225,22 +226,22 @@ export default {
           return true;
         }
       },
-      set: function(value) {
+      set: function (value) {
         let sellerAttribute = [];
         if (value < this.sellerAttributeList.length) {
-          this.sellerAttributeList.forEach(attribute => {
+          this.sellerAttributeList.forEach((attribute) => {
             sellerAttribute.push(attribute.value);
           });
           this.sellerAttribute = sellerAttribute;
         } else if (value === this.sellerAttributeList.length) {
           this.sellerAttribute = [];
         }
-      }
-    }
+      },
+    },
   },
   mounted() {
     this.getToday();
-  }
+  },
 };
 </script>
 
