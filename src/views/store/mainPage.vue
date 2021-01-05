@@ -20,7 +20,8 @@
           v-on:click="petchData"
         />
       </div>
-      <v-btn @click="more">더보기</v-btn>
+      <v-btn v-on:click="increseOffset">더보기</v-btn>
+      {{ offset }}
     </div>
     <Footer></Footer>
   </div>
@@ -35,6 +36,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      offset: 0,
       slideitems: [
         {
           src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
@@ -66,14 +68,31 @@ export default {
           Authorization: localStorage.getItem(token)
         }
       );
+    },
+    increseOffset() {
+      this.offset += 30;
+      axios
+        .get(
+          `http://192.168.40.116:5000/products?offset=${this.offset}&limit=30`
+        )
+        .then(res => console.log("반응>>>", res));
     }
   },
   mounted() {
-    axios.get("http://192.168.40.116:5000/products?offset=0").then(response => {
-      (this.cardList = response.data.result.product_list),
-        console.log(response);
-    });
+    axios
+      .get(`http://192.168.40.116:5000/products?offset=0&limit=30`)
+      .then(response => {
+        this.cardList = response.data.result.product_list;
+      });
   }
+  // created() {
+  //   axios
+  //     .get(`http://192.168.40.116:5000/products?offset=${this.offset}&limit=30`)
+  //     .then(res => {
+  //       console.log(res);
+  //       cardList.push(res);
+  //     });
+  // }
 };
 </script>
 

@@ -26,6 +26,7 @@
 export default {
   props: ["item"],
   data() {
+    //가격들을 천 단위로 쉼표 찍어주기
     return {
       newOriginPrice: Number(this.item.origin_price).toLocaleString(),
       newDiscountedPrice: Number(this.item.discounted_price).toLocaleString(),
@@ -33,10 +34,6 @@ export default {
       newDiscount: Number(this.item.discount_rate) * 100
     };
     console.log(newDiscountPrice);
-  },
-  created() {
-    const userName = this.$route.params.id;
-    this.$store.dispatch("FETCH_USER", userName);
   }
 };
 </script>

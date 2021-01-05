@@ -67,12 +67,12 @@ export default {
     GoogleLogin
   },
 
+  //구글 소셜 로그인
   methods: {
     onSuccess(googleUser) {
       console.log("구글토큰>>>>", googleUser);
       console.log("basicprofile>>>>>", googleUser.getBasicProfile());
       axios
-        // const token = "google.xc.access_token"
         .post(
           "http://192.168.40.116:5000/users/social-signin",
           {},
@@ -80,12 +80,9 @@ export default {
             headers: {
               Authorization: googleUser.xc.id_token
             }
-
-            // headers: { Authorization: token },
           }
         )
         .then(function(response) {
-          console.log(response);
           localStorage.setItem("token", response.data.token);
         })
         .catch(function(error) {
@@ -94,6 +91,8 @@ export default {
 
       this.$router.push("/");
     },
+
+    //일반 로그인
     signin() {
       this.$store.dispatch("signin", this.state).then(this.$router.push("/"));
     }
