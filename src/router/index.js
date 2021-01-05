@@ -25,6 +25,7 @@ import productsDetail from "@/views/store/products/productsDetail";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
+import sender from "@/views/store/order/sender";
 
 Vue.use(Router);
 
@@ -73,7 +74,12 @@ export default new Router({
       component: productsDetail,
       meta: { admin: false }
     },
-
+    {
+      path: "/checkout/sender",
+      name: "sender",
+      component: sender,
+      meta: { admin: false }
+    },
     {
       path: "/signUpDone",
       name: "signUpDone",
