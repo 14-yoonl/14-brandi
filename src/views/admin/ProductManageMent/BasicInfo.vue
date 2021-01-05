@@ -4,29 +4,33 @@
       <template v-slot:header>기본 정보</template>
       <template v-slot:body>
         <tr>
-          <td>셀러 선택</td>
+          <td>
+            셀러 선택
+            <v-icon x-small color="red">
+              mdi-star
+            </v-icon>
+          </td>
           <td>
             <v-autocomplete
-              v-model="seller"
+              @input="setData('seller', $event)"
               :loading="isLoading"
               :items="$store.getters.getSearchList"
               :search-input.sync="searchSeller"
-              chips
               :label="seller ? `` : `셀러를 선택하세요`"
-              item-text="name"
-              item-value="seller_id"
+              item-text="seller_id"
+              item-value="account_name"
+              chips
             >
               <template v-slot:selection="data">
                 <v-chip
                   v-bind="data.attrs"
                   :input-value="data.selected"
                   @click="data.select"
-                  @click:close="remove(data.item)"
                 >
                   <v-avatar left>
-                    <v-img :src="data.item.avatar"></v-img>
+                    <v-img :src="data.item.profile_image_url"></v-img>
                   </v-avatar>
-                  {{ data.item.name }}
+                  {{ data.item.seller_name }}
                 </v-chip>
               </template>
               <template v-slot:item="data">
@@ -35,11 +39,11 @@
                 </template>
                 <template v-else>
                   <v-list-item-avatar @click="selectSeller">
-                    <img :src="data.item.avatar" />
+                    <img :src="data.item.profile_image_url" />
                   </v-list-item-avatar>
                   <v-list-item-content @click="selectSeller">
                     <v-list-item-title
-                      v-html="data.item.name"
+                      v-html="data.item.seller_name"
                     ></v-list-item-title>
                   </v-list-item-content>
                 </template>
@@ -50,7 +54,11 @@
         <tr>
           <td>판매여부</td>
           <td>
-            <v-radio-group v-model="isSale" row>
+            <v-radio-group
+              @change="setData(`isSale`, $event)"
+              :value="isSale"
+              row
+            >
               <v-radio :label="`판매`" :value="1"></v-radio>
               <v-radio :label="`미판매`" :value="0"></v-radio>
             </v-radio-group>
@@ -63,7 +71,11 @@
         <tr>
           <td>진열여부</td>
           <td>
-            <v-radio-group v-model="isDisplay" row>
+            <v-radio-group
+              @change="setData(`isDisplay`, $event)"
+              :value="isDisplay"
+              row
+            >
               <v-radio :label="`진열`" :value="1"></v-radio>
               <v-radio :label="`미진열`" :value="0"></v-radio>
             </v-radio-group>
@@ -74,7 +86,12 @@
           </td>
         </tr>
         <tr>
-          <td>카테고리</td>
+          <td>
+            카테고리
+            <v-icon x-small color="red">
+              mdi-star
+            </v-icon>
+          </td>
           <td>
             <table class="categoryTable">
               <thead>
@@ -87,25 +104,43 @@
                 <tr>
                   <td>
                     <v-select
-                      v-model="mainCategory"
+                      @input="setData('mainCategory', $event)"
                       :items="setCategory('main')"
-                      item-text="value"
-                      item-value="pk"
+                      item-text="main_category_name"
+                      item-value="main_category_id"
                       :label="!mainCategory && '1차 카테고리를 선택해주세요.'"
-                    ></v-select>
+                    >
+                      <template v-slot:selection="{ item }">
+                        <span
+                          class="d-flex justify-center"
+                          style="width: 100%;"
+                        >
+                          {{ item.main_category_name }}
+                        </span>
+                      </template>
+                    </v-select>
                   </td>
                   <td>
                     <v-select
-                      v-model="subCategory"
+                      @input="setData('subCategory', $event)"
                       :items="setCategory('sub')"
-                      item-text="value"
-                      item-value="pk"
+                      item-text="sub_category_name"
+                      item-value="sub_category_id"
                       :label="
                         mainCategory
                           ? !subCategory && '2차 카테고리를 선택해주세요.'
                           : '1차 카테고리를 먼저 선택해주세요.'
                       "
-                    ></v-select>
+                    >
+                      <template v-slot:selection="{ item }">
+                        <span
+                          class="d-flex justify-center"
+                          style="width: 100%;"
+                        >
+                          {{ item.sub_category_name }}
+                        </span>
+                      </template></v-select
+                    >
                   </td>
                 </tr>
               </tbody>
@@ -115,54 +150,51 @@
         <tr>
           <td>상품 정보 고시</td>
           <td>
-            <v-radio-group v-model="isProductNotice" row>
-              <v-radio :label="`상품상세 참조`" :value="1"></v-radio>
-              <v-radio :label="`직접입력`" :value="0"></v-radio>
+            <v-radio-group
+              @change="setData(`isProductNotice`, $event)"
+              :value="isProductNotice"
+              row
+            >
+              <v-radio :label="`상품상세 참조`" :value="0"></v-radio>
+              <v-radio :label="`직접입력`" :value="1"></v-radio>
             </v-radio-group>
-            <div class="productNotice" v-if="!isProductNotice">
+            <div class="productNotice" v-if="isProductNotice">
               <div>
                 <span>제조사(수입사) : </span>
                 <v-text-field
-                  v-model="manufacturer"
+                  :value="manufacturer"
+                  @input="setData(`manufacturer`, $event)"
                   placeholder="한줄 상품 설명을 입력해주세요."
                 ></v-text-field>
               </div>
               <div>
                 <span>제조일자 :</span>
-                <v-menu
-                  ref="menu"
-                  v-model="menu"
-                  :close-on-content-click="false"
-                  :return-value.sync="manufacturingDate"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
+                <v-menu>
+                  <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="date"
-                      :label="!manufacturingDate && `제조일자를 선택해주세요.`"
+                      :value="manufacturingDate"
+                      :label="
+                        !manufacturingDate ? `제조일자를 선택해주세요` : ``
+                      "
+                      v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="date" no-title scrollable>
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu = false">
-                      Cancel
-                    </v-btn>
-                    <v-btn text color="primary" @click="$refs.menu.save(date)">
-                      OK
-                    </v-btn>
-                  </v-date-picker>
+                  <v-date-picker
+                    no-title
+                    locale="ko-KR"
+                    v-model="txtdate"
+                    @input="setData('manufacturingDate', $event)"
+                  ></v-date-picker>
                 </v-menu>
               </div>
               <div>
                 <span>원산지 : </span>
                 <v-select
-                  v-model="productOriginTypeId"
-                  :items="setCategory('main')"
-                  item-text="value"
-                  item-value="pk"
+                  :items="getOptions"
+                  item-text="product_origin_type_name"
+                  item-value="product_origin_type_id"
+                  @change="setData('productOriginTypeId', $event)"
                   :label="!productOriginTypeId && '원산지를 입력해주세요.'"
                 ></v-select>
               </div>
@@ -170,10 +202,15 @@
           </td>
         </tr>
         <tr>
-          <td>상품명</td>
+          <td>
+            상품명
+            <v-icon x-small color="red">
+              mdi-star
+            </v-icon>
+          </td>
           <td>
             <v-text-field
-              v-model="productName"
+              @input="setData('productName', $event)"
               placeholder="상품명을 입력해주세요."
             ></v-text-field>
             <div class="notice">
@@ -190,72 +227,104 @@
           <td>한줄 상품 설명</td>
           <td>
             <v-text-field
-              v-model="description"
+              @input="setData('description', $event)"
               placeholder="한줄 상품 설명을 입력해주세요."
             ></v-text-field>
           </td>
         </tr>
         <tr>
-          <td>대표 이미지 등록</td>
-          <td><ImagePriview></ImagePriview></td>
-        </tr>
-        <tr>
-          <td>이미지 등록</td>
-          <td><ImagePriview :type="`multiple`"></ImagePriview></td>
-        </tr>
-        <tr>
-          <td>상세 상품 정보</td>
           <td>
-            <iframe
-              width="100%"
-              height="400"
-              scrolling="yes"
-              contenteditable="true"
-              spellcheck="true"
-            >
-            </iframe>
+            이미지 등록
+            <v-icon x-small color="red">
+              mdi-star
+            </v-icon>
+          </td>
+          <td><ImagePriview :setImages.sync="setImages"></ImagePriview></td>
+        </tr>
+        <tr>
+          <td>
+            상세 상품 정보
+            <v-icon x-small color="red">
+              mdi-star
+            </v-icon>
+          </td>
+          <td>
+            <editor
+              initialEditType="wysiwyg"
+              height="500px"
+              ref="detailInformation"
+            />
           </td>
         </tr>
       </template>
     </DataTable>
-    <ProductOptions></ProductOptions>
-    <ProductSalesInfo></ProductSalesInfo>
   </div>
 </template>
 <script>
 import DataTable from "../../../components/common/DataTable";
 import ImagePriview from "../../../components/common/ImagePriview";
+import "codemirror/lib/codemirror.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+
+import { Editor } from "@toast-ui/vue-editor";
 
 export default {
+  props: {
+    images: { type: Array },
+    seller: { type: Number },
+    isSale: { type: Number },
+    isDisplay: { type: Number },
+    manufacturer: { type: String },
+    subCategory: { type: Number },
+    productName: { type: String },
+    description: { type: String },
+    mainCategory: { type: Number },
+    isProductNotice: { type: Number },
+    manufacturingDate: { type: String },
+    productOriginTypeId: { type: String }
+  },
+
   components: {
     DataTable,
-    ImagePriview
+    ImagePriview,
+    Editor
   },
-  created() {},
+
   data() {
     return {
-      seller: 0, //선택된 셀러
-      searchSeller: 0,
-      isSale: 1,
-      isDisplay: 1,
-      mainCategory: 0,
-      subCategory: 0,
-      isProductNotice: 1,
-      manufacturer: "",
-      manufacturingDate: "",
-      productOriginTypeId: "",
-      productName: "",
-      description: ""
+      searchSeller: "",
+      txtdate: null
     };
   },
+
   computed: {
+    setData() {
+      return (param, value) => (
+        this.$emit(`update:${param}`, value), console.log("데이터:", value)
+      );
+    },
     setCategory() {
       return value => this.$store.getters.getCategory[value];
     },
     isLoading() {
       return this.$store.getters.getSellerLodingState;
+    },
+    getOptions() {
+      return this.$store.getters.getOptions.product_origin_types;
+    },
+    getDetailInfo() {
+      return this.$refs.detailInformation;
+    },
+    setImages: {
+      get: function() {
+        return this.images;
+      },
+      set: function(value) {
+        this.$emit("update:images", value);
+      }
     }
   },
+
   watch: {
     searchSeller(value) {
       !!value && this.$store.dispatch("searchSeller", value);
@@ -264,7 +333,7 @@ export default {
       value && this.$store.dispatch("loadMainCategory");
     },
     mainCategory(value) {
-      value && this.$store.dispatch("loadSubCategory");
+      value && this.$store.dispatch("loadSubCategory", value);
     }
   },
   methods: {
@@ -284,7 +353,7 @@ export default {
 
   .categoryTable {
     tr {
-      height: 35px;
+      height: 53px;
       td {
         width: 50% !important;
         background-color: white;
@@ -301,7 +370,9 @@ export default {
       margin: 5px 0;
 
       span {
+        width: 100px;
         margin-right: 10px;
+        text-align: center;
       }
     }
   }

@@ -6,9 +6,13 @@ import Router from "vue-router";
 import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
-import AdminOrder from "@/views/admin/OrderManagement/AdminOrder";
+import AdminPrepareOrder from "@/views/admin/OrderManagement/PrepareOrder";
 import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
 import AdminHome from "@/views/admin/Home/AdminHome";
+import ProductManageList from "@/views/admin/ProductManageMent/ProductManageList";
+import AdminInDelivery from "@/views/admin/OrderManagement/InDelivery";
+import AdminDoneDelivery from "@/views/admin/OrderManagement/DoneDelivery";
+import AdminConfirmOrder from "@/views/admin/OrderManagement/ConfirmOrder";
 
 //--service
 import signIn from "@/views/store/SignIn";
@@ -90,23 +94,54 @@ export default new Router({
     {
       path: "/admin/signup",
       name: "signUp",
-      component: adminSignUp
+      component: adminSignUp,
+      meta: { admin: true }
     },
     {
-      path: "/admin/order",
-      name: "AdminOrder",
-      component: AdminOrder,
+      path: "/admin/prepareOrder",
+      name: "AdminPrepareOrder",
+      component: AdminPrepareOrder,
       meta: { admin: true }
     },
     {
       path: "/admin/products/regist",
       name: "ProductManagement",
-      component: ProductManagement
+      component: ProductManagement,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/products/:id",
+      name: "ProductDetail",
+      component: ProductManagement,
+      meta: { admin: true }
     },
     {
       path: "/admin/home",
       name: "AdminHome",
       component: AdminHome,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/products",
+      name: "ProductManageList",
+      component: ProductManageList
+    },
+    {
+      path: "/admin/inDelivery",
+      name: "AdminInDelivery",
+      component: AdminInDelivery,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/doneDelivery",
+      name: "AdminDoneDelivery",
+      component: AdminDoneDelivery,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/confirmOrder",
+      name: "AdminConfirmOrder",
+      component: AdminConfirmOrder,
       meta: { admin: true }
     }
   ]
