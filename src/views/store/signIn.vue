@@ -53,18 +53,18 @@ export default {
     return {
       state: {
         id: "",
-        pw: "",
+        pw: ""
       },
       params: {
         client_id:
-          "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com",
-      },
+          "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
+      }
     };
   },
 
   components: {
     navbar: NavBar,
-    GoogleLogin,
+    GoogleLogin
   },
 
   methods: {
@@ -78,26 +78,26 @@ export default {
           {},
           {
             headers: {
-              Authorization: googleUser.xc.id_token,
-            },
+              Authorization: googleUser.xc.id_token
+            }
 
             // headers: { Authorization: token },
           }
         )
-        .then(function (response) {
-          localStorage.setItem("access_token", response.data.token);
+        .then(function(response) {
+          console.log(response);
+          localStorage.setItem("token", response.data.token);
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error);
         });
-      if (res.status === 200) {
-        this.$router.push("/");
-      }
+
+      this.$router.push("/");
     },
     signin() {
       this.$store.dispatch("signin", this.state).then(this.$router.push("/"));
-    },
-  },
+    }
+  }
 };
 </script>
 

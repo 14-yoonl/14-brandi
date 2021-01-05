@@ -37,41 +37,43 @@ export default {
     return {
       slideitems: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
+          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-        },
+          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+        }
       ],
-      cardList: [],
+      cardList: []
     };
   },
   components: {
     NavBar: NavBar,
     productCard: productCard,
-    Footer: Footer,
+    Footer: Footer
   },
   methods: {
     petchData() {
-      axios.get("`http://192.168.40.118:5000/products/${product_id}`", {
-        Authorization: localStorage.getItem(token),
-      });
-    },
+      axios.get(
+        "`http://192.168.40.118:5000/products/${product_id}`",
+        {},
+        {
+          Authorization: localStorage.getItem(token)
+        }
+      );
+    }
   },
   mounted() {
-    axios
-      .get("http://192.168.40.116:5000/products?offset=0")
-      .then((response) => {
-        (this.cardList = response.data.result.product_list),
-          console.log(response);
-      });
-  },
+    axios.get("http://192.168.40.116:5000/products?offset=0").then(response => {
+      (this.cardList = response.data.result.product_list),
+        console.log(response);
+    });
+  }
 };
 </script>
 
