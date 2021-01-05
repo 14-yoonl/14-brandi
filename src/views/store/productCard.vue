@@ -1,18 +1,18 @@
 <template>
-  <router-link :to="`products/${item.id}`" class="cardsLink">
+  <router-link :to="`products/${item.product_id}`" class="cardsLink">
     <div class="productList">
       <ul>
         <li class="listImage">
-          <img :src="item.imageUrl" alt="다람쥐사진" />
+          <img :src="item.image_url" alt="다람쥐사진" />
         </li>
         <li class="listSeller">
-          <span>{{ item.sellerName }}</span>
+          <span>{{ item.seller_name }}</span>
         </li>
         <li class="listTitle">
-          <em>{{ item.name }}</em>
+          <em>{{ item.product_name }}</em>
         </li>
         <li class="listPrice">
-          <span class="dcPercent">{{ item.discountRate }}%</span>
+          <span class="dcPercent">{{ newDiscount }}%</span>
           <span class="bPrice">{{ newDiscountedPrice }}</span>
           <span class="aPrice">{{ newOriginPrice }}</span>
         </li>
@@ -26,15 +26,14 @@
 export default {
   props: ["item"],
   data() {
+    //가격들을 천 단위로 쉼표 찍어주기
     return {
-      newOriginPrice: Number(this.item.originPrice).toLocaleString(),
-      newDiscountedPrice: Number(this.item.discountedPrice).toLocaleString(),
-      newCount: Number(this.item.count).toLocaleString()
+      newOriginPrice: Number(this.item.origin_price).toLocaleString(),
+      newDiscountedPrice: Number(this.item.discounted_price).toLocaleString(),
+      newCount: Number(this.item.sales_count).toLocaleString(),
+      newDiscount: Number(this.item.discount_rate) * 100
     };
-  },
-  created() {
-    const userName = this.$route.params.id;
-    this.$store.dispatch("FETCH_USER", userName);
+    console.log(newDiscountPrice);
   }
 };
 </script>
