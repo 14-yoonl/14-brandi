@@ -1,22 +1,11 @@
 <template>
   <div class="AdminOrder">
-    <AdminHeader>
-      <template v-slot:title>
-        <h1 class="mainTitle">주문 관리</h1>
-        <span class="subTitle">상품준비 관리</span>
-      </template>
-      <template v-slot:notice>
-        <p class="notice">
-          ( 상품준비 단계에서는 구매회원의 주문취소가 가능하며, 배송준비단계로
-          처리할 경우 3영업일 동안은 구매회원의 주문취소가 불가능합니다. )
-        </p>
-        <p class="notice">
-          ( 배송준비로 변경하신 후 3영업일 이내로 상품 배송이 시작되지 않을 경우
-          구매회원의 주문취소가 가능하며 이에 따른 책임은 판매자 회원에게
-          있습니다. (전자상거래법 제 15조 1항에 근거) )
-        </p>
-      </template>
-    </AdminHeader>
+    <div class="headerContainer">
+      <div class="title">
+        <h1 class="mainTitle">주문관리</h1>
+        <span class="subTitle">구매확정 관리</span>
+      </div>
+    </div>
 
     <div class="filterContainer">
       <div class="filterList">
@@ -43,24 +32,25 @@
       </div>
       <div class="filterList">
         <div class="filterTitle">
-          <span>결제완료일 : </span>
+          <span>구매확정일 : </span>
         </div>
         <div class="filterBtnsGroup">
           <div
-            v-for="dateOptions in payedCompletedDateList"
+            v-for="dateOptions in confirmOrderDateList"
             v-bind:key="dateOptions.id"
           >
             <input
               type="radio"
               :id="dateOptions.id"
               :value="dateOptions.value"
-              v-model="payedCompletedDate"
+              v-model="confirmOrderDate"
               @change="getStartedDate()"
             />
             <label :for="dateOptions.id">{{ dateOptions.text }}</label>
           </div>
         </div>
         <input type="date" class="dateBox" v-model="startedDate" />
+        <span>~</span>
         <input type="date" class="dateBox" v-model="endDate" />
       </div>
       <div class="filterList">
@@ -209,7 +199,9 @@
                 {{ order.created_at_date }}
               </td>
               <td>
-                {{ order.order_detail_number }}
+                <a>
+                  {{ order.order_detail_number }}
+                </a>
               </td>
               <td>
                 {{ order.seller_name }}
@@ -272,7 +264,7 @@ export default {
     return {
       filterSelectedCondition: "",
       searchInputData: "",
-      payedCompletedDate: "3",
+      confirmOrderDate: "3",
       sellerType: "전체",
       deliveryType: "전체",
       startedDate: "",
@@ -296,42 +288,24 @@ export default {
         { text: "상품명", value: "productName", disabled: false }
       ],
 
-      payedCompletedDateList: [
+      confirmOrderDateList: [
         {
-          name: "payedDate",
+          name: "confirmDate",
           value: "",
-          id: "payedDateAll",
+          id: "confirmDateAll",
           text: "전체"
         },
         {
-          name: "payedDate",
+          name: "confirmDate",
           value: "0",
           id: "today",
           text: "오늘"
         },
         {
-          name: "payedDate",
+          name: "confirmDate",
           value: "3",
           id: "3days",
           text: "3일"
-        },
-        {
-          name: "payedDate",
-          value: "7",
-          id: "7days",
-          text: "1주일"
-        },
-        {
-          name: "payedDate",
-          value: "30",
-          id: "30days",
-          text: "1개월"
-        },
-        {
-          name: "payedDate",
-          value: "90",
-          id: "3month",
-          text: "3개월"
         }
       ],
 
@@ -423,8 +397,9 @@ export default {
       ],
 
       headers: [
-        { text: "주문번호", value: "order_number" },
         { text: "결제일자", value: "created_at_date" },
+        { text: "구매확정일", value: "confirm_date" },
+        { text: "주문번호", value: "order_number" },
         { text: "주문상세번호", value: "order_detail_number" },
         { text: "셀러명", value: "seller_name" },
         { text: "상품명", value: "product_name" },
@@ -441,6 +416,7 @@ export default {
           id: 0,
           order_number: 20201218000028000,
           created_at_date: "2020-12-18 17:01:45",
+          confirm_date: "2020-12-18 17:01:45",
           order_detail_number: "B202012180001C873",
           seller_name: "모디무드",
           product_name: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
@@ -456,7 +432,7 @@ export default {
     };
   },
   watch: {
-    payedCompletedDate(value) {
+    confirmOrderDate(value) {
       setStartedDate();
     }
   },
@@ -469,7 +445,7 @@ export default {
     filterReset: function(event) {
       (this.filterSelectedCondition = ""),
         (this.searchInputData = ""),
-        (this.payedCompletedDate = "3"),
+        (this.confirmOrderDate = "3"),
         (this.sellerAttribute = []),
         (this.sellerType = "전체"),
         (this.deliveryType = "전체");
@@ -503,13 +479,13 @@ export default {
       this.endDate = endDate;
     },
     getStartedDate: function() {
-      let payedCompletedDate = this.payedCompletedDate;
+      let confirmOrderDate = this.confirmOrderDate;
       let endDate = this.endDate;
       let newDt = new Date(endDate);
-      if (payedCompletedDate === null) {
+      if (confirmOrderDate === null) {
         return false;
       } else {
-        newDt.setDate(newDt.getDate() - payedCompletedDate);
+        newDt.setDate(newDt.getDate() - confirmOrderDate);
         return (this.startedDate = newDt.toJSON().slice(0, 10));
       }
     },
@@ -590,6 +566,30 @@ export default {
   padding: 10px;
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #f3f4f7;
+
+  .headerContainer {
+    background-color: white;
+    padding: 10px 10px 0 10px;
+    border-radius: 10px;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+    .title {
+      display: flex;
+      align-items: center;
+      margin: 5px;
+
+      .mainTitle {
+        font-size: 28px;
+      }
+
+      .subTitle {
+        margin-left: 5px;
+        margin-bottom: -10px;
+        font-size: 16px;
+      }
+    }
+  }
 
   .filterContainer {
     width: 100%;
