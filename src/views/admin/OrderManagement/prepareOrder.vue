@@ -161,7 +161,6 @@
           >
         </div>
         <div class="headerRight">
-          <span>{{ itemsOrder }}</span>
           <select
             v-model="itemsOrder"
             class="selectBox"
@@ -170,8 +169,6 @@
             <option value="desc">최신주문일순</option>
             <option value="asc">주문일의 역순</option>
           </select>
-
-          <span>{{ itemsPerPage }}</span>
           <select
             v-model="itemsPerPage"
             class="selectBox"
@@ -605,7 +602,7 @@ export default {
 .AdminOrder {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   padding: 10px;
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #f3f4f7;
@@ -774,8 +771,9 @@ export default {
       .selectBox {
         width: 130px;
         height: 30px;
-        margin-right: 20px;
+        margin-right: 5px;
         font-size: 12px;
+        text-align: center;
         border: 1px solid #e5e5e5;
         border-radius: 6px;
         padding: 0 5px;
