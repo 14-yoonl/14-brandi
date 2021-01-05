@@ -21,13 +21,15 @@
             placeholder="비밀번호 입력"
             v-model="state.pw"
           />
-          <button class="logInButton" @click="signin">
-            로그인
-          </button>
+          <button class="logInButton" @click="signin">로그인</button>
 
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
 
-          <GoogleLogin :params="params" :onSuccess="onSuccess">
+          <GoogleLogin
+            :params="params"
+            :onSuccess="onSuccess"
+            @click="posttest"
+          >
             <img
               src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
               alt="구글 로고"
@@ -44,46 +46,58 @@
 import GoogleLogin from "vue-google-login";
 import NavBar from "./navBar";
 import API from "@/store/config.js";
+import axios from "axios";
 
 export default {
   data() {
     return {
       state: {
         id: "",
-        pw: ""
+        pw: "",
       },
       params: {
         client_id:
-          "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
-      }
+          "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com",
+      },
     };
   },
 
   components: {
     navbar: NavBar,
-    GoogleLogin
+    GoogleLogin,
   },
 
   methods: {
     onSuccess(googleUser) {
-      console.log("구글유저>>>>", googleUser.xc.access_token);
+      console.log("구글토큰>>>>", googleUser);
       console.log("basicprofile>>>>>", googleUser.getBasicProfile());
       axios
-        .post("http://192.168.40.116:5000/users/social-signin", {
-          Authorization: googleUser.xc.access_token
-        })
-        .then(function(response) {
+        // const token = "google.xc.access_token"
+        .post(
+          "http://192.168.40.116:5000/users/social-signin",
+          {},
+          {
+            headers: {
+              Authorization: googleUser.xc.id_token,
+            },
+
+            // headers: { Authorization: token },
+          }
+        )
+        .then(function (response) {
           localStorage.setItem("access_token", response.data.token);
         })
-        .then.catch(function(error) {
+        .catch(function (error) {
           console.log(error);
-          this.$router.push("/");
         });
+      if (res.status === 200) {
+        this.$router.push("/");
+      }
     },
     signin() {
       this.$store.dispatch("signin", this.state).then(this.$router.push("/"));
-    }
-  }
+    },
+  },
 };
 </script>
 

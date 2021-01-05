@@ -58,13 +58,18 @@ export default {
     Footer: Footer,
   },
   methods: {
-    petchData() {},
+    petchData() {
+      axios.get("`http://192.168.40.118:5000/products/${product_id}`", {
+        Authorization: localStorage.getItem(token),
+      });
+    },
   },
   mounted() {
     axios
       .get("http://192.168.40.116:5000/products?offset=0")
       .then((response) => {
-        this.cardList = response.data.result.product_list;
+        (this.cardList = response.data.result.product_list),
+          console.log(response);
       });
   },
 };
