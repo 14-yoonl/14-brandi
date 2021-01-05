@@ -32,7 +32,7 @@ export default {
       return state.filterList;
     },
     getOptions(state) {
-      console.log("|||||||||||||||", state.options);
+      // console.log("|||||||||||||||", state.options);
       return state.options;
     },
     getSearchList(state) {

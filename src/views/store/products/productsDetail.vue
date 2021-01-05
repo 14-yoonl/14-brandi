@@ -7,7 +7,7 @@
         <div class="datailTop">
           <!-- 왼쪽 -->
           <div class="thumbnails">
-            <div><img src="/" alt="thums" /></div>
+            <div class="mainImg"></div>
             <div class="postPictures"></div>
           </div>
           <!-- 오른쪽 -->
@@ -36,8 +36,21 @@
 import NavBar from "../navBar";
 import axios from "axios";
 export default {
+  props: ["product_id"],
   data() {
     return {};
+  },
+  mounted() {
+    axios
+      .get(
+        `http://192.168.40.118:5000/products/${this.$router.history.current.params.id}`,
+        {},
+        {
+          Authorization: localStorage.getItem("token")
+        }
+      )
+      .then(res => console.log(res));
+    console.log("ggggg>>>>", this.$router.history.current.params.id);
   },
   components: {
     NavBar: NavBar
@@ -49,6 +62,13 @@ export default {
 .productsDetail {
   .nav {
     margin: 0 auto;
+    .datailTop {
+      .thumbnails {
+        .mainImg {
+          background-image: url("https://images.unsplash.com/photo-1581655353564-df123a1eb820?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80");
+        }
+      }
+    }
   }
 }
 </style>
