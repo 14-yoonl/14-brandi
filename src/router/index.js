@@ -13,6 +13,7 @@ import ProductManageList from "@/views/admin/ProductManageMent/ProductManageList
 import AdminInDelivery from "@/views/admin/OrderManagement/InDelivery";
 import AdminDoneDelivery from "@/views/admin/OrderManagement/DoneDelivery";
 import AdminConfirmOrder from "@/views/admin/OrderManagement/ConfirmOrder";
+import OrderDetail from "@/views/admin/OrderManagement/OrderDetail";
 
 //--service
 import signIn from "@/views/store/SignIn";
@@ -142,6 +143,12 @@ export default new Router({
       path: "/admin/confirmOrder",
       name: "AdminConfirmOrder",
       component: AdminConfirmOrder,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/order/:id",
+      name: "OrderDetail",
+      component: OrderDetail,
       meta: { admin: true }
     }
   ]

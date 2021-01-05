@@ -1,5 +1,5 @@
 <template>
-  <div class="AdminOrder">
+  <div class="prepareOrder">
     <AdminHeader>
       <template v-slot:title>
         <h1 class="mainTitle">주문 관리</h1>
@@ -30,16 +30,19 @@
               v-for="condition in searchCondition"
               :disabled="condition.disabled"
               v-bind:key="condition.id"
+              :value="condition.value"
             >
               {{ condition.text }}
             </option>
           </select>
+          <span>{{ filterSelectedCondition }}</span>
         </div>
         <input
           v-model="searchInputData"
           class="searchInputBox"
           placeholder="검색어를 입력하세요"
         />
+        <span>{{ searchInputData }}</span>
       </div>
       <div class="filterList">
         <div class="filterTitle">
@@ -91,6 +94,7 @@
               sellerAttributes.text
             }}</label>
           </div>
+          <span>{{ sellerAttribute }}</span>
         </div>
       </div>
       <div class="filterList">
@@ -132,7 +136,7 @@
         </div>
       </div>
       <div class="searchBtnBox">
-        <v-btn elevation="2" md color="primary" v-on:click="handleFilterSearch"
+        <v-btn elevation="2" md color="primary" v-on:click="getOrderListData"
           >검색</v-btn
         >
         <v-btn elevation="2" md v-on:click="handleFilterReset">초기화</v-btn>
@@ -302,14 +306,14 @@ export default {
       selectedItems: [],
 
       searchCondition: [
-        { text: "주문번호", value: "orderNo", disabled: false },
-        { text: "주문상세번호", value: "orderDetailNo", disabled: false },
+        { text: "주문번호", value: "1", disabled: false },
+        { text: "주문상세번호", value: "2", disabled: false },
         { text: "--------------------", value: "", disabled: true },
-        { text: "주문자명", value: "senderName", disabled: false },
-        { text: "핸드폰번호", value: "senderPhone", disabled: false },
+        { text: "주문자명", value: "3", disabled: false },
+        { text: "핸드폰번호", value: "4", disabled: false },
         { text: "--------------------", value: "", disabled: true },
-        { text: "셀러명", value: "sellerName", disabled: false },
-        { text: "상품명", value: "productName", disabled: false }
+        { text: "셀러명", value: "5", disabled: false },
+        { text: "상품명", value: "6", disabled: false }
       ],
 
       payedCompletedDateList: [
@@ -354,31 +358,43 @@ export default {
       sellerAttributeList: [
         {
           name: "sellerAttribute",
-          value: "쇼핑몰",
+          value: "1",
           id: "shoppingmall",
           text: "쇼핑몰"
         },
         {
           name: "sellerAttribute",
-          value: "마켓",
+          value: "2",
           id: "market",
           text: "마켓"
         },
         {
           name: "sellerAttribute",
-          value: "로드샵",
+          value: "3",
           id: "roadShop",
           text: "로드샵"
         },
         {
           name: "sellerAttribute",
-          value: "디자이너브랜드",
+          value: "4",
           id: "designerBrand",
           text: "디자이너브랜드"
         },
         {
           name: "sellerAttribute",
-          value: "뷰티",
+          value: "5",
+          id: "generalBrand",
+          text: "재너럴브랜드"
+        },
+        {
+          name: "sellerAttribute",
+          value: "6",
+          id: "nationalBrand",
+          text: "내셔널브랜드"
+        },
+        {
+          name: "sellerAttribute",
+          value: "7",
           id: "beauty",
           text: "뷰티"
         }
@@ -478,10 +494,10 @@ export default {
   },
 
   methods: {
-    handleFilterSearch: function(event) {
-      getOrderListData();
-      alert("검색 완료!");
-    },
+    // handleFilterSearch: function() {
+    //   getOrderListData();
+    //   alert("검색 완료!");
+    // },
     handleFilterReset: function(event) {
       (this.filterSelectedCondition = ""),
         (this.searchInputData = ""),
@@ -532,7 +548,7 @@ export default {
     getOrderListData: function() {
       axios
         .get(
-          `http://192.168.40.107:5000/admin/orders?status=1&start_date=${this.startedDate}&end_date=${this.endDate}&page=${this.currentPage}&length=${this.itemsPerPage}`
+          `http://192.168.40.107:5000/admin/orders?status=1&start_date=${this.startedDate}&end_date=${this.endDate}&page=${this.currentPage}&length=${this.itemsPerPage}&attributes=${this.sellerAttribute}&order_by=${this.itemsOrder}`
         )
         .then(res => {
           this.totalCount = res.data.totalCount;
@@ -592,14 +608,14 @@ export default {
   mounted() {
     this.getToday();
     this.getStartedDate();
-    this.getOrderListData();
+    // this.getOrderListData();
     this.getPaginationLength();
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.AdminOrder {
+.prepareOrder {
   display: flex;
   flex-direction: column;
   width: 100%;
