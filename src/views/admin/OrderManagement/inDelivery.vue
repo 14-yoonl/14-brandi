@@ -18,6 +18,7 @@
               v-for="condition in searchCondition"
               :disabled="condition.disabled"
               v-bind:key="condition.id"
+              :value="condition.value"
             >
               {{ condition.text }}
             </option>
@@ -225,9 +226,14 @@
                 {{ order.orderNo }}
               </td>
               <td>
-                <a>
-                  {{ order.orderDetailNo }}
-                </a>
+                <router-link
+                  :to="{
+                    name: 'OrderDetail',
+                    params: { orderDetailNumber: order.order_detail_number }
+                  }"
+                >
+                  {{ order.order_detail_number }}
+                </router-link>
               </td>
               <td>
                 {{ order.sellerName }}
@@ -270,6 +276,8 @@
 </template>
 <script>
 import axios from "axios";
+import "url-search-params";
+
 export default {
   name: "inDelivery",
   data() {
@@ -290,14 +298,14 @@ export default {
       itemsPerPage: 30,
       totalCount: 1,
       searchCondition: [
-        { text: "주문번호", value: "orderNo", disabled: false },
-        { text: "주문상세번호", value: "orderDetailNo", disabled: false },
+        { text: "주문번호", value: "1", disabled: false },
+        { text: "주문상세번호", value: "2", disabled: false },
         { text: "--------------------", value: "", disabled: true },
-        { text: "주문자명", value: "senderName", disabled: false },
-        { text: "핸드폰번호", value: "senderPhone", disabled: false },
+        { text: "주문자명", value: "3", disabled: false },
+        { text: "핸드폰번호", value: "4", disabled: false },
         { text: "--------------------", value: "", disabled: true },
-        { text: "셀러명", value: "sellerName", disabled: false },
-        { text: "상품명", value: "productName", disabled: false }
+        { text: "셀러명", value: "5", disabled: false },
+        { text: "상품명", value: "6", disabled: false }
       ],
 
       deliveryStartedDateList: [
@@ -462,13 +470,19 @@ export default {
   watch: {
     deliveryStartedDate(value) {
       setStartedDate();
+    },
+    itemsOrder(value) {
+      getOrderListData();
+    },
+    itemsPerPage(value) {
+      getOrderListData();
     }
   },
   methods: {
-    filterSearch: function(event) {
-      getOrderListData();
-      alert("검색 완료!");
-    },
+    // filterSearch: function(event) {
+    //   getOrderListData();
+    //   alert("검색 완료!");
+    // },
     filterReset: function(event) {
       (this.filterSelectedCondition = ""),
         (this.searchInputData = ""),
@@ -483,7 +497,7 @@ export default {
       } else {
         for (let i = 0; i < this.selectedItems.length; i++) {
           axios.patch(
-            `http://192.168.40.107:5000/admin/orders?id=${this.selectedItems[i]}&status_id=1`
+            `http://192.168.40.107:5000/admin/orders?id=${this.selectedItems[i]}&status_id=2`
           );
         }
         alert(
@@ -580,7 +594,6 @@ export default {
   mounted() {
     this.getToday();
     this.getStartedDate();
-    this.getOrderListData();
     this.getPaginationLength();
   }
 };

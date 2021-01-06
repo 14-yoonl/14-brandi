@@ -153,7 +153,7 @@ export default new Router({
       meta: { admin: true }
     },
     {
-      path: "/admin/order/:id",
+      path: "/admin/order/detail/:orderDetailNumber",
       name: "OrderDetail",
       component: OrderDetail,
       meta: { admin: true }
