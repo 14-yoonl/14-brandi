@@ -12,18 +12,11 @@
     </v-carousel>
     <div class="mainProducts">
       <h2 class="productHeader">당신을 위한 추천</h2>
-      <div class="cardList">
-        <eventBanner
-          v-for="event in eventList"
-          :key="event.event_id"
-          :event="event"
-        />
-        <productCard
-          v-for="item in cardList"
-          :key="item.product_id"
-          :item="item"
-          v-on:click="petchData"
-        />
+      <div v-for="products in productList" :key="products.id" class="cardList">
+        <eventBanner :event="products.event" />
+        <div v-for="item in products.product_list" :key="item.id">
+          <productCard :item="item" v-on:click="petchData" />
+        </div>
       </div>
       <v-btn v-on:click="increseOffset">더보기</v-btn>
     </div>
@@ -57,7 +50,10 @@ export default {
         }
       ],
       cardList: [],
-      eventList: []
+      eventList: [],
+      articleWrap: {},
+      totalArray: [],
+      productList: []
     };
   },
   components: {
@@ -74,8 +70,8 @@ export default {
           `http://192.168.40.116:5000/products?offset=${this.offset}&limit=30`
         )
         .then(res => {
-          this.cardList = [...this.cardList, ...res.data.result.product_list];
-          this.eventList = [...this.eventList, [...res.data.result.event]];
+          console.log("sfsdfs>>>", res);
+          this.productList.push(res.data.result);
         });
     }
   },
@@ -83,8 +79,7 @@ export default {
     axios
       .get(`http://192.168.40.116:5000/products?offset=0&limit=30`)
       .then(response => {
-        (this.cardList = response.data.result.product_list),
-          (this.eventList = [response.data.result.event]);
+        this.productList.push(response.data.result);
       });
   }
 };
