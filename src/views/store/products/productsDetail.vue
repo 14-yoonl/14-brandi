@@ -5,7 +5,7 @@
       <div class="productDetail">
         <!-- 위쪽 사진 & 정보 -->
         <div class="datailTop">
-          <!-- 왼쪽 -->
+          <!-- 왼쪽 사진-->
           <div class="thumbnails">
             <div class="mainImg">
               <img
@@ -21,7 +21,7 @@
               </ul>
             </div>
           </div>
-          <!-- 오른쪽 -->
+          <!-- 오른쪽 상세정보 & 옵션 선택창 -->
           <div class="productOptions">
             <div class="detailSeller">{{ detail.seller_name }}</div>
             <div class="detailTitle">{{ detail.product_name }}</div>
@@ -32,20 +32,7 @@
               <div class="detailPrice">{{ detail.discounted_price }}원</div>
               <div class="originPrice">{{ detail.origin_price }}원</div>
             </div>
-            <!-- <v-container fluid class="selectBox">
-              <div class="d-flex">
-                <v-select
-                  :items="items.color_name"
-                  label="[컬러]를 선택하세요"
-                  outlined
-                ></v-select>
-                <v-select
-                  :items="items"
-                  label="[사이즈]를 선택하세요"
-                  outlined
-                ></v-select>
-              </div>
-            </v-container> -->
+
             <div class="options">
               <select v-model="pickColor">
                 <option v-for="option in items" :key="option.color_name">{{
@@ -99,15 +86,13 @@ export default {
           Authorization: localStorage.getItem("token")
         }
       )
-      // .then(res => console.log("res", res.data.result))
+
       .then(res => {
         (this.$data["detail"] = res.data.result),
           (this.items = res.data.result.colors),
           (this.size = res.data.result.sizes),
           (this.postPictures = res.data.result.images);
       });
-
-    // console.log("ggggg>>>>", this.$router.history.current.params.id);
   },
   components: {
     NavBar: NavBar
@@ -140,6 +125,7 @@ export default {
           .mainImg {
             width: 100%;
             height: 80%;
+
             img {
               width: 100%;
               height: 100%;
@@ -148,17 +134,19 @@ export default {
           .postPictures {
             width: 100%;
             height: 20%;
+
             ul {
               display: flex;
-
               padding: 0;
               text-decoration: none;
               list-style: none;
+
               li {
                 padding: 2px;
                 margin: 2px;
                 width: 85px;
                 height: 85px;
+
                 img {
                   width: 100%;
                   height: 100%;
@@ -167,40 +155,42 @@ export default {
             }
           }
         }
+
         .productOptions {
           width: 50%;
           margin: 0 15px;
           padding: 0 20px;
-
           font-weight: 500;
-          .d-flex {
-            display: flex;
-            flex-direction: column;
-          }
 
           .detailSeller {
             font-size: 26px;
           }
+
           .detailTitle {
             font-size: 30px;
           }
+
           .price {
             display: flex;
             padding-bottom: 25px;
             margin-bottom: 10px;
             border-bottom: 1px solid #c5c5c5;
+
             div {
               margin-right: 5px;
             }
+
             .detailDiscount {
               font-size: 34px;
               font-weight: 900;
               color: red;
             }
+
             .detailPrice {
               font-size: 34px;
               font-weight: 900;
             }
+
             .originPrice {
               padding-top: 17px;
               font-size: 20px;
@@ -226,6 +216,7 @@ export default {
               }
             }
           }
+
           .pickedOption {
             margin-top: 30px;
             background-color: rgba(0, 0, 0, 0.1);
