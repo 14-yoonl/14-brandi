@@ -12,11 +12,13 @@
           <em>{{ item.product_name }}</em>
         </li>
         <li class="listPrice">
-          <span class="dcPercent">{{ newDiscount }}%</span>
+          <span class="dcPercent"> {{ newDiscount }}%</span>
           <span class="bPrice">{{ newDiscountedPrice }}</span>
+          <!-- 필터 -->
           <span class="aPrice">{{ newOriginPrice }}</span>
         </li>
         <li class="productCount">{{ newCount }}개 판매중</li>
+        <input type="text" v-model="this.newOriginPrice" />
       </ul>
     </div>
   </router-link>

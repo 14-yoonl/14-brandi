@@ -13,6 +13,11 @@
     <div class="mainProducts">
       <h2 class="productHeader">당신을 위한 추천</h2>
       <div class="cardList">
+        <eventBanner
+          v-for="event in eventList"
+          :key="event.event_id"
+          :event="event"
+        />
         <productCard
           v-for="item in cardList"
           :key="item.product_id"
@@ -21,13 +26,13 @@
         />
       </div>
       <v-btn v-on:click="increseOffset">더보기</v-btn>
-      {{ offset }}
     </div>
     <Footer></Footer>
   </div>
 </template>
 
 <script>
+import eventBanner from "./eventBanner";
 import productCard from "./productCard.vue";
 import NavBar from "./navBar";
 import Footer from "./footer";
@@ -51,48 +56,37 @@ export default {
           src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
         }
       ],
-      cardList: []
+      cardList: [],
+      eventList: []
     };
   },
   components: {
     NavBar: NavBar,
     productCard: productCard,
-    Footer: Footer
+    Footer: Footer,
+    eventBanner: eventBanner
   },
   methods: {
-    petchData() {
-      axios.get(
-        "`http://192.168.40.118:5000/products/${product_id}`",
-        {},
-        {
-          Authorization: localStorage.getItem(token)
-        }
-      );
-    },
     increseOffset() {
-      this.offset += 30;
+      this.offset += 1;
       axios
         .get(
           `http://192.168.40.116:5000/products?offset=${this.offset}&limit=30`
         )
-        .then(res => console.log("반응>>>", res));
+        .then(res => {
+          this.cardList = [...this.cardList, ...res.data.result.product_list];
+          this.eventList = [...this.eventList, [...res.data.result.event]];
+        });
     }
   },
   mounted() {
     axios
       .get(`http://192.168.40.116:5000/products?offset=0&limit=30`)
       .then(response => {
-        this.cardList = response.data.result.product_list;
+        (this.cardList = response.data.result.product_list),
+          (this.eventList = [response.data.result.event]);
       });
   }
-  // created() {
-  //   axios
-  //     .get(`http://192.168.40.116:5000/products?offset=${this.offset}&limit=30`)
-  //     .then(res => {
-  //       console.log(res);
-  //       cardList.push(res);
-  //     });
-  // }
 };
 </script>
 
