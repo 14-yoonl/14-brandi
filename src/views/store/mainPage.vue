@@ -76,8 +76,6 @@ export default {
         .then(res => {
           this.cardList = [...this.cardList, ...res.data.result.product_list];
           this.eventList = [...this.eventList, [...res.data.result.event]];
-          console.log("클릭후>>>>>", this.cardList);
-          console.log("클릭후>>>>", this.eventList);
         });
     }
   },
@@ -87,8 +85,6 @@ export default {
       .then(response => {
         (this.cardList = response.data.result.product_list),
           (this.eventList = [response.data.result.event]);
-        console.log("첫화면>>>>>", this.eventList);
-        console.log("event>>>>>", response.data.result.event);
       });
   }
 };
