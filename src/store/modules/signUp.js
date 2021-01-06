@@ -1,18 +1,22 @@
 import axios from "axios";
 
-const uri = "http://localhost:8080";
+const postApi = (uri, data) => {
+  return axios.post(`${process.setting.ENV_ADMIN_SIGNUP}${uri}`, data);
+};
 
 export default {
   actions: {
-    signUp(loginData) {
-      return axios.post(uri, loginData).then(result => result);
-    },
-    async test({ commit }, value) {
-      return await new Promise(res => {
-        setTimeout(() => {
-          res(false);
-        }, 1000);
-      });
+    signUp({ commit }, signUp) {
+      const setData = {
+        username: signUp.id,
+        password: signUp.password,
+        seller_attribute_type_id: signUp.sellerType,
+        name: signUp.sellerName,
+        english_name: signUp.sellerEngName,
+        contact_phone: signUp.managerPhonNumber, //고객
+        service_center_number: signUp.ServiceCenterPhon
+      };
+      return postApi(`/admin/signup`, setData);
     }
   }
 };

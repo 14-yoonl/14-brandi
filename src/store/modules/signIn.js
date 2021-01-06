@@ -1,15 +1,16 @@
 import axios from "axios";
 
-const uri = "http://localhost:8080";
+const postApi = (uri, loginData) => {
+  return axios.post(`${process.setting.ENV_ADMIN_LOG_IN_OTU}${uri}`, loginData);
+};
 
 export default {
   state: {
-    token: "",
     userName: ""
   },
   actions: {
     logIn({ commit }, loginData) {
-      axios.post(uri, loginData).then(result => commit("ADD_STATE", result));
+      return postApi(`/admin/signin`, loginData);
     },
     logOut({ commit }) {
       commit("LOGOUT");
