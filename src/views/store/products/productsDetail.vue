@@ -40,16 +40,20 @@
                 }}</option>
               </select>
               <select v-model="pickSize">
-                <option v-for="option in size" :key="option.size_id">{{
-                  option.size_name
-                }}</option>
+                <option v-for="option in size" :key="option.size_id"
+                  >{{ option.size_name }}
+                </option>
               </select>
             </div>
             <div class="pickedOption">
               <div>{{ pickColor }}</div>
               <div>{{ pickSize }}</div>
+              <div>{{ detail.discounted_price }}원</div>
             </div>
-            <div class="detailTotalPrice">{{ detail.discounted_price }}원</div>
+            <div class="detailTotalPrice">
+              <span>총 상품 금액</span
+              ><span> {{ detail.discounted_price }}원</span>
+            </div>
             <div class="detailBuySection">
               <router-link to="/">바로 구매</router-link>
             </div>

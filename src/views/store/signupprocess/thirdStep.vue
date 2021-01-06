@@ -39,7 +39,7 @@
           label="비밀번호 확인"
           prepend-icon="mdi-checkbox-marked-circle-outline"
         ></v-text-field>
-        <v-btn class="gotoFinal" color="success" @click="postTest">
+        <v-btn class="gotoFinal" color="success" @click="signUpDone">
           가입 완료
         </v-btn>
       </v-form>
@@ -83,8 +83,8 @@ export default {
     Footer: Footer
   },
   methods: {
-    postTest() {
-      this.$store.dispatch("jebal", this.state);
+    signUpDone() {
+      this.$store.dispatch("brandiLogin", this.state);
     }
   }
 };

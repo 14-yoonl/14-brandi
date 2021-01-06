@@ -11,7 +11,7 @@ export default {
     phone: "01036464663"
   },
   actions: {
-    jebal(state, info) {
+    brandiLogin(state, info) {
       axios.post("http://192.168.40.116:5000/users/signup", {
         username: info.id,
         password: info.password,

@@ -70,7 +70,7 @@ export default {
           `http://192.168.40.116:5000/products?offset=${this.offset}&limit=30`
         )
         .then(res => {
-          console.log("sfsdfs>>>", res);
+          console.log("res>>>", res);
           this.productList.push(res.data.result);
         });
     }
