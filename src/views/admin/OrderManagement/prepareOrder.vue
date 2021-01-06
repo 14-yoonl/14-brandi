@@ -1,5 +1,5 @@
 <template>
-  <div class="AdminOrder">
+  <div class="prepareOrder">
     <AdminHeader>
       <template v-slot:title>
         <h1 class="mainTitle">주문 관리</h1>
@@ -30,16 +30,19 @@
               v-for="condition in searchCondition"
               :disabled="condition.disabled"
               v-bind:key="condition.id"
+              :value="condition.value"
             >
               {{ condition.text }}
             </option>
           </select>
+          <span>{{ filterSelectedCondition }}</span>
         </div>
         <input
           v-model="searchInputData"
           class="searchInputBox"
           placeholder="검색어를 입력하세요"
         />
+        <span>{{ searchInputData }}</span>
       </div>
       <div class="filterList">
         <div class="filterTitle">
@@ -61,6 +64,7 @@
           </div>
         </div>
         <input type="date" class="dateBox" v-model="startedDate" />
+        <span>~</span>
         <input type="date" class="dateBox" v-model="endDate" />
       </div>
       <div class="filterList">
@@ -90,6 +94,7 @@
               sellerAttributes.text
             }}</label>
           </div>
+          <span>{{ sellerAttribute }}</span>
         </div>
       </div>
       <div class="filterList">
@@ -131,10 +136,10 @@
         </div>
       </div>
       <div class="searchBtnBox">
-        <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
+        <v-btn elevation="2" md color="primary" v-on:click="getOrderListData"
           >검색</v-btn
         >
-        <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
+        <v-btn elevation="2" md v-on:click="handleFilterReset">초기화</v-btn>
       </div>
     </div>
 
@@ -144,15 +149,22 @@
           <span class="totalQuantity"
             >전체 조회건 수 : {{ totalCount }} 건</span
           >
-          <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+          <v-btn
+            elevation="1"
+            x-small
+            color="primary"
+            v-on:click="handlePrepareOrder"
             >배송준비처리</v-btn
           >
-          <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+          <v-btn
+            elevation="1"
+            x-small
+            color="primary"
+            v-on:click="handleCancelOrder"
             >주문취소처리</v-btn
           >
         </div>
         <div class="headerRight">
-          <span>{{ itemsOrder }}</span>
           <select
             v-model="itemsOrder"
             class="selectBox"
@@ -161,8 +173,6 @@
             <option value="desc">최신주문일순</option>
             <option value="asc">주문일의 역순</option>
           </select>
-
-          <span>{{ itemsPerPage }}</span>
           <select
             v-model="itemsPerPage"
             class="selectBox"
@@ -209,7 +219,9 @@
                 {{ order.created_at_date }}
               </td>
               <td>
-                {{ order.order_detail_number }}
+                <a>
+                  {{ order.order_detail_number }}
+                </a>
               </td>
               <td>
                 {{ order.seller_name }}
@@ -243,10 +255,18 @@
         </table>
       </div>
       <div class="tableContainerFooterBtns">
-        <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+        <v-btn
+          elevation="1"
+          x-small
+          color="primary"
+          v-on:click="handlePrepareOrder"
           >배송준비처리</v-btn
         >
-        <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+        <v-btn
+          elevation="1"
+          x-small
+          color="primary"
+          v-on:click="handleCancelOrder"
           >주문취소처리</v-btn
         >
         <span>{{ selectedItems }}</span>
@@ -286,14 +306,14 @@ export default {
       selectedItems: [],
 
       searchCondition: [
-        { text: "주문번호", value: "orderNo", disabled: false },
-        { text: "주문상세번호", value: "orderDetailNo", disabled: false },
+        { text: "주문번호", value: "1", disabled: false },
+        { text: "주문상세번호", value: "2", disabled: false },
         { text: "--------------------", value: "", disabled: true },
-        { text: "주문자명", value: "senderName", disabled: false },
-        { text: "핸드폰번호", value: "senderPhone", disabled: false },
+        { text: "주문자명", value: "3", disabled: false },
+        { text: "핸드폰번호", value: "4", disabled: false },
         { text: "--------------------", value: "", disabled: true },
-        { text: "셀러명", value: "sellerName", disabled: false },
-        { text: "상품명", value: "productName", disabled: false }
+        { text: "셀러명", value: "5", disabled: false },
+        { text: "상품명", value: "6", disabled: false }
       ],
 
       payedCompletedDateList: [
@@ -338,31 +358,43 @@ export default {
       sellerAttributeList: [
         {
           name: "sellerAttribute",
-          value: "쇼핑몰",
+          value: "1",
           id: "shoppingmall",
           text: "쇼핑몰"
         },
         {
           name: "sellerAttribute",
-          value: "마켓",
+          value: "2",
           id: "market",
           text: "마켓"
         },
         {
           name: "sellerAttribute",
-          value: "로드샵",
+          value: "3",
           id: "roadShop",
           text: "로드샵"
         },
         {
           name: "sellerAttribute",
-          value: "디자이너브랜드",
+          value: "4",
           id: "designerBrand",
           text: "디자이너브랜드"
         },
         {
           name: "sellerAttribute",
-          value: "뷰티",
+          value: "5",
+          id: "generalBrand",
+          text: "재너럴브랜드"
+        },
+        {
+          name: "sellerAttribute",
+          value: "6",
+          id: "nationalBrand",
+          text: "내셔널브랜드"
+        },
+        {
+          name: "sellerAttribute",
+          value: "7",
           id: "beauty",
           text: "뷰티"
         }
@@ -462,11 +494,11 @@ export default {
   },
 
   methods: {
-    filterSearch: function(event) {
-      getOrderListData();
-      alert("검색 완료!");
-    },
-    filterReset: function(event) {
+    // handleFilterSearch: function() {
+    //   getOrderListData();
+    //   alert("검색 완료!");
+    // },
+    handleFilterReset: function(event) {
       (this.filterSelectedCondition = ""),
         (this.searchInputData = ""),
         (this.payedCompletedDate = "3"),
@@ -474,7 +506,7 @@ export default {
         (this.sellerType = "전체"),
         (this.deliveryType = "전체");
     },
-    prepareOrder: function(event) {
+    handlePrepareOrder: function(event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
@@ -488,7 +520,7 @@ export default {
         );
       }
     },
-    cancelOrder: function(event) {
+    handleCancelOrder: function(event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
@@ -516,7 +548,7 @@ export default {
     getOrderListData: function() {
       axios
         .get(
-          `http://192.168.40.107:5000/admin/orders?status=1&start_date=${this.startedDate}&end_date=${this.endDate}&page=${this.currentPage}&length=${this.itemsPerPage}`
+          `http://192.168.40.107:5000/admin/orders?status=1&start_date=${this.startedDate}&end_date=${this.endDate}&page=${this.currentPage}&length=${this.itemsPerPage}&attributes=${this.sellerAttribute}&order_by=${this.itemsOrder}`
         )
         .then(res => {
           this.totalCount = res.data.totalCount;
@@ -576,17 +608,17 @@ export default {
   mounted() {
     this.getToday();
     this.getStartedDate();
-    this.getOrderListData();
+    // this.getOrderListData();
     this.getPaginationLength();
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.AdminOrder {
+.prepareOrder {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   padding: 10px;
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #f3f4f7;
@@ -755,8 +787,9 @@ export default {
       .selectBox {
         width: 130px;
         height: 30px;
-        margin-right: 20px;
+        margin-right: 5px;
         font-size: 12px;
+        text-align: center;
         border: 1px solid #e5e5e5;
         border-radius: 6px;
         padding: 0 5px;
