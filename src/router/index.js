@@ -13,6 +13,7 @@ import ProductManageList from "@/views/admin/ProductManageMent/ProductManageList
 import AdminInDelivery from "@/views/admin/OrderManagement/InDelivery";
 import AdminDoneDelivery from "@/views/admin/OrderManagement/DoneDelivery";
 import AdminConfirmOrder from "@/views/admin/OrderManagement/ConfirmOrder";
+import OrderDetail from "@/views/admin/OrderManagement/OrderDetail";
 
 //--service
 import signIn from "@/views/store/SignIn";
@@ -25,6 +26,7 @@ import productsDetail from "@/views/store/products/productsDetail";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
+import sender from "@/views/store/order/sender";
 
 Vue.use(Router);
 
@@ -39,6 +41,7 @@ export default new Router({
     },
     {
       path: "/products/:id",
+      // path: "/products",
       name: "productsDetail",
       component: productsDetail
     },
@@ -73,7 +76,12 @@ export default new Router({
       component: productsDetail,
       meta: { admin: false }
     },
-
+    {
+      path: "/checkout/sender",
+      name: "sender",
+      component: sender,
+      meta: { admin: false }
+    },
     {
       path: "/signUpDone",
       name: "signUpDone",
@@ -142,6 +150,12 @@ export default new Router({
       path: "/admin/confirmOrder",
       name: "AdminConfirmOrder",
       component: AdminConfirmOrder,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/order/:id",
+      name: "OrderDetail",
+      component: OrderDetail,
       meta: { admin: true }
     }
   ]

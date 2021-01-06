@@ -4,9 +4,7 @@ import mockData from "../../assets/main.json";
 const getApi = uri => {
   return axios.get(`${process.setting.ENV_ADMIN_PRODUCT}${uri}`, {
     headers: {
-      Authorization:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50X2lkIjoxLCJ1c2VybmFtZSI6Im1hc3RlciIsInBlcm1pc3Npb25fdHlwZV9pZCI6MX0.VPrb97C35wSLHhhOf4wV1n2bdBi_j1dkdVi88PoolZQ"
-      // sessionStorage.getItem("token")
+      Authorization: sessionStorage.getItem("token")
     }
   });
 };
