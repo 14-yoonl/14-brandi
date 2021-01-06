@@ -423,7 +423,7 @@ export default {
 .AdminHome {
   display: flex;
   justify-content: center;
-  width: 90%;
+  width: 100%;
   padding: 10px;
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #fafafa;
