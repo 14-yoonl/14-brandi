@@ -52,35 +52,46 @@ import LodingSpinner from "@/components/common/LodingSpinner";
 
 export default {
   components: {
-    LodingSpinner,
+    LodingSpinner
+  },
+  created() {
+    console.log(process.setting);
   },
   data() {
     return {
       id: "",
       password: "",
-      idRules: [(v) => !!v || "아이디를 입력해주세요"],
-      passwordRules: [(v) => !!v || "비밀번호를 입력해주세요."],
-      loding: false,
+      idRules: [v => !!v || "아이디를 입력해주세요"],
+      passwordRules: [v => !!v || "비밀번호를 입력해주세요."],
+      loding: false
     };
   },
   methods: {
     goTokakaoPlus() {
       window.open("https://pf.kakao.com/_pSxoZu");
     },
-    async login() {
-      //   try {
-      //     const loginData = {
-      //       id: this.id,
-      //       password: this.password
-      //     };
-      //     const { data } = await login(loginData);
-      //     sessionStorage.setItem("tokken", data.tokeen);
-      //     this.$router.push({ name: "admin" });
-      //   } catch (err) {
-      //     console.log("error", err);
-      //   }
-    },
-  },
+    login() {
+      try {
+        const loginData = {
+          username: this.id,
+          password: this.password
+        };
+
+        const result = this.$store.dispatch("logIn", loginData);
+        result.then(res => {
+          if (res.data.message === "success") {
+            sessionStorage.setItem("token", res.data.token);
+
+            this.$router.push({
+              name: "ProductManageList"
+            });
+          }
+        });
+      } catch (err) {
+        console.log("error", err);
+      }
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

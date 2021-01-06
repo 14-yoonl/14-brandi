@@ -19,7 +19,7 @@
         <tr>
           <td>옵션 정보</td>
           <td>
-            <table class="setOptions">
+            <table class="setOptions" v-if="!$route.params.productKey">
               <thead>
                 <tr>
                   <th>옵션항목</th>
@@ -48,7 +48,7 @@
                         <template>
                           <v-list-item-content
                             @click="
-                              duplicateList($event, data.item.id, `color`)
+                              duplicateList($event, data.item.color_id, `color`)
                             "
                             v-text="data.item.color_name"
                           ></v-list-item-content>
@@ -99,7 +99,9 @@
                       <template v-slot:item="data">
                         <template>
                           <v-list-item-content
-                            @click="duplicateList($event, data.item.id, `size`)"
+                            @click="
+                              duplicateList($event, data.item.size_id, `size`)
+                            "
                             v-text="data.item.size_name"
                           ></v-list-item-content>
                         </template>
@@ -149,8 +151,24 @@
                 </tr>
               </tfoot>
             </table>
-            <v-btn class="ma-2" color="success" @click="addOptionItemInfo">
+            <v-btn
+              class="ma-2"
+              color="success"
+              @click="addOptionItemInfo"
+              v-if="!$route.params.productKey"
+            >
               적용
+              <v-icon dark>
+                mdi-check-circle
+              </v-icon>
+            </v-btn>
+            <v-btn
+              class="ma-2"
+              color="success"
+              @click="addOptionItemUpdateInfo"
+              v-if="$route.params.productKey"
+            >
+              추가
               <v-icon dark>
                 mdi-check-circle
               </v-icon>
@@ -186,7 +204,11 @@
                         <template>
                           <v-list-item-content
                             @click="
-                              duplicateCrossList($event, data.item.id, `color`)
+                              duplicateCrossList(
+                                $event,
+                                data.item.color_id,
+                                `color`
+                              )
                             "
                             v-text="data.item.color_name"
                           ></v-list-item-content>
@@ -206,7 +228,11 @@
                         <template>
                           <v-list-item-content
                             @click="
-                              duplicateCrossList($event, data.item.id, `size`)
+                              duplicateCrossList(
+                                $event,
+                                data.item.size_id,
+                                `size`
+                              )
                             "
                             v-text="data.item.size_name"
                           ></v-list-item-content>
@@ -271,8 +297,7 @@ export default {
         color: [0],
         size: [0],
         isStockManage: false
-      },
-      productsInfo: []
+      }
     };
   },
   computed: {
@@ -288,7 +313,8 @@ export default {
       this.optionsList[type].splice(count, 1);
     },
     removeOptionItemInfo(count) {
-      this.productsInfo.splice(count, 1);
+      const arr = this.options.filter((list, index) => index !== count);
+      this.$emit("update:options", arr);
     },
     addOptionItemInfo(e) {
       const { color, size } = this.optionsList;
@@ -309,10 +335,17 @@ export default {
             color,
             size,
             isStockManage: this.optionsList.isStockManage,
-            remain: ""
+            remain: 0
           });
         })
       );
+      this.$emit("update:options", result);
+    },
+    addOptionItemUpdateInfo() {
+      const result = [
+        ...this.options,
+        { color: 0, size: 0, isStockManage: false, remain: 0 }
+      ];
       this.$emit("update:options", result);
     },
     duplicateList(event, pk, state) {
@@ -321,8 +354,9 @@ export default {
       result && (alert("이미 선택된 옵션 입니다."), event.stopPropagation());
     },
     duplicateCrossList(event, pk, state) {
+      console.log(event, pk, state, "||||||||||||||||");
       // 중복일 떄 true
-      const result = this.productsInfo.some(list => list[state] === pk);
+      const result = this.options.some(list => list[state] === pk);
       result && (alert("이미 선택된 옵션 입니다."), event.stopPropagation());
     }
   }

@@ -1,8 +1,21 @@
 import axios from "axios";
-import mockData from "../../assets/test.json";
+import mockData from "../../assets/main.json";
 
-// const uri = "http://brandi-intern.tplinkdns.com:9090";
-const uri = "http://192.168.40.115:5000";
+const getApi = uri => {
+  return axios.get(`${process.setting.ENV_ADMIN_PRODUCT}${uri}`, {
+    headers: {
+      Authorization: sessionStorage.getItem("token")
+    }
+  });
+};
+
+const postApi = (uri, data) => {
+  return axios.post(`${process.setting.ENV_ADMIN_PRODUCT}${uri}`, data, {
+    headers: {
+      Authorization: sessionStorage.getItem("token")
+    }
+  });
+};
 
 export default {
   state: {
@@ -32,7 +45,6 @@ export default {
       return state.filterList;
     },
     getOptions(state) {
-      // console.log("|||||||||||||||", state.options);
       return state.options;
     },
     getSearchList(state) {
@@ -50,56 +62,64 @@ export default {
   },
 
   actions: {
+    //상품등록 기본 선택 버튼 리스트 호출
     loadOptions({ commit }) {
-      axios
-        .get(`${uri}/admin/product/productRegist`)
-        .then(options => commit("ADD_OPTIONS", options.data.result));
+      try {
+        const result = getApi(`/admin/product/productRegist`);
+        result.then(options => commit("ADD_OPTIONS", options.data.result));
+      } catch (err) {
+        console.log(err);
+      }
     },
 
+    //상품등록 셀러 검색시 데이터 호출
     searchSeller({ commit }, searchValue) {
-      commit("TOGLE_SELLER_STATE");
-      axios
-        .get(`${uri}/admin/product/productRegist?seller_name=${searchValue}`)
-        .then(
-          searchList => (
-            console.log("셀러", searchList),
-            commit("SEARCH_SELLER", searchList.data.result)
-          )
-        )
-        .finally(() => commit("TOGLE_SELLER_STATE"));
-    },
-
-    loadMainCategory({ commit }) {
-      axios
-        .get(`${uri}/admin/product/productRegist/main_category`)
-        .then(categoryList =>
-          commit("ADD_CATEGORY", {
-            state: "main",
-            value: categoryList.data.result
-          })
+      try {
+        commit("TOGLE_SELLER_STATE");
+        const result = getApi(
+          `/admin/product/productRegist?seller_name=${searchValue}`
         );
+        result
+          .then(searchList => commit("SEARCH_SELLER", searchList.data.result))
+          .finally(() => commit("TOGLE_SELLER_STATE"));
+      } catch (err) {
+        console.log(err);
+      }
     },
 
+    //상품등록 메인 카테고리 리스트 호출
+    loadMainCategory({ commit }) {
+      commit("ADD_CATEGORY", {
+        state: "main",
+        value: mockData.result
+      });
+    },
+
+    //상품등록 서브 카테고리 리스트 호출
     loadSubCategory({ commit }, searchValue) {
-      axios
-        .get(
-          `${uri}/admin/product/productRegist?main_category_id=${searchValue}`
-        )
-        .then(categoryList =>
+      try {
+        const result = getApi(
+          `/admin/product/productRegist?main_category_id=${searchValue}`
+        );
+        result.then(searchList =>
           commit("ADD_CATEGORY", {
             state: "sub",
-            value: categoryList.data.result
+            value: searchList.data.result
           })
         );
+      } catch (err) {
+        console.log(err);
+      }
     },
 
+    //상품 등록
     addProduct({ commit }, productInfo) {
       commit("TOGLE_LODING_SPINNER");
       const formData = new FormData();
 
       formData.append("account_id", 1);
       formData.append("detail_information", productInfo.detailInformation);
-      formData.append("seller_id", productInfo.seller);
+      formData.append("seller_id", productInfo.sellerId);
       formData.append("is_sale", productInfo.isSale);
       formData.append("is_display", productInfo.isDisplay);
       formData.append("main_category_id", productInfo.mainCategory);
@@ -127,37 +147,27 @@ export default {
         formData.append("image_files", img);
       });
 
-      axios
-        .post(`${uri}/admin/product/productRegist`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        })
-        .then(res => console.log("최종결과", res))
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => {
-          commit("TOGLE_LODING_SPINNER");
-        });
+      return postApi(`/admin/product/productRegist`, formData);
     },
 
+    //검색 필터 리스트
     searchFilterList({ commit }, query) {
       commit("TOGLE_LODING_SPINNER");
-      const result = Object.keys(query).reduce((accValue, value, index) => {
-        if (query[value]) {
-          accValue += index
-            ? `&${value}=${query[value]}`
-            : `?${value}=${query[value]}`;
-        }
-        return accValue;
-      }, "");
 
-      console.log(result, "++++++|||||");
-      console.log(`${uri}/admin/products${result}`);
+      const queryString =
+        "limit" in query && "page_number" in query
+          ? Object.keys(query).reduce((accValue, value, index) => {
+              if (query[value]) {
+                accValue += index
+                  ? `&${value}=${query[value]}`
+                  : `?${value}=${query[value]}`;
+              }
+              return accValue;
+            }, "")
+          : "?limit=10&page_number=1";
 
-      axios
-        .get(`${uri}/admin/products${result}`)
+      const result = getApi(`/admin/products${queryString}`);
+      result
         .then(res => commit("SET_SEARCH_FILTER_LIST", res.data.result))
         .catch(err => {
           console.log(err);
@@ -165,13 +175,19 @@ export default {
         .finally(() => {
           commit("TOGLE_LODING_SPINNER");
         });
+    },
+
+    //상품 디테일,수정을 위한 데이터 호출
+    productInfo({ commit }, product_id) {
+      commit("TOGLE_LODING_SPINNER");
+
+      return getApi(`/admin/products/${product_id}`);
     }
   },
   mutations: {
     ADD_OPTIONS(state, optionsData) {
       state.options = optionsData;
     },
-
     SEARCH_SELLER(state, searchSeller) {
       state.searchSeller = searchSeller;
     },

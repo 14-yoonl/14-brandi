@@ -11,12 +11,14 @@
             </v-icon>
           </td>
           <td>
+            <span v-if="$route.params.productKey">{{ sellerName }}</span>
             <v-autocomplete
-              @input="setData('seller', $event)"
+              v-if="!$route.params.productKey"
+              @input="setData('sellerId', $event)"
               :loading="isLoading"
               :items="$store.getters.getSearchList"
               :search-input.sync="searchSeller"
-              :label="seller ? `` : `셀러를 선택하세요`"
+              :label="sellerId ? `` : `셀러를 선택하세요`"
               item-text="seller_id"
               item-value="account_name"
               chips
@@ -27,9 +29,6 @@
                   :input-value="data.selected"
                   @click="data.select"
                 >
-                  <v-avatar left>
-                    <v-img :src="data.item.profile_image_url"></v-img>
-                  </v-avatar>
                   {{ data.item.seller_name }}
                 </v-chip>
               </template>
@@ -38,9 +37,6 @@
                   <v-list-item-content v-text="data.item"></v-list-item-content>
                 </template>
                 <template v-else>
-                  <v-list-item-avatar @click="selectSeller">
-                    <img :src="data.item.profile_image_url" />
-                  </v-list-item-avatar>
                   <v-list-item-content @click="selectSeller">
                     <v-list-item-title
                       v-html="data.item.seller_name"
@@ -104,7 +100,8 @@
                 <tr>
                   <td>
                     <v-select
-                      @input="setData('mainCategory', $event)"
+                      @input="setCategoryMain('mainCategory', $event)"
+                      :value="mainCategory"
                       :items="setCategory('main')"
                       item-text="main_category_name"
                       item-value="main_category_id"
@@ -123,6 +120,7 @@
                   <td>
                     <v-select
                       @input="setData('subCategory', $event)"
+                      :value="subCategory"
                       :items="setCategory('sub')"
                       item-text="sub_category_name"
                       item-value="sub_category_id"
@@ -192,6 +190,7 @@
                 <span>원산지 : </span>
                 <v-select
                   :items="getOptions"
+                  :value="productOriginTypeId"
                   item-text="product_origin_type_name"
                   item-value="product_origin_type_id"
                   @change="setData('productOriginTypeId', $event)"
@@ -210,6 +209,7 @@
           </td>
           <td>
             <v-text-field
+              :value="productName"
               @input="setData('productName', $event)"
               placeholder="상품명을 입력해주세요."
             ></v-text-field>
@@ -227,6 +227,7 @@
           <td>한줄 상품 설명</td>
           <td>
             <v-text-field
+              :value="description"
               @input="setData('description', $event)"
               placeholder="한줄 상품 설명을 입력해주세요."
             ></v-text-field>
@@ -271,7 +272,8 @@ import { Editor } from "@toast-ui/vue-editor";
 export default {
   props: {
     images: { type: Array },
-    seller: { type: Number },
+    sellerId: { type: Number },
+    sellerName: { type: String },
     isSale: { type: Number },
     isDisplay: { type: Number },
     manufacturer: { type: String },
@@ -281,7 +283,7 @@ export default {
     mainCategory: { type: Number },
     isProductNotice: { type: Number },
     manufacturingDate: { type: String },
-    productOriginTypeId: { type: String }
+    productOriginTypeId: { type: Number }
   },
 
   components: {
@@ -299,8 +301,12 @@ export default {
 
   computed: {
     setData() {
+      return (param, value) => this.$emit(`update:${param}`, value);
+    },
+    setCategoryMain() {
       return (param, value) => (
-        this.$emit(`update:${param}`, value), console.log("데이터:", value)
+        this.$emit(`update:${param}`, value),
+        this.$emit(`update:subCategory`, 0)
       );
     },
     setCategory() {
@@ -329,8 +335,8 @@ export default {
     searchSeller(value) {
       !!value && this.$store.dispatch("searchSeller", value);
     },
-    seller(value) {
-      value && this.$store.dispatch("loadMainCategory");
+    sellerId(value) {
+      this.sellerId && this.$store.dispatch("loadMainCategory");
     },
     mainCategory(value) {
       value && this.$store.dispatch("loadSubCategory", value);
