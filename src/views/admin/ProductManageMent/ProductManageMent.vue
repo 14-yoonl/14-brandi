@@ -1,9 +1,11 @@
 <template>
   <div class="MemberManagment">
+    {{ $data }}
     <BasicInfo
       ref="test"
+      :sellerName.sync="sellerName"
       :images.sync="images"
-      :seller.sync="seller"
+      :sellerId.sync="sellerId"
       :isSale.sync="isSale"
       :isDisplay.sync="isDisplay"
       :productName.sync="productName"
@@ -48,8 +50,10 @@ import BasicInfo from "./BasicInfo";
 import ProductOptions from "./ProductOptions";
 import ProductSalesInfo from "./ProductSalesInfo";
 import LodingSpinner from "../../../components/common/LodingSpinner";
+import mixin from "../../../components/mixins/util";
 
 export default {
+  name: "ProductDetail",
   components: {
     BasicInfo,
     ProductOptions,
@@ -57,12 +61,15 @@ export default {
     LodingSpinner
   },
   created() {
-    console.log(this);
+    const getProductKey = this.$route.params.productKey;
+
+    //URI 파라미터의 유무로 데이터 수정 및 입력을 선택
+    getProductKey && this.getProductInfo(getProductKey);
     this.$store.dispatch("loadOptions");
   },
   data() {
     return {
-      seller: 0,
+      sellerId: "",
       isSale: 1,
       isDisplay: 1,
       mainCategory: 0,
@@ -70,7 +77,7 @@ export default {
       isProductNotice: 0,
       manufacturer: "",
       manufacturingDate: "",
-      productOriginTypeId: "",
+      productOriginTypeId: 0,
       productName: "",
       description: "",
       options: [],
@@ -82,13 +89,14 @@ export default {
       maximumQuantity: 0,
       minimumQuantity: 0,
       discountState: false,
+      sellerName: "",
       images: []
     };
   },
-
+  mixins: [mixin],
   methods: {
     submitData(e) {
-      if (!this.seller) {
+      if (!this.sellerId) {
         alert("셀러 선택은 필수입니다.");
         return;
       }
@@ -111,7 +119,7 @@ export default {
           alert(
             "상품 정보 고시 직접입력을 선택하셨으면, 제조사일자는 필수입니다."
           );
-        } else if (!ths.productOriginTypeId) {
+        } else if (!this.productOriginTypeId) {
           alert("상품 정보 고시 직접입력을 선택하셨으면, 원산지는 필수입니다.");
         }
         return;
@@ -165,11 +173,67 @@ export default {
       const detailInformation = this.$refs.test.getDetailInfo.invoke("getHtml");
 
       //데이터 vuex로 전송
-      this.$store.dispatch("addProduct", {
+      const result = this.$store.dispatch("addProduct", {
         ...this.$data,
         ...{ images: setImages },
         detailInformation
       });
+
+      result
+        .then(res => {
+          res.data.message === "success" && alert("회원가입을 축하드립니다");
+          this.$router.push({
+            path: "/admin/products/"
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.$store.commit("TOGLE_LODING_SPINNER");
+        });
+    },
+
+    getProductInfo(productKey) {
+      ///product 수정 페이지에서 사용하는 함수
+
+      try {
+        const result = this.$store.dispatch("productInfo", productKey);
+        result.then(result => {
+          console.log(result);
+          const infoOption = result.data.result.product_options;
+          const info = {
+            ...result.data.result.product_detail,
+            ...result.data.result.product_images
+          };
+
+          Object.keys(info).forEach(item => {
+            if (this.snakeToCamel(item) === "subCategoryId") {
+              this.$data["subCategory"] = info[item];
+            }
+            if (this.snakeToCamel(item) === "mainCategoryId") {
+              this.$data["mainCategory"] = info[item];
+            } else {
+              this.$data[this.snakeToCamel(item)] = info[item];
+            }
+          });
+
+          infoOption.forEach(item => {
+            this.$data["options"].push({
+              color: item.color_id,
+              size: item.size_id,
+              isStockManage: item.stock_id,
+              remain: item.remain
+            });
+          });
+        });
+
+        result.finally(() => {
+          this.$store.commit("TOGLE_LODING_SPINNER");
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
   },
   watch: {
@@ -191,10 +255,6 @@ export default {
 
       value === this.discountStartDate &&
         alert("시작 날짜는 종료 날짜와 같을 수 없습니다.");
-    },
-
-    mainCategory(value, preValue) {
-      this.subCategory = 0;
     }
   }
 };

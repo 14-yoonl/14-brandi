@@ -102,8 +102,7 @@ export default new Router({
     {
       path: "/admin/signup",
       name: "signUp",
-      component: adminSignUp,
-      meta: { admin: true }
+      component: adminSignUp
     },
     {
       path: "/admin/prepareOrder",
@@ -132,7 +131,8 @@ export default new Router({
     {
       path: "/admin/products",
       name: "ProductManageList",
-      component: ProductManageList
+      component: ProductManageList,
+      meta: { admin: true }
     },
     {
       path: "/admin/inDelivery",
