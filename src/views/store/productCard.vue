@@ -33,7 +33,7 @@ export default {
       newOriginPrice: Number(this.item.origin_price).toLocaleString(),
       newDiscountedPrice: Number(this.item.discounted_price).toLocaleString(),
       newCount: Number(this.item.sales_count).toLocaleString(),
-      newDiscount: Number(this.item.discount_rate) * 100
+      newDiscount: this.item.discount_rate * 100
     };
     console.log(newDiscountPrice);
   }

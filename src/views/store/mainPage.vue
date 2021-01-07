@@ -3,27 +3,20 @@
     <NavBar />
     <v-carousel class="mainImageSlide">
       <v-carousel-item
-        v-for="(item, i) in slideitems"
+        v-for="(item, i) in productList"
         :key="i"
-        :src="item.src"
+        :src="item.event.event_banner_image"
         reverse-transition="fade-transition"
         transition="fade-transition"
       ></v-carousel-item>
     </v-carousel>
     <div class="mainProducts">
       <h2 class="productHeader">당신을 위한 추천</h2>
-      <div class="cardList">
-        <eventBanner
-          v-for="event in eventList"
-          :key="event.event_id"
-          :event="event"
-        />
-        <productCard
-          v-for="item in cardList"
-          :key="item.product_id"
-          :item="item"
-          v-on:click="petchData"
-        />
+      <div v-for="products in productList" :key="products.id" class="cardList">
+        <eventBanner :event="products.event" />
+        <div v-for="item in products.product_list" :key="item.id">
+          <productCard :item="item" v-on:click="petchData" />
+        </div>
       </div>
       <v-btn v-on:click="increseOffset">더보기</v-btn>
     </div>
@@ -37,6 +30,7 @@ import productCard from "./productCard.vue";
 import NavBar from "./navBar";
 import Footer from "./footer";
 import axios from "axios";
+import API from "@/store/config.js";
 
 export default {
   data() {
@@ -57,7 +51,8 @@ export default {
         }
       ],
       cardList: [],
-      eventList: []
+      eventList: [],
+      productList: []
     };
   },
   components: {
@@ -70,22 +65,17 @@ export default {
     increseOffset() {
       this.offset += 1;
       axios
-        .get(
-          `http://192.168.40.116:5000/products?offset=${this.offset}&limit=30`
-        )
+        .get(`${API.API}/products?offset=${this.offset}&limit=30`)
         .then(res => {
-          this.cardList = [...this.cardList, ...res.data.result.product_list];
-          this.eventList = [...this.eventList, [...res.data.result.event]];
+          console.log("res>>>", res);
+          this.productList.push(res.data.result);
         });
     }
   },
   mounted() {
-    axios
-      .get(`http://192.168.40.116:5000/products?offset=0&limit=30`)
-      .then(response => {
-        (this.cardList = response.data.result.product_list),
-          (this.eventList = [response.data.result.event]);
-      });
+    axios.get(`${API.API}/products?offset=0&limit=30`).then(response => {
+      this.productList.push(response.data.result);
+    });
   }
 };
 </script>
