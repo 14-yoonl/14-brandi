@@ -3,9 +3,9 @@
     <NavBar />
     <v-carousel class="mainImageSlide">
       <v-carousel-item
-        v-for="(item, i) in slideitems"
+        v-for="(item, i) in productList"
         :key="i"
-        :src="item.src"
+        :src="item.event.event_banner_image"
         reverse-transition="fade-transition"
         transition="fade-transition"
       ></v-carousel-item>
@@ -30,6 +30,7 @@ import productCard from "./productCard.vue";
 import NavBar from "./navBar";
 import Footer from "./footer";
 import axios from "axios";
+import API from "@/store/config.js";
 
 export default {
   data() {
@@ -51,8 +52,6 @@ export default {
       ],
       cardList: [],
       eventList: [],
-      articleWrap: {},
-      totalArray: [],
       productList: []
     };
   },
@@ -66,9 +65,7 @@ export default {
     increseOffset() {
       this.offset += 1;
       axios
-        .get(
-          `http://192.168.40.116:5000/products?offset=${this.offset}&limit=30`
-        )
+        .get(`${API.API}/products?offset=${this.offset}&limit=30`)
         .then(res => {
           console.log("res>>>", res);
           this.productList.push(res.data.result);
@@ -76,11 +73,9 @@ export default {
     }
   },
   mounted() {
-    axios
-      .get(`http://192.168.40.116:5000/products?offset=0&limit=30`)
-      .then(response => {
-        this.productList.push(response.data.result);
-      });
+    axios.get(`${API.API}/products?offset=0&limit=30`).then(response => {
+      this.productList.push(response.data.result);
+    });
   }
 };
 </script>

@@ -48,11 +48,10 @@
             <div class="pickedOption">
               <div>{{ pickColor }}</div>
               <div>{{ pickSize }}</div>
-              <div>{{ detail.discounted_price }}원</div>
+              <div></div>
             </div>
             <div class="detailTotalPrice">
-              <span>총 상품 금액</span
-              ><span> {{ detail.discounted_price }}원</span>
+              <span>총 상품 금액</span><span></span>
             </div>
             <div class="detailBuySection">
               <router-link to="/">바로 구매</router-link>
@@ -68,6 +67,8 @@
 <script>
 import NavBar from "../navBar";
 import axios from "axios";
+import API from "@/store/config.js";
+
 export default {
   props: ["product_id"],
   state: [],
@@ -78,13 +79,15 @@ export default {
       size: [],
       pickColor: "",
       pickSize: "",
-      postPictures: []
+      postPictures: [],
+      optionsArray: []
     };
   },
+
   mounted() {
     axios
       .get(
-        `http://192.168.40.118:5000/products/${this.$router.history.current.params.id}`,
+        `${API.API}/products/${this.$router.history.current.params.id}`,
 
         {
           Authorization: localStorage.getItem("token")

@@ -12,7 +12,7 @@ export default {
   },
   actions: {
     brandiLogin(state, info) {
-      axios.post("http://192.168.40.116:5000/users/signup", {
+      axios.post(`${LOCAL_API}/users/signup`, {
         username: info.id,
         password: info.password,
         email: info.email,
@@ -22,7 +22,7 @@ export default {
     signin(state, loginInfo) {
       console.log(state, loginInfo);
       axios
-        .post("http://192.168.40.116:5000/users/signin", {
+        .post(`${LOCAL_API}/users/signin`, {
           username: loginInfo.id,
           password: loginInfo.pw
         })

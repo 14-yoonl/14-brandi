@@ -46,7 +46,7 @@
         <div class="footerBottom">
           <div class="bottomLeft"></div>
           <div class="bottomRight">
-            <a href="/admin/seller"
+            <a href="/admin/home"
               ><img
                 src="https://www.brandi.co.kr/static/20.09.01/images/icon_footer_05.png"
                 alt=""

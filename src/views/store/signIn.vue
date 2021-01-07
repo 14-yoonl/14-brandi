@@ -71,7 +71,7 @@ export default {
   methods: {
     onSuccess(googleUser) {
       axios
-        .post("http://192.168.40.116:5000/users/social-signin", {
+        .post(`http://192.168.105.133:5000/users/social-signin`, {
           headers: {
             Authorization: googleUser.xc.id_token
           }
