@@ -337,7 +337,7 @@ export default {
       axios
         .get(
           `http://192.168.40.107:5000/admin/orders/detail/${this.order_detail_number}`
-        )
+        ) 
         .then(res => {
           this.desserts = res.data.result;
         });
