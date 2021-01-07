@@ -503,9 +503,6 @@ export default {
     };
   },
   watch: {
-    payedCompletedDate(value) {
-      setStartedDate();
-    },
     itemsOrder(value) {
       getOrderListData();
     },
@@ -582,12 +579,12 @@ export default {
         (this.sellerType = "전체"),
         (this.deliveryType = "전체");
     },
-    handlePrepareOrder: function(event) {
+    handlePrepareOrder: async function(event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
         for (let i = 0; i < this.selectedItems.length; i++) {
-          axios.patch(
+          await axios.patch(
             `http://192.168.40.107:5000/admin/orders?id=${this.selectedItems[i]}&status_id=1`
           );
         }
