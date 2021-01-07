@@ -4,17 +4,22 @@
       <template v-slot:header>옵션 정보</template>
       <template v-slot:body>
         <tr>
-          <td>옵션 설정</td>
           <td>
-            <v-radio-group v-model="option" row>
-              <v-radio :label="`기본옵션`" :value="1"></v-radio>
+            옵션 설정
+            <v-icon x-small color="red">
+              mdi-star
+            </v-icon>
+          </td>
+          <td>
+            <v-radio-group v-model="optionType" row>
+              <v-radio :label="`기본옵션`" :value="0"></v-radio>
             </v-radio-group>
           </td>
         </tr>
         <tr>
           <td>옵션 정보</td>
           <td>
-            <table class="setOptions">
+            <table class="setOptions" v-if="!$route.params.productKey">
               <thead>
                 <tr>
                   <th>옵션항목</th>
@@ -28,14 +33,28 @@
                     색상
                   </th>
                   <td>
-                    <v-select
+                    <v-autocomplete
                       v-model="optionsList.color[index]"
-                      :items="$store.getters.getOptions.color"
-                      item-value="pk"
-                      item-text="value"
-                      label="색상 옵션을 선택해 주세요."
-                      dense
-                    ></v-select>
+                      :items="getOptions('color_list')"
+                      item-value="color_id"
+                      item-text="color_name"
+                      :label="
+                        optionsList.color[index]
+                          ? ''
+                          : `색상 옵션을 선택해 주세요.`
+                      "
+                    >
+                      <template v-slot:item="data">
+                        <template>
+                          <v-list-item-content
+                            @click="
+                              duplicateList($event, data.item.color_id, `color`)
+                            "
+                            v-text="data.item.color_name"
+                          ></v-list-item-content>
+                        </template>
+                      </template>
+                    </v-autocomplete>
                   </td>
                   <td class="actionButtons">
                     <v-btn
@@ -66,14 +85,28 @@
                     사이즈
                   </th>
                   <td>
-                    <v-select
+                    <v-autocomplete
                       v-model="optionsList.size[index]"
-                      :items="$store.getters.getOptions.size"
-                      item-value="pk"
-                      item-text="value"
-                      label="사이즈 옵션을 선택해 주세요."
-                      dense
-                    ></v-select>
+                      :items="getOptions('size_list')"
+                      :label="
+                        optionsList.size[index]
+                          ? ``
+                          : `사이즈 옵션을 선택해 주세요.`
+                      "
+                      item-text="size_name"
+                      item-value="size_id"
+                    >
+                      <template v-slot:item="data">
+                        <template>
+                          <v-list-item-content
+                            @click="
+                              duplicateList($event, data.item.size_id, `size`)
+                            "
+                            v-text="data.item.size_name"
+                          ></v-list-item-content>
+                        </template>
+                      </template>
+                    </v-autocomplete>
                   </td>
                   <td class="actionButtons">
                     <v-btn
@@ -104,7 +137,7 @@
                 <tr>
                   <th>재고관리여부</th>
                   <td colspan="2">
-                    <v-radio-group v-model="optionsList.stock" row>
+                    <v-radio-group v-model="optionsList.isStockManage" row>
                       <v-radio
                         :label="`재고 수량 관리안함`"
                         :value="false"
@@ -118,8 +151,24 @@
                 </tr>
               </tfoot>
             </table>
-            <v-btn class="ma-2" color="success" @click="addOptionItemInfo">
+            <v-btn
+              class="ma-2"
+              color="success"
+              @click="addOptionItemInfo"
+              v-if="!$route.params.productKey"
+            >
               적용
+              <v-icon dark>
+                mdi-check-circle
+              </v-icon>
+            </v-btn>
+            <v-btn
+              class="ma-2"
+              color="success"
+              @click="addOptionItemUpdateInfo"
+              v-if="$route.params.productKey"
+            >
+              추가
               <v-icon dark>
                 mdi-check-circle
               </v-icon>
@@ -137,44 +186,79 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(info, index) in productsInfo">
+                <tr v-if="!options.length && true">
+                  <td colspan="4">
+                    옵션정보를 입력 후 [적용] 버튼을 눌러주세요.
+                  </td>
+                </tr>
+                <tr v-for="(info, index) in options">
                   <td>
-                    <v-select
+                    <v-autocomplete
                       v-model="info.color"
-                      :items="$store.getters.getOptions.color"
-                      item-value="pk"
-                      item-text="value"
-                      label="색상 옵션을 선택해 주세요."
-                      dense
-                    ></v-select>
+                      :items="getOptions('color_list')"
+                      item-value="color_id"
+                      item-text="color_name"
+                      :label="info.color ? '' : `색상 옵션을 선택해 주세요.`"
+                    >
+                      <template v-slot:item="data">
+                        <template>
+                          <v-list-item-content
+                            @click="
+                              duplicateCrossList(
+                                $event,
+                                data.item.color_id,
+                                `color`
+                              )
+                            "
+                            v-text="data.item.color_name"
+                          ></v-list-item-content>
+                        </template>
+                      </template>
+                    </v-autocomplete>
                   </td>
                   <td>
-                    <v-select
+                    <v-autocomplete
                       v-model="info.size"
-                      :items="$store.getters.getOptions.size"
-                      item-value="pk"
-                      item-text="value"
-                      label="사이즈 옵션을 선택해 주세요."
-                      dense
-                    ></v-select>
+                      :items="getOptions('size_list')"
+                      :label="info.size ? `` : `사이즈 옵션을 선택해 주세요.`"
+                      item-text="size_name"
+                      item-value="size_id"
+                    >
+                      <template v-slot:item="data">
+                        <template>
+                          <v-list-item-content
+                            @click="
+                              duplicateCrossList(
+                                $event,
+                                data.item.size_id,
+                                `size`
+                              )
+                            "
+                            v-text="data.item.size_name"
+                          ></v-list-item-content>
+                        </template>
+                      </template>
+                    </v-autocomplete>
                   </td>
                   <td>
-                    <v-radio-group v-model="info.stock" row>
-                      <v-radio
-                        :label="`재고관리 안함`"
-                        :value="false"
-                      ></v-radio>
-                      <v-radio :value="true">
-                        <template v-slot:label>
-                          <v-text-field
-                            single-line
-                            outlined
-                            v-model="info.stockValue"
-                          ></v-text-field>
-                          개</template
-                        >
-                      </v-radio>
-                    </v-radio-group>
+                    <div class="stock">
+                      <v-radio-group v-model="info.isStockManage" row>
+                        <v-radio
+                          :label="`재고관리 안함`"
+                          :value="false"
+                        ></v-radio>
+                        <v-radio :value="true">
+                          <template v-slot:label>
+                            <v-text-field
+                              single-line
+                              outlined
+                              v-model="info.remain"
+                            ></v-text-field>
+                            개</template
+                          >
+                        </v-radio>
+                      </v-radio-group>
+                    </div>
                   </td>
                   <td>
                     <v-btn color="error" @click="removeOptionItemInfo(index)">
@@ -201,19 +285,25 @@ export default {
     DataTable,
     ImagePriview
   },
+  props: {
+    options: {
+      type: Array
+    }
+  },
   data() {
     return {
+      optionType: 0, //기본 옵션
       optionsList: {
-        color: [3, 1, 3, 4],
-        size: [2, 2, 3, 4],
-        stock: false
-      },
-      productsInfo: [
-        { color: 3, size: 5, stock: false, stockValue: "" },
-        { color: 1, size: 1, stock: false, stockValue: "" },
-        { color: 5, size: 2, stock: false, stockValue: "" }
-      ]
+        color: [0],
+        size: [0],
+        isStockManage: false
+      }
     };
+  },
+  computed: {
+    getOptions() {
+      return type => this.$store.getters.getOptions[type];
+    }
   },
   methods: {
     addOptionList(type, count) {
@@ -223,30 +313,68 @@ export default {
       this.optionsList[type].splice(count, 1);
     },
     removeOptionItemInfo(count) {
-      this.productsInfo.splice(count, 1);
+      const arr = this.options.filter((list, index) => index !== count);
+      this.$emit("update:options", arr);
     },
-    addOptionItemInfo() {
+    addOptionItemInfo(e) {
       const { color, size } = this.optionsList;
-      const productsInfo = [];
-      let result = true;
+      const result = [];
 
-      result = color.some(color => {
-        return color;
-      });
+      //null이 있을 경우 true
+      const colorNullData = color.some(value => value === 0);
+      const sizeNullData = size.some(value => value === 0);
 
-      console.log(result);
-      console.log(productsInfo);
+      if (colorNullData || sizeNullData) {
+        alert("색상 및 사이즈 선택은 필수 입니다.");
+        consle.log(e.stopPropagation());
+      }
+
+      color.forEach(color =>
+        size.forEach(size => {
+          result.push({
+            color,
+            size,
+            isStockManage: this.optionsList.isStockManage,
+            remain: 0
+          });
+        })
+      );
+      this.$emit("update:options", result);
+    },
+    addOptionItemUpdateInfo() {
+      const result = [
+        ...this.options,
+        { color: 0, size: 0, isStockManage: false, remain: 0 }
+      ];
+      this.$emit("update:options", result);
+    },
+    duplicateList(event, pk, state) {
+      // 중복일 떄 true
+      const result = this.optionsList[state].some(list => list === pk);
+      result && (alert("이미 선택된 옵션 입니다."), event.stopPropagation());
+    },
+    duplicateCrossList(event, pk, state) {
+      console.log(event, pk, state, "||||||||||||||||");
+      // 중복일 떄 true
+      const result = this.options.some(list => list[state] === pk);
+      result && (alert("이미 선택된 옵션 입니다."), event.stopPropagation());
     }
   }
 };
 </script>
 <style lang="scss" scoped>
 .ProductOptions {
+  >>> .v-select__slot {
+    input {
+      text-align: center;
+    }
+  }
+
   .setOptions {
     height: 130px;
     thead {
       tr {
-        height: 30px;
+        height: 35px;
 
         th {
           &:nth-child(1) {
@@ -263,7 +391,7 @@ export default {
     }
     tbody {
       tr {
-        height: 47px !important;
+        height: 53px !important;
         background-color: white !important;
         border: 1px solid #ccc;
 
@@ -311,9 +439,10 @@ export default {
     tbody {
       tr {
         td {
-          height: 50px;
+          height: 53px;
           border: 1px solid #ccc;
           background-color: white;
+          text-align: center;
 
           &:nth-child(1) {
             width: 30%;

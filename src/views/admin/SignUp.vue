@@ -47,21 +47,24 @@
             <v-radio
               v-for="info in checkInfo"
               :key="info"
-              :label="info"
-              :value="info"
+              :label="info.value"
+              :value="info.key"
             ></v-radio>
           </v-radio-group>
           <v-text-field
+            v-model="memberData.sellerName"
             :rules="sellerNameRules"
             label="셀러명(상호)"
             prepend-icon="mdi-sign-text"
           ></v-text-field>
           <v-text-field
+            v-model="memberData.sellerEngName"
             :rules="sellerEngNameRules"
             label="셀러명(영문상호)"
             prepend-icon="mdi-sign-text"
           ></v-text-field>
           <v-text-field
+            v-model="memberData.ServiceCenterPhon"
             :rules="customerCenterNumber"
             label="고객센터 전화번호"
             prepend-icon="mdi-phone"
@@ -70,7 +73,7 @@
       </v-container>
       <div class="actionForm">
         <div class="pushBtn" @click="cancelClick">취소</div>
-        <div class="pushBtn">가입하기</div>
+        <div class="pushBtn" @click="sendServer">가입하기</div>
       </div>
     </div>
   </div>
@@ -80,6 +83,18 @@ export default {
   methods: {
     cancelClick() {
       this.$router.push({ name: "adminSignIn" });
+    },
+    sendServer() {
+      try {
+        const result = this.$store.dispatch("signUp", this.memberData);
+        result.then(res =>
+          res.data.message === "success"
+            ? alert("환양합니다")
+            : alert("다시 입력해주세요")
+        );
+      } catch (err) {
+        console.log(err, "에러 확인 메세지");
+      }
     },
     serverValidCheck(aa) {
       const result = this.$store.dispatch("test", aa);
@@ -102,13 +117,13 @@ export default {
         ServiceCenterPhon: ""
       },
       checkInfo: [
-        "쇼핑몰",
-        "마켓",
-        "로드샵",
-        "디자인브랜드",
-        "제너럴브랜드",
-        "내셔널브랜드",
-        "뷰티"
+        { key: 1, value: "쇼핑몰" },
+        { key: 2, value: "마켓" },
+        { key: 3, value: "로드샵" },
+        { key: 4, value: "디자인브랜드" },
+        { key: 5, value: "제너럴브랜드" },
+        { key: 6, value: "내셔널브랜드" },
+        { key: 7, value: "뷰티" }
       ],
       valid: false,
       idRules: [

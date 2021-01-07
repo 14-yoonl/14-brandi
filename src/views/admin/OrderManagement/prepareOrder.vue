@@ -1,5 +1,5 @@
 <template>
-  <div class="AdminOrder">
+  <div class="prepareOrder">
     <AdminHeader>
       <template v-slot:title>
         <h1 class="mainTitle">주문 관리</h1>
@@ -24,12 +24,17 @@
           <span>검색조건 : </span>
         </div>
         <div class="filterBtnsGroup">
-          <select v-model="filterSelectedCondition" class="searchCondition">
+          <select
+            v-model="filterSelectedCondition"
+            class="searchCondition"
+            @change="handleInputData()"
+          >
             <option value="" disabled>조건을 선택해주세요 ▼</option>
             <option
               v-for="condition in searchCondition"
               :disabled="condition.disabled"
               v-bind:key="condition.id"
+              :value="condition.value"
             >
               {{ condition.text }}
             </option>
@@ -39,6 +44,7 @@
           v-model="searchInputData"
           class="searchInputBox"
           placeholder="검색어를 입력하세요"
+          @change="handleInputData()"
         />
       </div>
       <div class="filterList">
@@ -61,6 +67,7 @@
           </div>
         </div>
         <input type="date" class="dateBox" v-model="startedDate" />
+        <span>~</span>
         <input type="date" class="dateBox" v-model="endDate" />
       </div>
       <div class="filterList">
@@ -131,10 +138,10 @@
         </div>
       </div>
       <div class="searchBtnBox">
-        <v-btn elevation="2" md color="primary" v-on:click="filterSearch"
+        <v-btn elevation="2" md color="primary" v-on:click="getOrderListData"
           >검색</v-btn
         >
-        <v-btn elevation="2" md v-on:click="filterReset">초기화</v-btn>
+        <v-btn elevation="2" md v-on:click="handleFilterReset">초기화</v-btn>
       </div>
     </div>
 
@@ -144,29 +151,34 @@
           <span class="totalQuantity"
             >전체 조회건 수 : {{ totalCount }} 건</span
           >
-          <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+          <v-btn
+            elevation="1"
+            x-small
+            color="primary"
+            v-on:click="handlePrepareOrder"
             >배송준비처리</v-btn
           >
-          <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+          <v-btn
+            elevation="1"
+            x-small
+            color="primary"
+            v-on:click="handleCancelOrder"
             >주문취소처리</v-btn
           >
         </div>
         <div class="headerRight">
-          <span>{{ itemsOrder }}</span>
           <select
             v-model="itemsOrder"
             class="selectBox"
-            @change="handleItemsOrder"
+            @change="getOrderListData()"
           >
-            <option value="desc">최신주문일순</option>
-            <option value="asc">주문일의 역순</option>
+            <option value="recent">최신주문일순</option>
+            <option value="">주문일의 역순</option>
           </select>
-
-          <span>{{ itemsPerPage }}</span>
           <select
             v-model="itemsPerPage"
             class="selectBox"
-            @change="handleItemsPerPage"
+            @change="getOrderListData()"
           >
             <option value="10">10개씩 보기</option>
             <option value="20">20개씩 보기</option>
@@ -209,7 +221,14 @@
                 {{ order.created_at_date }}
               </td>
               <td>
-                {{ order.order_detail_number }}
+                <router-link
+                  :to="{
+                    name: 'OrderDetail',
+                    params: { orderDetailNumber: order.order_detail_number }
+                  }"
+                >
+                  {{ order.order_detail_number }}
+                </router-link>
               </td>
               <td>
                 {{ order.seller_name }}
@@ -243,18 +262,26 @@
         </table>
       </div>
       <div class="tableContainerFooterBtns">
-        <v-btn elevation="1" x-small color="primary" v-on:click="prepareOrder"
+        <v-btn
+          elevation="1"
+          x-small
+          color="primary"
+          v-on:click="handlePrepareOrder"
           >배송준비처리</v-btn
         >
-        <v-btn elevation="1" x-small color="primary" v-on:click="cancelOrder"
+        <v-btn
+          elevation="1"
+          x-small
+          color="primary"
+          v-on:click="handleCancelOrder"
           >주문취소처리</v-btn
         >
-        <span>{{ selectedItems }}</span>
+
         <v-pagination
           v-model="currentPage"
-          :length="paginationLength"
+          :length="10"
+          @v-on:click="getOrderListData()"
         ></v-pagination>
-        <span>{{ currentPage }}</span>
       </div>
     </div>
   </div>
@@ -264,6 +291,8 @@ import { filterSelectedCondition, searchInputData } from "vuex";
 import AdminHeader from "../../../components/common/adminDataTable/AdminHeader";
 import AdminFilter from "../../../components/common/adminDataTable/AdminFilter";
 import axios from "axios";
+import Qs from "qs";
+import "url-search-params";
 
 export default {
   name: "adminOrder",
@@ -271,6 +300,12 @@ export default {
   data() {
     return {
       filterSelectedCondition: "",
+      filterOrderNo: "",
+      filterDetailOrderNo: "",
+      filterSenderName: "",
+      filterSenderPhone: "",
+      filterSellerName: "",
+      filterProductName: "",
       searchInputData: "",
       payedCompletedDate: "3",
       sellerType: "전체",
@@ -278,22 +313,22 @@ export default {
       startedDate: "",
       endDate: "",
       sellerAttribute: [],
-      itemsOrder: "desc",
+      itemsOrder: "recent",
       currentPage: 1,
-      paginationLength: 5,
+      paginationLength: 1,
       itemsPerPage: 30,
       totalCount: 1,
       selectedItems: [],
 
       searchCondition: [
-        { text: "주문번호", value: "orderNo", disabled: false },
-        { text: "주문상세번호", value: "orderDetailNo", disabled: false },
+        { text: "주문번호", value: "1", disabled: false },
+        { text: "주문상세번호", value: "2", disabled: false },
         { text: "--------------------", value: "", disabled: true },
-        { text: "주문자명", value: "senderName", disabled: false },
-        { text: "핸드폰번호", value: "senderPhone", disabled: false },
+        { text: "주문자명", value: "3", disabled: false },
+        { text: "핸드폰번호", value: "4", disabled: false },
         { text: "--------------------", value: "", disabled: true },
-        { text: "셀러명", value: "sellerName", disabled: false },
-        { text: "상품명", value: "productName", disabled: false }
+        { text: "셀러명", value: "5", disabled: false },
+        { text: "상품명", value: "6", disabled: false }
       ],
 
       payedCompletedDateList: [
@@ -338,31 +373,43 @@ export default {
       sellerAttributeList: [
         {
           name: "sellerAttribute",
-          value: "쇼핑몰",
+          value: 1,
           id: "shoppingmall",
           text: "쇼핑몰"
         },
         {
           name: "sellerAttribute",
-          value: "마켓",
+          value: 2,
           id: "market",
           text: "마켓"
         },
         {
           name: "sellerAttribute",
-          value: "로드샵",
+          value: 3,
           id: "roadShop",
           text: "로드샵"
         },
         {
           name: "sellerAttribute",
-          value: "디자이너브랜드",
+          value: 4,
           id: "designerBrand",
           text: "디자이너브랜드"
         },
         {
           name: "sellerAttribute",
-          value: "뷰티",
+          value: 5,
+          id: "generalBrand",
+          text: "재너럴브랜드"
+        },
+        {
+          name: "sellerAttribute",
+          value: 6,
+          id: "nationalBrand",
+          text: "내셔널브랜드"
+        },
+        {
+          name: "sellerAttribute",
+          value: 7,
           id: "beauty",
           text: "뷰티"
         }
@@ -458,15 +505,76 @@ export default {
   watch: {
     payedCompletedDate(value) {
       setStartedDate();
+    },
+    itemsOrder(value) {
+      getOrderListData();
+    },
+    itemsPerPage(value) {
+      getOrderListData();
+    },
+    searchInputData(value) {
+      handleInputData();
+    },
+    currentPage(value) {
+      getOrderListData();
     }
   },
 
   methods: {
-    filterSearch: function(event) {
-      getOrderListData();
-      alert("검색 완료!");
+    handleInputData: function(value) {
+      let filterSelectedCondition = this.filterSelectedCondition;
+      let inputData = this.searchInputData;
+      if (filterSelectedCondition === "1") {
+        this.filterOrderNo = inputData;
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = "";
+        this.filterSenderPhone = "";
+        this.filterSellerName = "";
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "2") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = inputData;
+        this.filterSenderName = "";
+        this.filterSenderPhone = "";
+        this.filterSellerName = "";
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "3") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = inputData;
+        this.filterSenderPhone = "";
+        this.filterSellerName = "";
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "4") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = "";
+        this.filterSenderPhone = inputData;
+        this.filterSellerName = "";
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "5") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = "";
+        this.filterSenderPhone = "";
+        this.filterSellerName = inputData;
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "6") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = "";
+        this.filterSenderPhone = "";
+        this.filterSellerName = "";
+        this.filterProductName = inputData;
+        return;
+      }
     },
-    filterReset: function(event) {
+    handleFilterReset: function(event) {
       (this.filterSelectedCondition = ""),
         (this.searchInputData = ""),
         (this.payedCompletedDate = "3"),
@@ -474,7 +582,7 @@ export default {
         (this.sellerType = "전체"),
         (this.deliveryType = "전체");
     },
-    prepareOrder: function(event) {
+    handlePrepareOrder: function(event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
@@ -488,15 +596,12 @@ export default {
         );
       }
     },
-    cancelOrder: function(event) {
+    handleCancelOrder: function(event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
         alert(`${this.selectedItems.length}개의 주문이 취소되었습니다 !`);
       }
-    },
-    handleItemsPerPage: function() {
-      console.log(`아이템 갯수가 ${this.itemsPerPage}로 바뀜 `);
     },
     getToday: function() {
       let endDate = new Date().toJSON().slice(0, 10);
@@ -514,18 +619,42 @@ export default {
       }
     },
     getOrderListData: function() {
-      axios
-        .get(
-          `http://192.168.40.107:5000/admin/orders?status=1&start_date=${this.startedDate}&end_date=${this.endDate}&page=${this.currentPage}&length=${this.itemsPerPage}`
-        )
+      let params = {
+        status: 1,
+        start_date: this.startedDate,
+        end_date: this.endDate,
+        page: this.currentPage,
+        length: this.itemsPerPage,
+        attributes: this.sellerAttribute,
+        order_by: this.itemsOrder,
+        number: this.filterOrderNo,
+        detail_number: this.filterDetailOrderNo,
+        sender_name: this.filterSenderName,
+        sender_phone: this.filterSenderPhone,
+        seller_name: this.filterSellerName,
+        product_name: this.filterProductName
+      };
+
+      axios.get("http://192.168.40.107:5000/admin/orders", { params });
+      let myAxios = axios.create({
+        paramsSerializer: params =>
+          Qs.stringify(params, { arrayFormat: "repeat" })
+      });
+      myAxios
+        .get("http://192.168.40.107:5000/admin/orders", { params })
         .then(res => {
           this.totalCount = res.data.totalCount;
           this.desserts = res.data.results;
+        })
+        .catch(function(error) {
+          console.log(error);
         });
+      getPaginationLength();
     }
   },
   computed: {
     getPaginationLength: function() {
+      let currentPage = this.currentPage;
       let totalCount = this.totalCount;
       let itemPerPage = this.itemsPerPage;
       let paginationLength = parseInt(1 + totalCount / itemPerPage);
@@ -576,17 +705,16 @@ export default {
   mounted() {
     this.getToday();
     this.getStartedDate();
-    this.getOrderListData();
     this.getPaginationLength();
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.AdminOrder {
+.prepareOrder {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   padding: 10px;
   border-radius: 10px 0 0 10px / 10px 0 0 10px;
   background-color: #f3f4f7;
@@ -755,8 +883,9 @@ export default {
       .selectBox {
         width: 130px;
         height: 30px;
-        margin-right: 20px;
+        margin-right: 5px;
         font-size: 12px;
+        text-align: center;
         border: 1px solid #e5e5e5;
         border-radius: 6px;
         padding: 0 5px;

@@ -1,1 +1,1 @@
-export default { API: "http://localhost:5000" };
+export default { API: "http://192.168.105.133:5000" };

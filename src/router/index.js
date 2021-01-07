@@ -6,10 +6,14 @@ import Router from "vue-router";
 import MemberManagement from "@/views/admin/MemberManagement/MemberManagement";
 import adminSignIn from "@/views/admin/signIn";
 import adminSignUp from "@/views/admin/signUp";
-import AdminPrepareOrder from "@/views/admin/OrderManagement/prepareOrder";
+import AdminPrepareOrder from "@/views/admin/OrderManagement/PrepareOrder";
 import ProductManagement from "@/views/admin/ProductManageMent/ProductManageMent";
 import AdminHome from "@/views/admin/Home/AdminHome";
-import AdminInOrder from "@/views/admin/OrderManagement/inDelivery";
+import ProductManageList from "@/views/admin/ProductManageMent/ProductManageList";
+import AdminInDelivery from "@/views/admin/OrderManagement/InDelivery";
+import AdminDoneDelivery from "@/views/admin/OrderManagement/DoneDelivery";
+import AdminConfirmOrder from "@/views/admin/OrderManagement/ConfirmOrder";
+import OrderDetail from "@/views/admin/OrderManagement/OrderDetail";
 
 //--service
 import signIn from "@/views/store/SignIn";
@@ -22,6 +26,7 @@ import productsDetail from "@/views/store/products/productsDetail";
 import signUp from "@/views/store/signupprocess/signUp";
 import getInfo from "@/views/store/signupprocess/getInfo";
 import thirdStep from "@/views/store/signupprocess/thirdStep";
+import sender from "@/views/store/order/sender";
 
 Vue.use(Router);
 
@@ -70,7 +75,12 @@ export default new Router({
       component: productsDetail,
       meta: { admin: false }
     },
-
+    {
+      path: "/checkout/sender",
+      name: "sender",
+      component: sender,
+      meta: { admin: false }
+    },
     {
       path: "/signUpDone",
       name: "signUpDone",
@@ -102,7 +112,14 @@ export default new Router({
     {
       path: "/admin/products/regist",
       name: "ProductManagement",
-      component: ProductManagement
+      component: ProductManagement,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/products/:id",
+      name: "ProductDetail",
+      component: ProductManagement,
+      meta: { admin: true }
     },
     {
       path: "/admin/home",
@@ -111,9 +128,33 @@ export default new Router({
       meta: { admin: true }
     },
     {
+      path: "/admin/products",
+      name: "ProductManageList",
+      component: ProductManageList,
+      meta: { admin: true }
+    },
+    {
       path: "/admin/inDelivery",
-      name: "AdminInOrder",
-      component: AdminInOrder,
+      name: "AdminInDelivery",
+      component: AdminInDelivery,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/doneDelivery",
+      name: "AdminDoneDelivery",
+      component: AdminDoneDelivery,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/confirmOrder",
+      name: "AdminConfirmOrder",
+      component: AdminConfirmOrder,
+      meta: { admin: true }
+    },
+    {
+      path: "/admin/order/detail/:orderDetailNumber",
+      name: "OrderDetail",
+      component: OrderDetail,
       meta: { admin: true }
     }
   ]

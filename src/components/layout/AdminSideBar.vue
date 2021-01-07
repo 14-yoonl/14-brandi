@@ -49,8 +49,7 @@ export default {
 .AdminSideBar {
   display: flex;
   flex-direction: column;
-  width: 10%;
-  min-width: 160px;
+  width: 150px;
   margin-top: 80px;
   color: #f1f1f1;
   font-size: 14px;

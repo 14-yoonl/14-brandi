@@ -8,19 +8,27 @@
           <div>무료배송으로 내일 받는 브랜디 LOGIN</div>
         </div>
         <div class="loginBottom">
-          <input type="text" class="idInput" placeholder="아이디 입력" />
-          <input type="password" class="pwInput" placeholder="비밀번호 입력" />
-          <button class="logInButton" @click="signin">
-            <a href="/">로그인</a>
-          </button>
+          <input
+            type="text"
+            class="idInput"
+            placeholder="아이디 입력"
+            v-model="state.id"
+          />
+
+          <input
+            type="password"
+            class="pwInput"
+            placeholder="비밀번호 입력"
+            v-model="state.pw"
+          />
+          <button class="logInButton" @click="signin">로그인</button>
 
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
 
           <GoogleLogin
+            class="googleLogin"
             :params="params"
             :onSuccess="onSuccess"
-            :onFailure="onFailure"
-            @click="onlist"
           >
             <img
               src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
@@ -38,10 +46,15 @@
 import GoogleLogin from "vue-google-login";
 import NavBar from "./navBar";
 import API from "@/store/config.js";
+import axios from "axios";
 
 export default {
   data() {
     return {
+      state: {
+        id: "",
+        pw: ""
+      },
       params: {
         client_id:
           "15026492474-0jhj7d4r0r2mugin72a41l9ig76084ev.apps.googleusercontent.com"
@@ -54,24 +67,28 @@ export default {
     GoogleLogin
   },
 
+  //구글 소셜 로그인
   methods: {
     onSuccess(googleUser) {
-      console.log("구글유저>>>>", googleUser.xc.access_token);
-      console.log("basicprofile>>>>>", googleUser.getBasicProfile());
       axios
-        .post("http://192.168.40.116:5000/users/social-signin", {
-          Authorization: googleUser.xc.access_token
+        .post(`http://192.168.105.133:5000/users/social-signin`, {
+          headers: {
+            Authorization: googleUser.xc.id_token
+          }
         })
         .then(function(response) {
-          localStorage.setItem("access_token", res.data.token);
+          localStorage.setItem("token", response.data.token);
         })
-        .then.catch(function(error) {
+        .catch(function(error) {
           console.log(error);
         });
-      this.$router.push("/home");
+
+      this.$router.push("/");
     },
+
+    //일반 로그인
     signin() {
-      this.$store.dispatch("signin");
+      this.$store.dispatch("signin", this.state).then(this.$router.push("/"));
     }
   }
 };
@@ -115,21 +132,22 @@ export default {
         }
 
         .logInButton {
+          width: 570px;
           height: 50px;
           margin: 10px 0 2px 0;
           color: white;
           background-color: black;
-
-          a {
-            text-decoration: none;
-            color: white;
-          }
         }
         .signUpButton {
           a {
             padding: 15px 250px;
             text-decoration: none;
             color: black;
+          }
+          .googleLogin {
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
         }
 

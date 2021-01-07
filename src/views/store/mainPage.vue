@@ -3,37 +3,39 @@
     <NavBar />
     <v-carousel class="mainImageSlide">
       <v-carousel-item
-        v-for="(item, i) in slideitems"
+        v-for="(item, i) in productList"
         :key="i"
-        :src="item.src"
+        :src="item.event.event_banner_image"
         reverse-transition="fade-transition"
         transition="fade-transition"
       ></v-carousel-item>
     </v-carousel>
     <div class="mainProducts">
       <h2 class="productHeader">당신을 위한 추천</h2>
-      <div class="cardList">
-        <productCard
-          v-for="item in cards"
-          :key="item.id"
-          :item="item"
-          v-on:click="petchData"
-        />
+      <div v-for="products in productList" :key="products.id" class="cardList">
+        <eventBanner :event="products.event" />
+        <div v-for="item in products.product_list" :key="item.id">
+          <productCard :item="item" v-on:click="petchData" />
+        </div>
       </div>
+      <v-btn v-on:click="increseOffset">더보기</v-btn>
     </div>
     <Footer></Footer>
   </div>
 </template>
 
 <script>
+import eventBanner from "./eventBanner";
 import productCard from "./productCard.vue";
 import NavBar from "./navBar";
 import Footer from "./footer";
 import axios from "axios";
+import API from "@/store/config.js";
 
 export default {
   data() {
     return {
+      offset: 0,
       slideitems: [
         {
           src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
@@ -48,46 +50,32 @@ export default {
           src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
         }
       ],
-      cards: [
-        // {
-        //   id: 1,
-        //   sellerName: "미우블랑",
-        //   imageUrl:
-        //     "https://image.brandi.me/cproduct/2019/12/16/12635118_1576508021_image1_M.jpg",
-        //   name: "쫀쫀 심플 기모 목폴라(6color)_미우블랑",
-        //   originPrice: 9800,
-        //   discountRate: 0,
-        //   discountedPrice: 9800,
-        //   count: 432
-        // },
-        // {
-        //   id: 2,
-        //   sellerName: "로젠하이",
-        //   imageUrl:
-        //     "https://image.brandi.me/cproduct/2019/06/25/9350924_1561425223_image1_M.jpg",
-        //   name: "일론 스티치 반팔 미니-원피스(린넨55%)",
-        //   originPrice: 26000,
-        //   discountRate: 18,
-        //   discountedPrice: 18720,
-        //   count: 1136
-        // }
-      ],
-      cardList: []
+      cardList: [],
+      eventList: [],
+      productList: []
     };
   },
   components: {
     NavBar: NavBar,
     productCard: productCard,
-    Footer: Footer
+    Footer: Footer,
+    eventBanner: eventBanner
   },
   methods: {
-    petchData() {
-      axios.get(
-        `"http://localhost:5000/products/${item.id}"`.then(function(res) {
-          this.$store.commit("list", this.cardList);
-        })
-      );
+    increseOffset() {
+      this.offset += 1;
+      axios
+        .get(`${API.API}/products?offset=${this.offset}&limit=30`)
+        .then(res => {
+          console.log("res>>>", res);
+          this.productList.push(res.data.result);
+        });
     }
+  },
+  mounted() {
+    axios.get(`${API.API}/products?offset=0&limit=30`).then(response => {
+      this.productList.push(response.data.result);
+    });
   }
 };
 </script>
