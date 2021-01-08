@@ -8,10 +8,12 @@
         <tbody>
           <slot name="body">
             <!-- 입력 데이터형식 -->
-            <!-- <tr>
-              <td>이름</td>
-              <td>홍길동</td>
-            </tr> -->
+            <!-- 
+              <tr>
+                <td>항목 이름</td>
+                <td>내용</td>
+              </tr> 
+            -->
           </slot>
         </tbody>
       </table>

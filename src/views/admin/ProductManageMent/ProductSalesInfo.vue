@@ -39,6 +39,7 @@
                       <div class="inputForm">
                         <v-text-field
                           type="number"
+                          :value="discountRate"
                           placeholder="할인율 (%)"
                           reverse
                           max="100"

@@ -285,7 +285,6 @@ export default {
     manufacturingDate: { type: String },
     productOriginTypeId: { type: Number }
   },
-
   components: {
     DataTable,
     ImagePriview,
