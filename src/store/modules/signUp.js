@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const postApi = (uri, data) => {
-  return axios.post(`${process.setting.ENV_ADMIN_SIGNUP}${uri}`, data);
+  return axios.post(`${process.setting.ENV_ADMIN_LOG_IN_OTU}${uri}`, data);
 };
 
 export default {

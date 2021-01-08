@@ -1,6 +1,5 @@
 <template>
   <div class="MemberManagment">
-    {{ $data }}
     <BasicInfo
       ref="test"
       :sellerName.sync="sellerName"
@@ -38,8 +37,19 @@
         color="success"
         rounded
         @click="submitData($event)"
+        v-if="!this.$route.params.productKey"
       >
         <v-icon left> mdi-pencil </v-icon>완료
+      </v-btn>
+      <v-btn
+        class="ma-3"
+        large
+        color="success"
+        rounded
+        @click="updateProduct()"
+        v-if="this.$route.params.productKey"
+      >
+        <v-icon left> mdi-pencil </v-icon>수정하기
       </v-btn>
       <LodingSpinner v-if="$store.getters.getLodingSpinner" />
     </div>
@@ -181,7 +191,7 @@ export default {
 
       result
         .then(res => {
-          res.data.message === "success" && alert("회원가입을 축하드립니다");
+          res.data.message === "success" && alert("작성을 완료 하였습니다.");
           this.$router.push({
             path: "/admin/products/"
           });
@@ -200,11 +210,10 @@ export default {
       try {
         const result = this.$store.dispatch("productInfo", productKey);
         result.then(result => {
-          console.log(result);
+          console.log(result, ",==============상세 페이지 데이터");
           const infoOption = result.data.result.product_options;
           const info = {
-            ...result.data.result.product_detail,
-            ...result.data.result.product_images
+            ...result.data.result.product_detail
           };
 
           Object.keys(info).forEach(item => {
@@ -217,6 +226,14 @@ export default {
               this.$data[this.snakeToCamel(item)] = info[item];
             }
           });
+          result.data.result.product_images.forEach(img => {
+            this.images.push({ preview: img.product_image_url });
+          });
+
+          const setHtmlData =
+            result.data.result.product_detail.detail_information;
+
+          this.$refs.test.getDetailInfo.invoke("setHtml", setHtmlData);
 
           infoOption.forEach(item => {
             this.$data["options"].push({
@@ -234,28 +251,34 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+
+    updateProduct() {
+      try {
+        const result = this.$store.dispatch("updateProduct", this.$data);
+        result.then(res => console.log("update 결과", res));
+      } catch (err) {
+        console.log(err);
+      }
     }
   },
   watch: {
-    //할인기간 시작 날짜 입력 체크
-    discountStartDate(value) {
-      this.discountEndDate &&
-        value > this.discountEndDate &&
-        alert("시작 날짜는 종료 날짜를 지날 수 없습니다.");
-
-      value === this.discountEndDate &&
-        alert("시작 날짜는 종료 날짜와 같을 수 없습니다.");
-    },
-
-    //할인기간 종류 날짜 입력 체크
-    discountEndDate(value) {
-      this.discountStartDate &&
-        value < this.discountStartDate &&
-        alert("시작 날짜는 종료 날짜를 지날 수 없습니다.");
-
-      value === this.discountStartDate &&
-        alert("시작 날짜는 종료 날짜와 같을 수 없습니다.");
-    }
+    // //할인기간 시작 날짜 입력 체크
+    // discountStartDate(value) {
+    //   this.discountEndDate &&
+    //     value > this.discountEndDate &&
+    //     alert("시작 날짜는 종료 날짜를 지날 수 없습니다.");
+    //   value === this.discountEndDate &&
+    //     alert("시작 날짜는 종료 날짜와 같을 수 없습니다.");
+    // },
+    // //할인기간 종류 날짜 입력 체크
+    // discountEndDate(value) {
+    //   this.discountStartDate &&
+    //     value < this.discountStartDate &&
+    //     alert("시작 날짜는 종료 날짜를 지날 수 없습니다.");
+    //   value === this.discountStartDate &&
+    //     alert("시작 날짜는 종료 날짜와 같을 수 없습니다.");
+    // }
   }
 };
 </script>

@@ -168,6 +168,18 @@
             >전체 조회건 수 : {{ setData.total_count }} 건</span
           >
           <div class="perPage">
+            <v-btn
+              elevation="2"
+              medium
+              small
+              @click="excelDownload('select')"
+            >엑셀 선택 다운로드</v-btn>
+            <v-btn
+              elevation="2"
+              medium
+              small
+              @click="excelDownload('all')"
+            >엑셀 전체 다운로드</v-btn>
             <v-select 
               v-model="listPerpage" 
               :items="perPageList" 
@@ -200,14 +212,12 @@
               <tr v-for="(product, index) in setData.product_list" v-bind:key="index">
                 <td v-for="column in listColumn">
                   <span v-if="column.value === '상품체크'">
-                    <input type="checkbox" :value="product.product_id" v-model="selectProduct"/>
+                    <input type="checkbox" :value="index" v-model="selectProduct"/>
                   </span>
                   <span v-else-if="column.value === '등록상태'">등록완료</span>
                   <span v-else-if="column.value === '대표이미지'"><img :src="product[column.key]"/></span>
                   <span v-else-if="column.value === '상품코드'">
                     <span class="toDetailBtn" @click="ChagePage(product[column.key] )">{{product[column.key]}}</span>
-                    <!-- <router-link :to="{ name: 'ProductDetail', params: { productKey: product[column.key] } }">
-                     -->
                     </router-link>
                   </span>
                   <span v-else-if="column.value === '판매여부'">{{ product[column.key] === 1 ?"판매":"미판매" }}</span>
@@ -255,7 +265,11 @@ export default {
       filterList: [],
       selectProduct: [],
       searchState : "",
-      searchInfoList : [{name:'상품명',key:"productName"},{name:'상품번호',key:"productId"},{name:'상품코드',key:"productCode"}],
+      searchInfoList : [
+        { name:'상품명',  key:"productName"},
+        { name:'상품번호',key:"productId"  },
+        { name:'상품코드',  key:"productCode"}
+      ],
       filters: {
         isSale: 0,
         isDisplay: 0,
@@ -348,6 +362,30 @@ export default {
       this.filters.productId = "";
       this.filters.productName = "";
       this.filters.productCode = "";
+    },
+    excelDownload(value){
+      if(value === 'all'){
+        this.$store.dispatch('excelDownload','all')
+      }else{
+        const setData = []
+         this.selectProduct.forEach(cnt=>{
+           setData.push(this.setData.product_list[cnt])
+        })
+        const result = this.$store.dispatch('excelDownload',setData)
+        result.then(res=>{
+            function replaceAll (str, searchStr, replaceStr) {
+                  return str.split(searchStr).join(replaceStr)
+              }
+              const url = window.URL.createObjectURL(new Blob([response.data], { type: 'image/xls' }))
+              const link = document.createElement('a')
+              link.href = url
+              const filename = replaceAll(decodeURI(response.headers.filename), '+', ' ')
+              link.setAttribute('download', filename)
+              document.body.appendChild(link)
+              link.click()
+        })
+        
+      }
     }
   },
   computed: {
@@ -355,12 +393,9 @@ export default {
       const { search_condition } = this.$store.getters.getFilterList;
 
       search_condition && Object.keys(search_condition).forEach(list=>{
-        // console.log(search_condition[list],"+++++",list)
 
         //0을 값을 기준으로 변경이 되기 때
-        console.log(search_condition[list])
         if(search_condition[list]){
-          console.log(search_condition[list],"------------------------",list)
           if(list === 'limit') this.listPerpage = search_condition[list]
           else if(list === 'page_number'){
             this.pageNow = search_condition[list]
@@ -399,8 +434,8 @@ export default {
       set: function(value) {
         let selectedItems = [];
         if (value) {
-          this.setData.product_list.forEach(list => {
-            selectedItems.push(list.product_id);
+          this.setData.product_list.forEach((list,index) => {
+            selectedItems.push(index);
           });
         }
         this.selectProduct = selectedItems;
@@ -441,10 +476,11 @@ export default {
       const route = this.$route.query;
       this.$router.push({
         name: "ProductManageList",
-        query: { ...route, limit: value }
+        query: { ...route, limit: this.listPerpage , page_number: this.pageNow}
       });
       this.getFilterList();
     },
+    
     pageNow(value) {
       const route = this.$route.query;
 
@@ -452,7 +488,7 @@ export default {
       
       this.$router.push({
         name: "ProductManageList",
-        query: { ...route, page_number: value }
+        query: { ...route, page_number: this.pageNow , limit: this.listPerpage}
       });
       this.getFilterList();
     },

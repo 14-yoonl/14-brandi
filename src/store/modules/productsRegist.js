@@ -4,7 +4,9 @@ import mockData from "../../assets/main.json";
 const getApi = uri => {
   return axios.get(`${process.setting.ENV_ADMIN_PRODUCT}${uri}`, {
     headers: {
-      Authorization: sessionStorage.getItem("token")
+      Authorization:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50X2lkIjoxLCJ1c2VybmFtZSI6Im1hc3RlciIsInBlcm1pc3Npb25fdHlwZV9pZCI6MX0.IuzuJ9iEviCiouUJrlLsqcmtf6A9tJkUQlVPlGJJqws"
+      // sessionStorage.getItem("token")
     }
   });
 };
@@ -12,7 +14,33 @@ const getApi = uri => {
 const postApi = (uri, data) => {
   return axios.post(`${process.setting.ENV_ADMIN_PRODUCT}${uri}`, data, {
     headers: {
-      Authorization: sessionStorage.getItem("token")
+      Authorization:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50X2lkIjoxLCJ1c2VybmFtZSI6Im1hc3RlciIsInBlcm1pc3Npb25fdHlwZV9pZCI6MX0.IuzuJ9iEviCiouUJrlLsqcmtf6A9tJkUQlVPlGJJqws"
+      // sessionStorage.getItem("token")
+    }
+  });
+};
+
+const ExcelTestPostApi = (uri, data) => {
+  return axios.post(
+    `http://localhost:5000${uri}`,
+    { excel_list: data },
+    {
+      headers: {
+        Authorization:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50X2lkIjoxLCJ1c2VybmFtZSI6Im1hc3RlciIsInBlcm1pc3Npb25fdHlwZV9pZCI6MX0.IuzuJ9iEviCiouUJrlLsqcmtf6A9tJkUQlVPlGJJqws"
+        // sessionStorage.getItem("token")
+      }
+    }
+  );
+};
+
+const patchApi = (uri, data) => {
+  return axios.patch(`${process.setting.ENV_ADMIN_PRODUCT}${uri}`, data, {
+    headers: {
+      Authorization:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50X2lkIjoxLCJ1c2VybmFtZSI6Im1hc3RlciIsInBlcm1pc3Npb25fdHlwZV9pZCI6MX0.IuzuJ9iEviCiouUJrlLsqcmtf6A9tJkUQlVPlGJJqws"
+      // sessionStorage.getItem("token")
     }
   });
 };
@@ -182,6 +210,48 @@ export default {
       commit("TOGLE_LODING_SPINNER");
 
       return getApi(`/admin/products/${product_id}`);
+    },
+
+    //엑셀 다운로드
+    excelDownload({ commit }, data) {
+      if (typeof data === String) {
+        console.log("전체");
+      } else {
+        return ExcelTestPostApi(`/admin/product/excel`, data);
+      }
+    },
+
+    //업데이트 Product
+    updateProduct({ commit }, productInfo) {
+      const formData = new FormData();
+
+      formData.append("product_id", productInfo.productId);
+      formData.append("detail_information", productInfo.detailInformation);
+      formData.append("seller_id", productInfo.sellerId);
+      formData.append("is_sale", productInfo.isSale);
+      formData.append("is_display", productInfo.isDisplay);
+      formData.append("main_category_id", productInfo.mainCategory);
+      formData.append("sub_category_id", productInfo.subCategory);
+      formData.append("is_product_notice", productInfo.isProductNotice);
+      formData.append("manufacturer", productInfo.manufacturer);
+      formData.append("manufacturing_date", productInfo.manufacturingDate);
+      formData.append("product_name", productInfo.productName);
+      formData.append("description", productInfo.description);
+      formData.append("origin_price", productInfo.originPrice);
+      formData.append("discount_rate", productInfo.discountRate);
+      formData.append("discounted_price", productInfo.discountedPrice);
+      formData.append("discount_start_date", productInfo.discountStartDate);
+      formData.append("discount_end_date", productInfo.discountEndDate);
+      formData.append("maximum_quantity", productInfo.maximumQuantity);
+      formData.append("minimum_quantity", productInfo.minimumQuantity);
+      formData.append("options", JSON.stringify(productInfo.options));
+      formData.append("detail_information", productInfo.detailInformation);
+      formData.append(
+        "product_origin_type_id",
+        productInfo.productOriginTypeId
+      );
+
+      return patchApi("`/admin/products/", formData);
     }
   },
   mutations: {

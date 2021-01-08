@@ -2,7 +2,9 @@
   <div class="LoginPage">
     <div class="loginForm">
       <div class="loginLogo">
-        <img src="../../assets/logo.png" /><span>BRANDI ADMIN</span>
+        <img src="../../assets/logo.png" alt="브랜디 아이콘" /><span
+          >BRANDI ADMIN</span
+        >
       </div>
       <v-container>
         <v-form>
@@ -79,6 +81,7 @@ export default {
 
         const result = this.$store.dispatch("logIn", loginData);
         result.then(res => {
+          console.log(res.data.message, "+++++++");
           if (res.data.message === "success") {
             sessionStorage.setItem("token", res.data.token);
 

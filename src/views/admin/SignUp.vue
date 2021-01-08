@@ -87,11 +87,13 @@ export default {
     sendServer() {
       try {
         const result = this.$store.dispatch("signUp", this.memberData);
-        result.then(res =>
-          res.data.message === "success"
-            ? alert("환양합니다")
-            : alert("다시 입력해주세요")
-        );
+        result.then(res => {
+          if (res.data.message === "success") {
+            this.$router.push({
+              name: "adminSignIn"
+            });
+          }
+        });
       } catch (err) {
         console.log(err, "에러 확인 메세지");
       }
@@ -131,7 +133,6 @@ export default {
         v =>
           /^[A-Za-z]{1}[A-Za-z0-9]{5,19}$/.test(v) ||
           "길이는 6~20 사이, 한글 및 특수문자는 사용하실수 없습니다."
-        // async v => ((await this.serverValidCheck("")) ? "111" : "22")
       ],
       passwordRules: [
         v => !!v || "비밀번호는 필수 입력항목입니다.",
@@ -150,14 +151,6 @@ export default {
       sellerEngNameRules: [
         v => !!v || "셀러명(상호)은 필수 입력항목입니다.",
         v => /[a-z]/.test(v) || "셀러 영문명은 소문자만 입력가능합니다."
-      ],
-      phoneNumberRules: [
-        v => !!v || "핸드폰 번호는 필수 입력항목입니다.",
-        v => /^\d{3}-\d{3,4}-\d{4}$/.test(v) || "000-0000-0000"
-      ],
-      customerCenterNumber: [
-        v => !!v || "고객센터 번호는 필수 입력항목입니다.",
-        v => /^\d{3}-\d{3,4}-\d{4}$/.test(v) || "숫자만 입력해주세요"
       ]
     };
   }
