@@ -24,7 +24,11 @@
           <span>검색조건 : </span>
         </div>
         <div class="filterBtnsGroup">
-          <select v-model="filterSelectedCondition" class="searchCondition">
+          <select
+            v-model="filterSelectedCondition"
+            class="searchCondition"
+            @change="handleInputData()"
+          >
             <option value="" disabled>조건을 선택해주세요 ▼</option>
             <option
               v-for="condition in searchCondition"
@@ -35,14 +39,13 @@
               {{ condition.text }}
             </option>
           </select>
-          <span>{{ filterSelectedCondition }}</span>
         </div>
         <input
           v-model="searchInputData"
           class="searchInputBox"
           placeholder="검색어를 입력하세요"
+          @change="handleInputData()"
         />
-        <span>{{ searchInputData }}</span>
       </div>
       <div class="filterList">
         <div class="filterTitle">
@@ -94,7 +97,6 @@
               sellerAttributes.text
             }}</label>
           </div>
-          <span>{{ sellerAttribute }}</span>
         </div>
       </div>
       <div class="filterList">
@@ -168,15 +170,15 @@
           <select
             v-model="itemsOrder"
             class="selectBox"
-            @change="handleItemsOrder"
+            @change="getOrderListData()"
           >
-            <option value="desc">최신주문일순</option>
-            <option value="asc">주문일의 역순</option>
+            <option value="recent">최신주문일순</option>
+            <option value="">주문일의 역순</option>
           </select>
           <select
             v-model="itemsPerPage"
             class="selectBox"
-            @change="handleItemsPerPage"
+            @change="getOrderListData()"
           >
             <option value="10">10개씩 보기</option>
             <option value="20">20개씩 보기</option>
@@ -219,9 +221,14 @@
                 {{ order.created_at_date }}
               </td>
               <td>
-                <a>
+                <router-link
+                  :to="{
+                    name: 'OrderDetail',
+                    params: { orderDetailNumber: order.order_detail_number }
+                  }"
+                >
                   {{ order.order_detail_number }}
-                </a>
+                </router-link>
               </td>
               <td>
                 {{ order.seller_name }}
@@ -269,12 +276,12 @@
           v-on:click="handleCancelOrder"
           >주문취소처리</v-btn
         >
-        <span>{{ selectedItems }}</span>
+
         <v-pagination
           v-model="currentPage"
           :length="paginationLength"
+          @v-on:click="getOrderListData()"
         ></v-pagination>
-        <span>{{ currentPage }}</span>
       </div>
     </div>
   </div>
@@ -284,6 +291,8 @@ import { filterSelectedCondition, searchInputData } from "vuex";
 import AdminHeader from "../../../components/common/adminDataTable/AdminHeader";
 import AdminFilter from "../../../components/common/adminDataTable/AdminFilter";
 import axios from "axios";
+import Qs from "qs";
+import "url-search-params";
 
 export default {
   name: "adminOrder",
@@ -291,6 +300,12 @@ export default {
   data() {
     return {
       filterSelectedCondition: "",
+      filterOrderNo: "",
+      filterDetailOrderNo: "",
+      filterSenderName: "",
+      filterSenderPhone: "",
+      filterSellerName: "",
+      filterProductName: "",
       searchInputData: "",
       payedCompletedDate: "3",
       sellerType: "전체",
@@ -298,9 +313,9 @@ export default {
       startedDate: "",
       endDate: "",
       sellerAttribute: [],
-      itemsOrder: "desc",
+      itemsOrder: "recent",
       currentPage: 1,
-      paginationLength: 5,
+      paginationLength: 1,
       itemsPerPage: 30,
       totalCount: 1,
       selectedItems: [],
@@ -358,43 +373,43 @@ export default {
       sellerAttributeList: [
         {
           name: "sellerAttribute",
-          value: "1",
+          value: 1,
           id: "shoppingmall",
           text: "쇼핑몰"
         },
         {
           name: "sellerAttribute",
-          value: "2",
+          value: 2,
           id: "market",
           text: "마켓"
         },
         {
           name: "sellerAttribute",
-          value: "3",
+          value: 3,
           id: "roadShop",
           text: "로드샵"
         },
         {
           name: "sellerAttribute",
-          value: "4",
+          value: 4,
           id: "designerBrand",
           text: "디자이너브랜드"
         },
         {
           name: "sellerAttribute",
-          value: "5",
+          value: 5,
           id: "generalBrand",
           text: "재너럴브랜드"
         },
         {
           name: "sellerAttribute",
-          value: "6",
+          value: 6,
           id: "nationalBrand",
           text: "내셔널브랜드"
         },
         {
           name: "sellerAttribute",
-          value: "7",
+          value: 7,
           id: "beauty",
           text: "뷰티"
         }
@@ -488,16 +503,74 @@ export default {
     };
   },
   watch: {
-    payedCompletedDate(value) {
-      setStartedDate();
+    itemsOrder(value) {
+      getOrderListData();
+    },
+    itemsPerPage(value) {
+      getOrderListData();
+    },
+    searchInputData(value) {
+      handleInputData();
+    },
+    currentPage(value) {
+      getOrderListData();
     }
   },
 
   methods: {
-    // handleFilterSearch: function() {
-    //   getOrderListData();
-    //   alert("검색 완료!");
-    // },
+    handleInputData: function(value) {
+      let filterSelectedCondition = this.filterSelectedCondition;
+      let inputData = this.searchInputData;
+      if (filterSelectedCondition === "1") {
+        this.filterOrderNo = inputData;
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = "";
+        this.filterSenderPhone = "";
+        this.filterSellerName = "";
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "2") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = inputData;
+        this.filterSenderName = "";
+        this.filterSenderPhone = "";
+        this.filterSellerName = "";
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "3") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = inputData;
+        this.filterSenderPhone = "";
+        this.filterSellerName = "";
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "4") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = "";
+        this.filterSenderPhone = inputData;
+        this.filterSellerName = "";
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "5") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = "";
+        this.filterSenderPhone = "";
+        this.filterSellerName = inputData;
+        this.filterProductName = "";
+        return;
+      } else if (filterSelectedCondition === "6") {
+        this.filterOrderNo = "";
+        this.filterDetailOrderNo = "";
+        this.filterSenderName = "";
+        this.filterSenderPhone = "";
+        this.filterSellerName = "";
+        this.filterProductName = inputData;
+        return;
+      }
+    },
     handleFilterReset: function(event) {
       (this.filterSelectedCondition = ""),
         (this.searchInputData = ""),
@@ -506,12 +579,12 @@ export default {
         (this.sellerType = "전체"),
         (this.deliveryType = "전체");
     },
-    handlePrepareOrder: function(event) {
+    handlePrepareOrder: async function(event) {
       if (this.selectedItems.length === 0) {
         alert("선택된 것이 아무 것도 없습니다");
       } else {
         for (let i = 0; i < this.selectedItems.length; i++) {
-          axios.patch(
+          await axios.patch(
             `http://192.168.40.107:5000/admin/orders?id=${this.selectedItems[i]}&status_id=1`
           );
         }
@@ -526,9 +599,6 @@ export default {
       } else {
         alert(`${this.selectedItems.length}개의 주문이 취소되었습니다 !`);
       }
-    },
-    handleItemsPerPage: function() {
-      console.log(`아이템 갯수가 ${this.itemsPerPage}로 바뀜 `);
     },
     getToday: function() {
       let endDate = new Date().toJSON().slice(0, 10);
@@ -546,18 +616,42 @@ export default {
       }
     },
     getOrderListData: function() {
-      axios
-        .get(
-          `http://192.168.40.107:5000/admin/orders?status=1&start_date=${this.startedDate}&end_date=${this.endDate}&page=${this.currentPage}&length=${this.itemsPerPage}&attributes=${this.sellerAttribute}&order_by=${this.itemsOrder}`
-        )
+      let params = {
+        status: 1,
+        start_date: this.startedDate,
+        end_date: this.endDate,
+        page: this.currentPage,
+        length: this.itemsPerPage,
+        attributes: this.sellerAttribute,
+        order_by: this.itemsOrder,
+        number: this.filterOrderNo,
+        detail_number: this.filterDetailOrderNo,
+        sender_name: this.filterSenderName,
+        sender_phone: this.filterSenderPhone,
+        seller_name: this.filterSellerName,
+        product_name: this.filterProductName
+      };
+
+      axios.get("http://192.168.40.107:5000/admin/orders", { params });
+      let myAxios = axios.create({
+        paramsSerializer: params =>
+          Qs.stringify(params, { arrayFormat: "repeat" })
+      });
+      myAxios
+        .get("http://192.168.40.107:5000/admin/orders", { params })
         .then(res => {
           this.totalCount = res.data.totalCount;
           this.desserts = res.data.results;
+        })
+        .catch(function(error) {
+          console.log(error);
         });
+      getPaginationLength();
     }
   },
   computed: {
     getPaginationLength: function() {
+      let currentPage = this.currentPage;
       let totalCount = this.totalCount;
       let itemPerPage = this.itemsPerPage;
       let paginationLength = parseInt(1 + totalCount / itemPerPage);
@@ -608,7 +702,6 @@ export default {
   mounted() {
     this.getToday();
     this.getStartedDate();
-    // this.getOrderListData();
     this.getPaginationLength();
   }
 };

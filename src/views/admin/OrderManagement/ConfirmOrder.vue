@@ -199,9 +199,14 @@
                 {{ order.created_at_date }}
               </td>
               <td>
-                <a>
+                <router-link
+                  :to="{
+                    name: 'OrderDetail',
+                    params: { orderDetailNumber: order.order_detail_number }
+                  }"
+                >
                   {{ order.order_detail_number }}
-                </a>
+                </router-link>
               </td>
               <td>
                 {{ order.seller_name }}

@@ -26,9 +26,9 @@
           <button class="signUpButton"><a href="/signUp">회원가입</a></button>
 
           <GoogleLogin
+            class="googleLogin"
             :params="params"
             :onSuccess="onSuccess"
-            @click="posttest"
           >
             <img
               src="https://www.brandi.co.kr/static/20.09.01/images/google-logo.png"
@@ -70,18 +70,12 @@ export default {
   //구글 소셜 로그인
   methods: {
     onSuccess(googleUser) {
-      console.log("구글토큰>>>>", googleUser);
-      console.log("basicprofile>>>>>", googleUser.getBasicProfile());
       axios
-        .post(
-          "http://192.168.40.116:5000/users/social-signin",
-          {},
-          {
-            headers: {
-              Authorization: googleUser.xc.id_token
-            }
+        .post(`http://192.168.105.133:5000/users/social-signin`, {
+          headers: {
+            Authorization: googleUser.xc.id_token
           }
-        )
+        })
         .then(function(response) {
           localStorage.setItem("token", response.data.token);
         })
@@ -149,6 +143,11 @@ export default {
             padding: 15px 250px;
             text-decoration: none;
             color: black;
+          }
+          .googleLogin {
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
         }
 
