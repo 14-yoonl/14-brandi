@@ -1,21 +1,29 @@
-# 14-brandi
+-프로젝트 설명
+wecode 14기 기업 협업 - 브랜디 (서비스, 어드민) 클론 코딩
+*서비스 : 실제 유저가 사이트에 들어와 상품을 보고 구매를 진행하는 기능
+*어드민 : 셀러의 상품을 등록하고, 결제완료 후의 과정을 진행하는 기능
 
-> cloning brandi
+-프로젝트 기간
+2020/12/14 ~ 2021/01/07 약 4주에 걸쳐 모델링부터 기능 구현까지
 
-## Build Setup
+-사용한 기술 스택 (프론트 / 백엔드) 
+프론트엔드
+HTML5 
+Vue.js
 
-``` bash
-# install dependencies
-npm install
+백엔드
+파이썬 3.7
+MySQL
+Flask Framework
+Flask Request Validator
+Amazon S3
 
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+-팀원 소개 / 맡은 기능
+프론트엔드
+ 
+백엔드
+ 심원두 - 어드민 (상품 등록 초기화면, 상품 등록, 상품 상세, 상품 리스트)
+ 
+-사용한 툴
+-기능 구현 사항
+-API 문서
